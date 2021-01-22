@@ -24,10 +24,11 @@ import java.util.List;
  */
 public class HttpResourceCrawler {
 
-    public static void main(String ... v) throws Exception {
+    public String getBodyData(String url) throws IOException{
+        String responseBody = null ;
         CloseableHttpClient httpclient = HttpClients.createDefault();
         try {
-            HttpGet httpget = new HttpGet("https://www.naver.com");
+            HttpGet httpget = new HttpGet(url);
 
             System.out.println("Executing request " + httpget.getRequestLine());
 
@@ -47,12 +48,44 @@ public class HttpResourceCrawler {
                 }
 
             };
-            String responseBody = httpclient.execute(httpget, responseHandler);
-            System.out.println("----------------------------------------");
-            System.out.println(responseBody);
+            responseBody = httpclient.execute(httpget, responseHandler);
+
         } finally {
             httpclient.close();
         }
+
+        return responseBody ;
+    }
+
+    public static void main(String ... v) throws Exception {
+//        CloseableHttpClient httpclient = HttpClients.createDefault();
+//        try {
+//            HttpGet httpget = new HttpGet("https://www.naver.com");
+//
+//            System.out.println("Executing request " + httpget.getRequestLine());
+//
+//            // Create a custom response handler
+//            ResponseHandler<String> responseHandler = new ResponseHandler<String>() {
+//
+//                @Override
+//                public String handleResponse(
+//                        final HttpResponse response) throws ClientProtocolException, IOException {
+//                    int status = response.getStatusLine().getStatusCode();
+//                    if (status >= 200 && status < 300) {
+//                        HttpEntity entity = response.getEntity();
+//                        return entity != null ? EntityUtils.toString(entity) : null;
+//                    } else {
+//                        throw new ClientProtocolException("Unexpected response status: " + status);
+//                    }
+//                }
+//
+//            };
+//            String responseBody = httpclient.execute(httpget, responseHandler);
+//            System.out.println("----------------------------------------");
+//            System.out.println(responseBody);
+//        } finally {
+//            httpclient.close();
+//        }
 
 //        HttpPost httpPost = new HttpPost("http://targethost/login");
 //        List<NameValuePair> nvps = new ArrayList<NameValuePair>();

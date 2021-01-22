@@ -10,7 +10,6 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 //@EnableTransactionManagement
 @EnableWebMvc
 @ComponentScan("com.yg.horus")
-
 public class DemoApplication {
 
 	public static void main(String[] args) {
