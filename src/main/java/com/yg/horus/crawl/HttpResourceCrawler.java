@@ -58,6 +58,11 @@ public class HttpResourceCrawler {
     }
 
     public static void main(String ... v) throws Exception {
+        HttpResourceCrawler test = new HttpResourceCrawler();
+        String bodyData = test.getBodyData("https://www.naver.com");
+
+        System.out.println("HTML body -> " + bodyData);
+
 //        CloseableHttpClient httpclient = HttpClients.createDefault();
 //        try {
 //            HttpGet httpget = new HttpGet("https://www.naver.com");
