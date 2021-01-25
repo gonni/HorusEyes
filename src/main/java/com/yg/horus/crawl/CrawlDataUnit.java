@@ -7,4 +7,15 @@ import lombok.Data;
  */
 @Data
 public class CrawlDataUnit {
+    private String anchorText ;
+    private String url ;
+
+    public CrawlDataUnit(String anchorText, String url) {
+        this.anchorText = anchorText ;
+        this.url = url ;
+    }
+
+    public String toString() {
+        return this.anchorText + "\t" + this.url ;
+    }
 }

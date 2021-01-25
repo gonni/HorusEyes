@@ -13,6 +13,8 @@ import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by a1000074 on 08/01/2021.
@@ -44,6 +46,30 @@ public class PageWrapper {
         }
     }
 
+    public List<CrawlDataUnit> getSubUrls(String url) {
+        List<CrawlDataUnit> lstUrls = new ArrayList<CrawlDataUnit>();
+
+        try {
+            Document doc = Jsoup.connect(url).get();
+            Elements links = doc.select("a");
+
+            System.out.println("Links : " + links.size());
+            links.forEach(link -> {
+                String anchorText = links.text();
+                String linkUrl = links.attr("abs:href");
+
+                System.out.println("URL ->" + linkUrl);
+                lstUrls.add(new CrawlDataUnit(anchorText, linkUrl));
+            });
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return lstUrls ;
+    }
+
 
     public static void main(String ... v) {
         try {
@@ -51,17 +77,21 @@ public class PageWrapper {
 
 //            Document doc = Jsoup.connect("https://www.naver.com").get();
             //https://finance.naver.com/news/news_list.nhn?mode=LSS2D&section_id=101&section_id2=258&date=20210121&page=8
-            Document doc = Jsoup.connect("https://finance.naver.com/news/news_list.nhn?mode=LSS3D&section_id=10" +
-                    "1&section_id2=258&section_id3=402&date=20210124&page=2").get();
+//            Document doc = Jsoup.connect("https://finance.naver.com/news/news_list.nhn?mode=LSS3D&section_id=101&section_id2=258&section_id3=402&date=20210124&page=2").get();
+//
+//            Elements links = doc.select("dd.articleSubject");
+//            links.stream().forEach(link -> {
+//                System.out.println("LINK -> " + link.text());
+//            });
+//
+//            System.out.println("Title -> " + doc.title());
 
-            Elements links = doc.select("dd.articleSubject");
-            links.stream().forEach(link -> {
-                System.out.println("LINK -> " + link.text());
-            });
+            String url = "https://finance.naver.com/news/news_list.nhn?mode=LSS3D&section_id=101&section_id2=258&section_id3=402&date=20210124&page=2";
+            List<CrawlDataUnit> subUrls = pageWrapper.getSubUrls(url);
+            System.out.println("Size -> " + subUrls.size());
+//            subUrls.forEach(System.out::println);
 
-            System.out.println("Title -> " + doc.title());
-
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
