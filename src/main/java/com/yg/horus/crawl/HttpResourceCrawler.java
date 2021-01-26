@@ -18,11 +18,19 @@ import org.apache.http.util.EntityUtils;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * Created by a1000074 on 07/01/2021.
  */
 public class HttpResourceCrawler {
+
+    public List<CrawlDataUnit> getMatchedLinks(String url, String urlPattern) {
+        Pattern p = Pattern.compile(urlPattern)
+
+        return null ;
+    }
+
 
     public String getBodyData(String url) throws IOException{
         String responseBody = null ;

@@ -54,11 +54,15 @@ public class PageWrapper {
             Elements links = doc.select("a");
 
             System.out.println("Links : " + links.size());
-            links.forEach(link -> {
-                String anchorText = links.text();
-                String linkUrl = links.attr("abs:href");
 
-                System.out.println("URL ->" + linkUrl);
+
+            links.forEach(link -> {
+//                System.out.println("HTML ->" + link.outerHtml());
+
+                String anchorText = link.text();
+                String linkUrl = link.attr("abs:href");
+
+//                System.out.println("URL ->" + linkUrl);
                 lstUrls.add(new CrawlDataUnit(anchorText, linkUrl));
             });
 
@@ -89,7 +93,11 @@ public class PageWrapper {
             String url = "https://finance.naver.com/news/news_list.nhn?mode=LSS3D&section_id=101&section_id2=258&section_id3=402&date=20210124&page=2";
             List<CrawlDataUnit> subUrls = pageWrapper.getSubUrls(url);
             System.out.println("Size -> " + subUrls.size());
-//            subUrls.forEach(System.out::println);
+
+            int i = 0;
+            for (CrawlDataUnit subUrl : subUrls) {
+                System.out.println(i++ + " " + subUrl);
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
