@@ -3,21 +3,17 @@ package com.yg.horus.crawl;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -25,10 +21,23 @@ import java.util.regex.Pattern;
  */
 public class HttpResourceCrawler {
 
-    public List<CrawlDataUnit> getMatchedLinks(String url, String urlPattern) {
-        Pattern p = Pattern.compile(urlPattern)
+    private PageWrapper pageWrapper = new PageWrapper() ;
 
-        return null ;
+    public List<CrawlDataUnit> getMatchedLinks(String url, String urlPattern) {
+        List<CrawlDataUnit> subUrls = this.pageWrapper.getSubUrls(url);
+        Pattern p = Pattern.compile(urlPattern) ;
+
+        List<CrawlDataUnit> lstFiltered = new ArrayList<>() ;
+
+        subUrls.stream().forEach(subUrl -> {
+            String targetUlr = subUrl.getUrl();
+            System.out.println("-> " + targetUlr);
+            if(p.matcher(targetUlr).matches()) {
+                System.out.println("Matched -> " +  subUrl);
+            }
+        });
+
+        return lstFiltered ;
     }
 
 
@@ -67,9 +76,21 @@ public class HttpResourceCrawler {
 
     public static void main(String ... v) throws Exception {
         HttpResourceCrawler test = new HttpResourceCrawler();
-        String bodyData = test.getBodyData("https://www.naver.com");
+        String seedUrl = "https://finance.naver.com/news/news_list.nhn?mode=LSS3D&section_id=101&section_id2=258&section_id3=402&date=20210124&page=2";
+        String regexFilter = "^(https:\\/\\/finance.naver.com\\/news\\/news_read.nhn\\?article_id=).*$";
+//        List<CrawlDataUnit> matchedLinks = test.getMatchedLinks(seedUrl, regexFilter);
+//        System.out.println("ReX Filtered ..");
+//        matchedLinks.stream().forEach(System.out::println);
 
-        System.out.println("HTML body -> " + bodyData);
+        Pattern p = Pattern.compile(regexFilter) ;
+        Matcher matcher = p.matcher("https://finance.naver.com/news1/news_read.nhn?article_id=0003861512&office_id=011&mode=LSS3D&type=0&section_id=101&section_id2=258&section_id3=402&date=20210124&page=2");
+
+        System.out.println("MATCH FIND :" + matcher.find());
+        System.out.println("MATCH MATCH :" + matcher.matches());
+
+//        String bodyData = test.getBodyData("https://www.naver.com");
+
+//        System.out.println("HTML body -> " + bodyData);
 
 //        CloseableHttpClient httpclient = HttpClients.createDefault();
 //        try {

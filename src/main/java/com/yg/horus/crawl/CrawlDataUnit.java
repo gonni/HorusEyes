@@ -16,6 +16,6 @@ public class CrawlDataUnit {
     }
 
     public String toString() {
-        return this.anchorText + "\t" + this.url ;
+        return this.anchorText + "\t-->\t" + this.url ;
     }
 }

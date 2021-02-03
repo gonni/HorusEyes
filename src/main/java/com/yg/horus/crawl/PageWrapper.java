@@ -53,16 +53,23 @@ public class PageWrapper {
             Document doc = Jsoup.connect(url).get();
             Elements links = doc.select("a");
 
-            System.out.println("Links : " + links.size());
+//            System.out.println("Links : " + links.size());
 
 
             links.forEach(link -> {
 //                System.out.println("HTML ->" + link.outerHtml());
 
+
                 String anchorText = link.text();
+                Elements imgElement = link.select("img");
+                if(imgElement != null && imgElement.size() > 0) {
+//                    System.out.println("IMG detected ..");
+                    anchorText = "[IMG]" ;
+                }
+
                 String linkUrl = link.attr("abs:href");
 
-//                System.out.println("URL ->" + linkUrl);
+                System.out.println("URL ->" + linkUrl);
                 lstUrls.add(new CrawlDataUnit(anchorText, linkUrl));
             });
 
