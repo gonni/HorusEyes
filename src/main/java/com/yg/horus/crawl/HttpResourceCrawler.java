@@ -75,16 +75,16 @@ public class HttpResourceCrawler {
     }
 
     public static void main(String ... v) throws Exception {
-        HttpResourceCrawler test = new HttpResourceCrawler();
-        String seedUrl = "https://finance.naver.com/news/news_list.nhn?mode=LSS3D&section_id=101&section_id2=258&section_id3=402&date=20210124&page=2";
+//        HttpResourceCrawler test = new HttpResourceCrawler();
+//        String seedUrl = "https://finance.naver.com/news/news_list.nhn?mode=LSS3D&section_id=101&section_id2=258&section_id3=402&date=20210124&page=2";
         String regexFilter = "^(https:\\/\\/finance.naver.com\\/news\\/news_read.nhn\\?article_id=).*$";
 //        List<CrawlDataUnit> matchedLinks = test.getMatchedLinks(seedUrl, regexFilter);
 //        System.out.println("ReX Filtered ..");
 //        matchedLinks.stream().forEach(System.out::println);
 
         Pattern p = Pattern.compile(regexFilter) ;
-        Matcher matcher = p.matcher("https://finance.naver.com/news1/news_read.nhn?article_id=0003861512&office_id=011&mode=LSS3D&type=0&section_id=101&section_id2=258&section_id3=402&date=20210124&page=2");
-
+        Matcher matcher = p.matcher("https://finance.naver.com/news/news_read.nhn?article_id=0003861512&office_id=011&mode=LSS3D&type=0&section_id=101&section_id2=258&section_id3=402&date=20210124&page=2");
+//
         System.out.println("MATCH FIND :" + matcher.find());
         System.out.println("MATCH MATCH :" + matcher.matches());
 
