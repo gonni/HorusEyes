@@ -9,8 +9,19 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 import java.io.IOException;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -21,10 +32,33 @@ import java.util.regex.Pattern;
  */
 public class HttpResourceCrawler {
 
-    private PageWrapper pageWrapper = new PageWrapper() ;
+    public HttpResourceCrawler() {
+        this.initSslConnection(); ;
+    }
+
+    private void initSslConnection() {
+        TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager(){
+            public X509Certificate[] getAcceptedIssuers(){return new X509Certificate[0];}
+            public void checkClientTrusted(X509Certificate[] certs, String authType){}
+            public void checkServerTrusted(X509Certificate[] certs, String authType){}
+        }};
+
+        try {
+
+            SSLContext sc = SSLContext.getInstance("TLS");
+            sc.init(null, trustAllCerts, new SecureRandom());
+            HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+
+            System.out.println("Custom SSL setting is just initialized ..");
+
+        } catch (NoSuchAlgorithmException | KeyManagementException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
 
     public List<CrawlDataUnit> getMatchedLinks(String url, String urlPattern) {
-        List<CrawlDataUnit> subUrls = this.pageWrapper.getSubUrls(url);
+        List<CrawlDataUnit> subUrls = this.getSubUrls(url);
         Pattern p = Pattern.compile(urlPattern) ;
 
         List<CrawlDataUnit> lstFiltered = new ArrayList<>() ;
@@ -41,6 +75,44 @@ public class HttpResourceCrawler {
         return lstFiltered ;
     }
 
+    public List<CrawlDataUnit> getSubUrls(String url) {
+        List<CrawlDataUnit> lstUrls = new ArrayList<CrawlDataUnit>();
+
+        try {
+            Document doc = Jsoup.connect(url).get();
+            Elements links = doc.select("a");
+
+//            System.out.println("Links : " + links.size());
+
+
+            links.forEach(link -> {
+//                System.out.println("HTML ->" + link.outerHtml());
+
+
+                String anchorText = link.text();
+                Elements imgElement = link.select("img");
+                if(imgElement != null && imgElement.size() > 0) {
+//                    System.out.println("IMG detected ..");
+                    anchorText = "[IMG]" ;
+                }
+
+                String linkUrl = link.attr("abs:href");
+
+                System.out.println("URL ->" + linkUrl);
+                lstUrls.add(new CrawlDataUnit(anchorText, linkUrl));
+            });
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return lstUrls ;
+    }
+
+    public Document getPageDoc(String url) throws IOException {
+        return  Jsoup.connect(url).get();
+    }
 
     public String getBodyData(String url) throws IOException{
         String responseBody = null ;

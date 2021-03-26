@@ -2,6 +2,7 @@ package com.yg.horus.doc;
 
 import lombok.Data;
 
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -9,8 +10,17 @@ import java.util.Date;
  */
 @Data
 public class ContentPageDoc implements PageDoc {
-    private Date issueAt ;
+
+    public enum PageDocStatus {
+        INIT,
+        FAIL,
+        SUCC
+    }
+
+    private PageDocStatus status = PageDocStatus.INIT;
+    private Date issueAt = new Date(System.currentTimeMillis()) ;
     private String title ;
+    private String titleOnContent ;
     private String content ;
 
 }
