@@ -2,7 +2,6 @@ package com.yg.horus.doc;
 
 import lombok.Data;
 
-import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -23,4 +22,11 @@ public class ContentPageDoc implements PageDoc {
     private String titleOnContent ;
     private String content ;
 
+    public String toString() {
+        StringBuilder sb = new StringBuilder() ;
+        sb.append("title :").append(this.title).append("\n");
+        sb.append("title on content :").append(this.titleOnContent).append("\n");
+        sb.append("content :").append(this.content).append("\n") ;
+        return sb.toString() ;
+    }
 }

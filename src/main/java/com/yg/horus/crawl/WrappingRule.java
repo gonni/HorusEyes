@@ -2,6 +2,7 @@ package com.yg.horus.crawl;
 
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,4 +14,7 @@ public class WrappingRule {
     private String titleOnContents ;
     private List<String> contents ;
 
+    public WrappingRule() {
+        this.contents = new ArrayList<>() ;
+    }
 }
