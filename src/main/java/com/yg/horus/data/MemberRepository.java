@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Deprecated
 @Repository
 public interface MemberRepository extends JpaRepository<MemberVo, Long> {
     public List<MemberVo> findById(String id);

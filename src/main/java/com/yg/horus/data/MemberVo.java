@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 
+@Deprecated
 @Data
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
