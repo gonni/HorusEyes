@@ -1,5 +1,6 @@
 package com.yg.horus.data;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -20,12 +21,18 @@ public class CrawlUnitVo {
     private Long crawlNo;
     private String url ;
     private String anchorText ;
-    private String status ;
+    @Setter
+    @Enumerated(EnumType.STRING)
+    private CrawlStatus status ;
     @CreationTimestamp
     private LocalDateTime regDate ;
+    @CreationTimestamp
+    private LocalDateTime updDate ;
+    @Setter
+    private String pageText ;
 
     @Builder
-    public CrawlUnitVo(String url, String anchorText, String status) {
+    public CrawlUnitVo(String url, String anchorText, CrawlStatus status) {
         this.url = url ;
         this.anchorText = anchorText ;
         this.status = status;

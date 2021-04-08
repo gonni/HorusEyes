@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 /**
  * Created by a1000074 on 07/04/2021.
  */
+@Deprecated
 @Entity
 @Getter
 @NoArgsConstructor

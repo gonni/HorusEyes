@@ -2,6 +2,7 @@ package com.yg.horus.data;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -38,12 +39,18 @@ public class CrawlRepositoryTest {
         CrawlUnitVo crawlUnitVo = CrawlUnitVo.builder()
                 .url("https://www.naver.com/news/test.hml")
                 .anchorText(anchorText)
-                .status("INIT")
+                .status(CrawlStatus.INIT)
                 .build();
 
 
         CrawlUnitVo save = this.crawlRepository.save(crawlUnitVo);
         System.out.println("Inserted Crawl No -> " + save.getCrawlNo());
+
+        save.setPageText("This is Text message for test created at " + System.currentTimeMillis() + " #id:"
+                + save.getCrawlNo()) ;
+        save.setStatus(CrawlStatus.SUCC);
+
+        this.crawlRepository.save(save);
 
         assertTrue(true) ;
     }
