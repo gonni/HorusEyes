@@ -32,7 +32,7 @@ public class CrawlRepositoryTest {
 
     @Test
     public void inOutCrawlTest() {
-        String anchorText = "Test Title Anchor at " + System.currentTimeMillis();
+        String anchorText = "Test Title Anchor at " + System.currentTimeMillis() ;
 
         TopSeeds topSeeds = TopSeeds.builder()
                 .urlPattern("http://navertest.com/news/today")
