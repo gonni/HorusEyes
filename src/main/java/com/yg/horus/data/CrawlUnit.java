@@ -15,10 +15,10 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 @Table(name="CRAWL_UNIT")
-public class CrawlUnitVo {
+public class CrawlUnit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long crawlNo;
+    private long crawlNo;
     private String url ;
     private String anchorText ;
     @Setter
@@ -30,9 +30,13 @@ public class CrawlUnitVo {
     private LocalDateTime updDate ;
     @Setter
     private String pageText ;
+    @Setter
+    @ManyToOne(targetEntity = TopSeeds.class, fetch = FetchType.LAZY)
+    @JoinColumn(name="SEED_NO")
+    private TopSeeds topSeeds ;
 
     @Builder
-    public CrawlUnitVo(String url, String anchorText, CrawlStatus status) {
+    public CrawlUnit(String url, String anchorText, CrawlStatus status) {
         this.url = url ;
         this.anchorText = anchorText ;
         this.status = status;

@@ -2,7 +2,6 @@ package com.yg.horus.data;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,8 +10,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
-
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -30,20 +27,29 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class CrawlRepositoryTest {
     @Autowired
     private CrawlRepository crawlRepository = null ;
+    @Autowired
+    private SeedRepository seedRepository = null ;
 
     @Test
     public void inOutCrawlTest() {
         String anchorText = "Test Title Anchor at " + System.currentTimeMillis();
 
+        TopSeeds topSeeds = TopSeeds.builder()
+                .urlPattern("http://navertest.com/news/today")
+                .title("TEST SITE").build();
 
-        CrawlUnitVo crawlUnitVo = CrawlUnitVo.builder()
+        this.seedRepository.save(topSeeds) ;
+
+        CrawlUnit crawlUnit = CrawlUnit.builder()
                 .url("https://www.naver.com/news/test.hml")
                 .anchorText(anchorText)
                 .status(CrawlStatus.INIT)
                 .build();
 
+        crawlUnit.setTopSeeds(topSeeds);
 
-        CrawlUnitVo save = this.crawlRepository.save(crawlUnitVo);
+
+        CrawlUnit save = this.crawlRepository.save(crawlUnit);
         System.out.println("Inserted Crawl No -> " + save.getCrawlNo());
 
         save.setPageText("This is Text message for test created at " + System.currentTimeMillis() + " #id:"
@@ -51,6 +57,9 @@ public class CrawlRepositoryTest {
         save.setStatus(CrawlStatus.SUCC);
 
         this.crawlRepository.save(save);
+
+
+
 
         assertTrue(true) ;
     }

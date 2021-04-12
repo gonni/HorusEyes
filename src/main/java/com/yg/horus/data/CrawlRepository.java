@@ -9,8 +9,8 @@ import java.util.List;
  * Created by a1000074 on 15/03/2021.
  */
 @Repository
-public interface CrawlRepository  extends JpaRepository<CrawlUnitVo, Long> {
-    public List<CrawlUnitVo> findByStatus(String status) ;
-    public List<CrawlUnitVo> findByAnchorText(String anchorText) ;
+public interface CrawlRepository  extends JpaRepository<CrawlUnit, Long> {
+    public List<CrawlUnit> findByStatus(String status) ;
+    public List<CrawlUnit> findByAnchorText(String anchorText) ;
 
 }
