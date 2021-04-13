@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
  * Created by a1000074 on 15/03/2021.
  */
 @Entity
+@Setter
 @Getter
 @NoArgsConstructor
 @Table(name="CRAWL_UNIT")

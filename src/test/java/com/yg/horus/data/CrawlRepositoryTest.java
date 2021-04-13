@@ -58,8 +58,16 @@ public class CrawlRepositoryTest {
 
         this.crawlRepository.save(save);
 
+        System.out.println("CrawlNo ->" + save.getCrawlNo());
 
-
+        this.crawlRepository.findAll().forEach(c -> {
+            try {
+                System.out.println("CrawlNo :" + c.getCrawlNo() + ", SeedClass :" + c.getTopSeeds());
+            } catch(Exception e) {
+                System.out.println("ERR :" + e.getMessage());
+                e.printStackTrace();
+            }
+        });
 
         assertTrue(true) ;
     }
