@@ -7,15 +7,23 @@ import lombok.Data;
  */
 @Data
 public class CrawlDataUnit {
+    public enum AnchorType {
+        TEXT,
+        IMG,
+        ETC
+    }
+
+    private AnchorType anchorType ;
     private String anchorText ;
     private String url ;
 
-    public CrawlDataUnit(String anchorText, String url) {
+    public CrawlDataUnit(AnchorType anchorType, String anchorText, String url) {
+        this.anchorType = anchorType ;
         this.anchorText = anchorText ;
         this.url = url ;
     }
 
     public String toString() {
-        return this.anchorText + "\t-->\t" + this.url ;
+        return this.anchorType + " : " + this.anchorText + "\t-->\t" + this.url ;
     }
 }

@@ -57,8 +57,8 @@ public class HttpResourceCrawler {
         }
     }
 
-    public List<CrawlDataUnit> getMatchedLinks(String url, String urlPattern) {
-        List<CrawlDataUnit> subUrls = this.getSubUrls(url);
+    public List<CrawlDataUnit> getMatchedLinks(String url, String urlPattern, String innerNodeSelector) {
+        List<CrawlDataUnit> subUrls = this.getSubUrls(url, innerNodeSelector);
         Pattern p = Pattern.compile(urlPattern) ;
 
         List<CrawlDataUnit> lstFiltered = new ArrayList<>() ;
@@ -75,8 +75,45 @@ public class HttpResourceCrawler {
         return lstFiltered ;
     }
 
+
+    public List<CrawlDataUnit> getSubUrls(String url, String innerNodeSelector) {
+        List<CrawlDataUnit> lstUrls = new ArrayList<>();
+
+        try {
+            Document doc = Jsoup.connect(url).get();
+            Elements filteredDoc = null ;
+            if(innerNodeSelector != null )
+                filteredDoc = doc.select(innerNodeSelector) ;
+            else
+                filteredDoc = doc.select("html") ;
+
+//            System.out.println("Filtered Top Elem -> " + filteredDoc.outerHtml());
+
+            Elements links = filteredDoc.select("a");
+
+            links.forEach(link -> {
+                String anchorText = link.text();
+                Elements imgElement = link.select("img");
+                if(imgElement != null && imgElement.size() > 0) {
+                    anchorText = "[IMG]" ;
+                }
+
+                String linkUrl = link.attr("abs:href");
+
+                System.out.println("URL ->" + linkUrl);
+                lstUrls.add(new CrawlDataUnit(anchorText, linkUrl));
+            });
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return lstUrls ;
+    }
+
     public List<CrawlDataUnit> getSubUrls(String url) {
-        List<CrawlDataUnit> lstUrls = new ArrayList<CrawlDataUnit>();
+        List<CrawlDataUnit> lstUrls = new ArrayList<>();
 
         try {
             Document doc = Jsoup.connect(url).get();
@@ -149,13 +186,21 @@ public class HttpResourceCrawler {
 
     public static void main(String ... v) throws Exception {
         HttpResourceCrawler test = new HttpResourceCrawler();
-        String seedUrl = "https://finance.naver.com/news/news_list.nhn?mode=LSS3D&section_id=101&section_id2=258&section_id3=402&date=20210124&page=2";
+        String seedUrl = "https://finance.naver.com/news/news_list.nhn?mode=LSS3D&section_id=101&section_id2=258&section_id3=402&date=20210124&page=1";
         String regexFilter = "^(https:\\/\\/finance.naver.com\\/news\\/news_read.nhn\\?article_id=).*$";
-        List<CrawlDataUnit> matchedLinks = test.getMatchedLinks(seedUrl, regexFilter);
+        List<CrawlDataUnit> matchedLinks = test.getMatchedLinks(seedUrl, regexFilter, "ul.realtimeNewsList");
 
         final Pattern p = Pattern.compile(regexFilter) ;
         System.out.println("====> ReX Filtered .." + matchedLinks.size());
         matchedLinks.stream().forEach(System.out::println);
+
+
+//        for (CrawlDataUnit crawlDataUnit : test.getSubUrls(seedUrl, "ul.realtimeNewsList")) {
+//            System.out.println("Filtered URL :" + crawlDataUnit.toString());
+//        }
+
+
+
 //        matchedLinks.stream().forEach(cdu->{
 //            Matcher matcher = p.matcher(cdu.getUrl());
 //            System.out.println("url -> " + cdu.getUrl());
