@@ -13,6 +13,7 @@ public class WrappingRule {
     private String titleOnTag ;
     private String titleOnContents ;
     private List<String> contents ;
+    private String contDate ;
 
     public WrappingRule() {
         this.contents = new ArrayList<>() ;

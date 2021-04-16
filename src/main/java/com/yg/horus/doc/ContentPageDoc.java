@@ -18,6 +18,7 @@ public class ContentPageDoc implements PageDoc {
 
     private PageDocStatus status = PageDocStatus.INIT;
     private Date issueAt = new Date(System.currentTimeMillis()) ;
+    private String dateOnContent ;
     private String title ;
     private String titleOnContent ;
     private String content ;
@@ -26,6 +27,7 @@ public class ContentPageDoc implements PageDoc {
         StringBuilder sb = new StringBuilder() ;
         sb.append("title :").append(this.title).append("\n");
         sb.append("title on content :").append(this.titleOnContent).append("\n");
+        sb.append("doc timeStamp :").append(this.dateOnContent).append("\n");
         sb.append("content :").append(this.content).append("\n") ;
         return sb.toString() ;
     }

@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 //@DataJpaTest
 @EnableJpaRepositories(basePackages = "com.yg.horus.data")
 @WebAppConfiguration
-@ActiveProfiles("local")
+@ActiveProfiles("localhome")
 @PropertySource("classpath:application.properties")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class CrawlRepositoryTest {
@@ -45,7 +45,7 @@ public class CrawlRepositoryTest {
                 .anchorText(anchorText)
                 .status(CrawlStatus.INIT)
                 .build();
-
+        crawlUnit.setPageDate("2021-01-24 15:12");
         crawlUnit.setTopSeeds(topSeeds);
 
 

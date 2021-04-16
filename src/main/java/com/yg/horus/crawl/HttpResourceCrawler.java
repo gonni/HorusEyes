@@ -93,15 +93,17 @@ public class HttpResourceCrawler {
 
             links.forEach(link -> {
                 String anchorText = link.text();
+                String linkUrl = link.attr("abs:href");
                 Elements imgElement = link.select("img");
                 if(imgElement != null && imgElement.size() > 0) {
                     anchorText = "[IMG]" ;
+                    lstUrls.add(new CrawlDataUnit(CrawlDataUnit.AnchorType.IMG, anchorText, linkUrl));
+                } else {
+                    lstUrls.add(new CrawlDataUnit(CrawlDataUnit.AnchorType.TEXT, anchorText, linkUrl));
                 }
 
-                String linkUrl = link.attr("abs:href");
+//                System.out.println("URL ->" + linkUrl);
 
-                System.out.println("URL ->" + linkUrl);
-                lstUrls.add(new CrawlDataUnit(anchorText, linkUrl));
             });
 
 
@@ -136,7 +138,7 @@ public class HttpResourceCrawler {
                 String linkUrl = link.attr("abs:href");
 
                 System.out.println("URL ->" + linkUrl);
-                lstUrls.add(new CrawlDataUnit(anchorText, linkUrl));
+                lstUrls.add(new CrawlDataUnit(null, anchorText, linkUrl));
             });
 
 
@@ -186,12 +188,13 @@ public class HttpResourceCrawler {
 
     public static void main(String ... v) throws Exception {
         HttpResourceCrawler test = new HttpResourceCrawler();
-        String seedUrl = "https://finance.naver.com/news/news_list.nhn?mode=LSS3D&section_id=101&section_id2=258&section_id3=402&date=20210124&page=1";
+        String seedUrl = "https://finance.naver.com/news/news_list.nhn?mode=LSS3D&section_id=101&section_id2=258&section_id3=402&date=20200124&page=1";
+
         String regexFilter = "^(https:\\/\\/finance.naver.com\\/news\\/news_read.nhn\\?article_id=).*$";
         List<CrawlDataUnit> matchedLinks = test.getMatchedLinks(seedUrl, regexFilter, "ul.realtimeNewsList");
 
         final Pattern p = Pattern.compile(regexFilter) ;
-        System.out.println("====> ReX Filtered .." + matchedLinks.size());
+        System.out.println("====> ReX Filtered :" + matchedLinks.size());
         matchedLinks.stream().forEach(System.out::println);
 
 

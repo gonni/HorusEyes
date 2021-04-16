@@ -28,6 +28,18 @@ public class JobManager {
         return this.multiWorkerJobQueue.size() ;
     }
 
+    public Job createSeedCrawlJob() {
+        return null ;
+    }
+
+    public Job createContentCrawlJob() {
+        return null ;
+    }
+
+    public Job createTimeRangeSeedCrawlJob() {
+        return null ;
+    }
+
     public static void main(String ... v) {
         System.out.println("Active Job Manager ..");
 

@@ -32,6 +32,9 @@ public class CrawlUnit {
     @Setter
     private String pageText ;
     @Setter
+    private String pageDate ;
+
+    @Setter
     @ManyToOne(targetEntity = TopSeeds.class, fetch = FetchType.LAZY)
     @JoinColumn(name="SEED_NO")
     private TopSeeds topSeeds ;

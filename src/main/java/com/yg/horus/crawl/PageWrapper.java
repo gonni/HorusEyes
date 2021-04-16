@@ -33,6 +33,7 @@ public class PageWrapper {
 
         contentPageDoc.setTitle(pageDoc.title());
         contentPageDoc.setTitleOnContent(pageDoc.select(wrappingRule.getTitleOnContents()).text());
+        contentPageDoc.setDateOnContent(pageDoc.select(wrappingRule.getContDate()).text());
 
         StringBuilder sb = new StringBuilder();
         for(String rule : wrappingRule.getContents()) {
@@ -55,6 +56,7 @@ public class PageWrapper {
         WrappingRule wrapRule = new WrappingRule() ;
         wrapRule.setTitleOnContents("div.article_info > h3");
         wrapRule.getContents().add("div#content");
+        wrapRule.setContDate("span.article_date");
 
         ContentPageDoc contentPageDoc = pageWrapper.getContentPageDoc(targetUrl, wrapRule);
 

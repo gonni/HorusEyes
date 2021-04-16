@@ -10,3 +10,16 @@ spring:
       maximum-pool-size: 10
 logging:
   config: classpath:logback-spring.xml
+---
+spring:
+  profiles: localhome
+  datasource:
+    username: root
+    password: 1111
+    jdbcUrl: jdbc:mysql://localhost:3306/horus0?useUnicode=true&characterEncoding=utf8
+    url: jdbc:mysql://localhost:3306/horus0?useUnicode=true&characterEncoding=utf8
+    driver-class-name: org.mariadb.jdbc.Driver
+    hikari:
+      maximum-pool-size: 10
+logging:
+  config: classpath:logback-spring.xml
