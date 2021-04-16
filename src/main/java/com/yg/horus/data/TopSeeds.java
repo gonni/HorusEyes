@@ -30,4 +30,8 @@ public class TopSeeds {
         this.urlPattern = urlPattern ;
         this.title = title ;
     }
+
+    public String toString() {
+        return null ;
+    }
 }
