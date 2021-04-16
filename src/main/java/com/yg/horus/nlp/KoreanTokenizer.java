@@ -28,7 +28,7 @@ public class KoreanTokenizer {
         for (Token token : tokenList) {
 //            System.out.format("(%2d, %2d) %s/%s\n", token.getBeginIndex(), token.getEndIndex(), token.getMorph(), token.getPos());
 
-
+            //aa
             String pos = token.getPos();
             String tk = token.getMorph();
 
