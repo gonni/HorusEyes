@@ -12,6 +12,7 @@ import org.apache.http.util.EntityUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
+import org.springframework.stereotype.Service;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
@@ -30,6 +31,7 @@ import java.util.regex.Pattern;
 /**
  * Created by a1000074 on 07/01/2021.
  */
+@Service
 public class HttpResourceCrawler {
 
     public HttpResourceCrawler() {

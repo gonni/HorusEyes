@@ -5,6 +5,7 @@ import java.util.List;
 /**
  * Created by jeff on 21. 4. 16.
  */
+@Deprecated
 public class NaverStockJobManager {
     public static void main(String ... v) {
         String seedUrl = "https://finance.naver.com/news/news_list.nhn?" +
@@ -15,4 +16,6 @@ public class NaverStockJobManager {
     public static List<String> createUrls(String seedUrl) {
         return null ;
     }
+
+
 }
