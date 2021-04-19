@@ -11,6 +11,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -21,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 //@DataJpaTest
 @EnableJpaRepositories(basePackages = "com.yg.horus.data")
 @WebAppConfiguration
-@ActiveProfiles("localhome")
+@ActiveProfiles("local")
 @PropertySource("classpath:application.properties")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class CrawlRepositoryTest {
@@ -41,7 +43,7 @@ public class CrawlRepositoryTest {
         this.seedRepository.save(topSeeds) ;
 
         CrawlUnit crawlUnit = CrawlUnit.builder()
-                .url("https://www.naver.com/news/test.hml")
+                .url("https://www.naver.com/news/test3.hml")
                 .anchorText(anchorText)
                 .status(CrawlStatus.INIT)
                 .build();
@@ -68,6 +70,12 @@ public class CrawlRepositoryTest {
                 e.printStackTrace();
             }
         });
+
+        List<CrawlUnit> byUrl = this.crawlRepository.findByUrl("https://www.naver.com/news/test1.hml");
+        if(byUrl != null && byUrl.size() > 0)
+            System.out.println("Find -> " + byUrl.get(0).getUrl());
+        else
+            System.out.println("Failed ..");
 
         assertTrue(true) ;
     }

@@ -1,0 +1,5 @@
+Anchor List Crawl Rule
+- Url Filter Pattern+
+- Area Top Element Query
+
+

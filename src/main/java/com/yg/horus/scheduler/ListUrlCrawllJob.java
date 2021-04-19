@@ -6,11 +6,12 @@ import com.yg.horus.data.CrawlRepository;
 import lombok.Builder;
 
 import java.util.List;
+import java.util.Observable;
 
 /**
  * Created by jeff on 21. 4. 18.
  */
-public class ListUrlCrawllJob implements Job {
+public class ListUrlCrawllJob extends Observable implements Job {
 
     CrawlRepository crawlRepository = null ;
     private String seedUrl = null ;
@@ -30,13 +31,23 @@ public class ListUrlCrawllJob implements Job {
         List<CrawlDataUnit> matchedLinks = crawler.getMatchedLinks(this.seedUrl, this.crawlUrlRegxPattern, this.crawlUrlAreaQuery);
 
         //TODO store data(need to check dupplicated
+        matchedLinks.forEach(link -> {
+
+            ;
+
+        });
 
     }
 
     @Override
-    public void getStatus() {
+    public JobStatus getStatus() {
 
+        return null;
     }
 
+    public static void main(String ... v) {
+        System.out.println("Active System .. ");
+
+    }
 
 }

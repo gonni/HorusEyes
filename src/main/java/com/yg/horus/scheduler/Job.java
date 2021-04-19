@@ -5,5 +5,5 @@ package com.yg.horus.scheduler;
  */
 public interface Job {
     void start() ;
-    void getStatus();
+    JobStatus getStatus();
 }

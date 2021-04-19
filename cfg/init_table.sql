@@ -15,3 +15,12 @@ create table CRAWL_SEEDS(
 	URL_PATTERN varchar(2048),
 	TITLE varchar(128)
 );
+
+create table WRAPPER_RULE(
+	WRAPPER_NO INT not null AUTO_INCREMENT PRIMARY KEY,
+	SEED_NO INT,
+	WRAP_TYPE varchar(64),
+	WRAP_VAL varchar(1024),
+	WRAP_NAME varchar(128),
+	REG_DT datetime
+);
