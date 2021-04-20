@@ -10,4 +10,5 @@ import java.util.Iterator;
  */
 @Repository
 public interface SeedRepository extends JpaRepository<TopSeeds, Iterator> {
+    TopSeeds findBySeedNo(long seedNo);
 }

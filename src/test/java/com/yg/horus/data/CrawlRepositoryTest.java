@@ -32,52 +32,67 @@ public class CrawlRepositoryTest {
     @Autowired
     private SeedRepository seedRepository = null ;
 
+//    @Test
+//    public void testInOutCrawl() {
+//        String anchorText = "Test Title Anchor at " + System.currentTimeMillis() ;
+//
+//        TopSeeds topSeeds = TopSeeds.builder()
+//                .urlPattern("http://navertest.com/news/today")
+//                .title("TEST SITE").build();
+//
+//        this.seedRepository.save(topSeeds) ;
+//
+//        CrawlUnit crawlUnit = CrawlUnit.builder()
+//                .url("https://www.naver.com/news/test3.hml")
+//                .anchorText(anchorText)
+//                .status(CrawlStatus.INIT)
+//                .build();
+//        crawlUnit.setPageDate("2021-01-24 15:12");
+//        crawlUnit.setTopSeeds(topSeeds);
+//
+//
+//        CrawlUnit save = this.crawlRepository.save(crawlUnit);
+//        System.out.println("Inserted Crawl No -> " + save.getCrawlNo());
+//
+//        save.setPageText("This is Text message for test created at " + System.currentTimeMillis() + " #id:"
+//                + save.getCrawlNo()) ;
+//        save.setStatus(CrawlStatus.SUCC);
+//
+//        this.crawlRepository.save(save);
+//
+//        System.out.println("CrawlNo ->" + save.getCrawlNo());
+//
+//        this.crawlRepository.findAll().forEach(c -> {
+//            try {
+//                System.out.println("CrawlNo :" + c.getCrawlNo() + ", SeedClass :" + c.getTopSeeds());
+//            } catch(Exception e) {
+//                System.out.println("ERR :" + e.getMessage());
+//                e.printStackTrace();
+//            }
+//        });
+//
+//        List<CrawlUnit> byUrl = this.crawlRepository.findByUrl("https://www.naver.com/news/test1.hml");
+//        if(byUrl != null && byUrl.size() > 0)
+//            System.out.println("Find -> " + byUrl.get(0).getUrl());
+//        else
+//            System.out.println("Failed ..");
+//
+//        assertTrue(true) ;
+//    }
+
     @Test
-    public void inOutCrawlTest() {
-        String anchorText = "Test Title Anchor at " + System.currentTimeMillis() ;
+    public void testCrawlSeed() {
+        System.out.println("Test SeedRep ..");
 
-        TopSeeds topSeeds = TopSeeds.builder()
-                .urlPattern("http://navertest.com/news/today")
-                .title("TEST SITE").build();
+        TopSeeds bySeedNo = this.seedRepository.findBySeedNo(19L);
+        assertTrue(bySeedNo != null) ;
+        assertTrue(bySeedNo.getWrapperRules().size() > 0);
 
-        this.seedRepository.save(topSeeds) ;
+        System.out.println("Read Result ..");
+        bySeedNo.getWrapperRules().forEach(System.out::println);
 
-        CrawlUnit crawlUnit = CrawlUnit.builder()
-                .url("https://www.naver.com/news/test3.hml")
-                .anchorText(anchorText)
-                .status(CrawlStatus.INIT)
-                .build();
-        crawlUnit.setPageDate("2021-01-24 15:12");
-        crawlUnit.setTopSeeds(topSeeds);
+        System.out.println("Test completed for SeedRep ..");
 
-
-        CrawlUnit save = this.crawlRepository.save(crawlUnit);
-        System.out.println("Inserted Crawl No -> " + save.getCrawlNo());
-
-        save.setPageText("This is Text message for test created at " + System.currentTimeMillis() + " #id:"
-                + save.getCrawlNo()) ;
-        save.setStatus(CrawlStatus.SUCC);
-
-        this.crawlRepository.save(save);
-
-        System.out.println("CrawlNo ->" + save.getCrawlNo());
-
-        this.crawlRepository.findAll().forEach(c -> {
-            try {
-                System.out.println("CrawlNo :" + c.getCrawlNo() + ", SeedClass :" + c.getTopSeeds());
-            } catch(Exception e) {
-                System.out.println("ERR :" + e.getMessage());
-                e.printStackTrace();
-            }
-        });
-
-        List<CrawlUnit> byUrl = this.crawlRepository.findByUrl("https://www.naver.com/news/test1.hml");
-        if(byUrl != null && byUrl.size() > 0)
-            System.out.println("Find -> " + byUrl.get(0).getUrl());
-        else
-            System.out.println("Failed ..");
-
-        assertTrue(true) ;
     }
 
 }
