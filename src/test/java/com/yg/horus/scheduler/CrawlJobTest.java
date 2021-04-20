@@ -11,6 +11,9 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import static org.junit.Assert.assertTrue;
+
+
 /**
  * Created by a1000074 on 20/04/2021.
  */
@@ -26,12 +29,16 @@ public class CrawlJobTest {
     private JobManager jobManager = null ;
 
     @Test
-    public void testlistCrawlJob() {
+    public void testListCrawlJob() {
         Job newJob = this.jobManager.createSeedListCrawlJob(19);
         System.out.println("Job Creation Test Completed for " + newJob);
 
-        newJob = this.jobManager.createSeedListCrawlJob(20);
-        System.out.println("Job Creation Test Completed for " + newJob);
+        newJob.start();
+
+        System.out.println("Successfully Job Completed ..");
+        assertTrue(newJob.getStatus().equals(JobStatus.COMPLETED));
+//        newJob = this.jobManager.createSeedListCrawlJob(20);
+//        System.out.println("Job Creation Test Completed for " + newJob);
     }
 
 }

@@ -80,19 +80,25 @@ public class CrawlRepositoryTest {
 //        assertTrue(true) ;
 //    }
 
+//    @Test
+//    public void testCrawlSeed() {
+//        System.out.println("Test SeedRep ..");
+//
+//        TopSeeds bySeedNo = this.seedRepository.findBySeedNo(19L);
+//        assertTrue(bySeedNo != null) ;
+//        assertTrue(bySeedNo.getWrapperRules().size() > 0);
+//
+//        System.out.println("Read Result ..");
+//        bySeedNo.getWrapperRules().forEach(System.out::println);
+//
+//        System.out.println("Test completed for SeedRep ..");
+//    }
+
     @Test
-    public void testCrawlSeed() {
-        System.out.println("Test SeedRep ..");
-
-        TopSeeds bySeedNo = this.seedRepository.findBySeedNo(19L);
-        assertTrue(bySeedNo != null) ;
-        assertTrue(bySeedNo.getWrapperRules().size() > 0);
-
-        System.out.println("Read Result ..");
-        bySeedNo.getWrapperRules().forEach(System.out::println);
-
-        System.out.println("Test completed for SeedRep ..");
-
+    public void testFind() {
+        CrawlUnit oneByUrl = this.crawlRepository.findOneByUrl("https://www.naver.com/news/test3.hml");
+        System.out.println("Result ->" + oneByUrl);
+        assertTrue(oneByUrl != null);
     }
 
 }

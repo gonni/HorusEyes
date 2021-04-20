@@ -13,6 +13,8 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 /**
  * Created by a1000074 on 20/04/2021.
  */
@@ -29,16 +31,25 @@ public class SeedRepositoryTest {
     @Autowired
     private SeedRepository seedRepository = null ;
 
+//    @Test
+//    public void testSaveAll() {
+//
+//        TopSeeds topSeeds = TopSeeds.builder()
+//                .urlPattern("http://test.test3.com")
+//                .title("jpa test3").build() ;
+//        topSeeds.addWrapperRule(new WrapperRule(WrapType.CONT_MAIN_CONT, "TestJPA1", "Test Only JPA"));
+//        topSeeds.addWrapperRule(new WrapperRule(WrapType.CONT_DATE_ON_PAGE, "TestJPA2", "Test Only JPA2"));
+//        topSeeds.addWrapperRule(new WrapperRule(WrapType.LIST_URL_PATTERN_FILTER, "TestJPA3", "Test Only JPA3"));
+//
+//        this.seedRepository.save(topSeeds);
+//    }
+
     @Test
-    public void testSaveAll() {
+    public void testUpdateData() {
+        TopSeeds topSeed = this.seedRepository.findBySeedNo(21);
+        topSeed.setTitle("Modified Title for JPA");
 
-        TopSeeds topSeeds = TopSeeds.builder()
-                .urlPattern("http://test.test3.com")
-                .title("jpa test3").build() ;
-        topSeeds.addWrapperRule(new WrapperRule(WrapType.CONT_MAIN_CONT, "TestJPA1", "Test Only JPA"));
-        topSeeds.addWrapperRule(new WrapperRule(WrapType.CONT_DATE_ON_PAGE, "TestJPA2", "Test Only JPA2"));
-        topSeeds.addWrapperRule(new WrapperRule(WrapType.LIST_URL_PATTERN_FILTER, "TestJPA3", "Test Only JPA3"));
-
-        this.seedRepository.save(topSeeds);
+        this.seedRepository.save(topSeed);
+        assertTrue(true);
     }
 }

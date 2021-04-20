@@ -45,4 +45,9 @@ public class CrawlUnit {
         this.anchorText = anchorText ;
         this.status = status;
     }
+
+    @Override
+    public String toString() {
+        return String.format("%s|%s|%s|%s|%s|%s", crawlNo, url, anchorText, status, regDate, pageText);
+    }
 }

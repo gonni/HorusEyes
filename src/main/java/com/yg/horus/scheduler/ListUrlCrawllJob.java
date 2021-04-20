@@ -3,6 +3,7 @@ package com.yg.horus.scheduler;
 import com.yg.horus.crawl.CrawlDataUnit;
 import com.yg.horus.crawl.HttpResourceCrawler;
 import com.yg.horus.data.CrawlRepository;
+import com.yg.horus.data.CrawlStatus;
 import com.yg.horus.data.CrawlUnit;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
@@ -33,17 +34,25 @@ public class ListUrlCrawllJob extends Observable implements Job {
         HttpResourceCrawler crawler = new HttpResourceCrawler();
 
         List<CrawlDataUnit> matchedLinks = crawler.getMatchedLinks(this.seedUrl, this.crawlUrlRegxPattern, this.crawlUrlAreaQuery);
+        int cntNew = 0;
+        for(CrawlDataUnit link : matchedLinks) {
+            CrawlUnit crawlUnit = this.crawlRepository.findOneByUrl(link.getUrl());
 
-        //TODO store data(need to check dupplicated
-        matchedLinks.forEach(link -> {
+            if(crawlUnit == null) {
+                crawlUnit = CrawlUnit.builder()
+                        .url(link.getUrl())
+                        .anchorText(link.getAnchorText())
+                        .status(CrawlStatus.IURL)
+                        .build();
 
-            List<CrawlUnit> crawlUnits = this.crawlRepository.findByUrl(link.getUrl());
-            if(crawlUnits != null && crawlUnits.size() > 0) {
-                log.info("Duplicated : {}", link);
+                this.crawlRepository.save(crawlUnit);
+                cntNew++;
             } else {
-                this.crawlRepository.save(crawlUnits.get(0));
+                log.info("Dupplicated : {}", link);
             }
-        });
+        }
+
+        log.info("Added News Links : {}/{}", cntNew, matchedLinks.size());
         this.jobStatus = JobStatus.COMPLETED ;
     }
 

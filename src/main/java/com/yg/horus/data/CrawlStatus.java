@@ -6,6 +6,7 @@ package com.yg.horus.data;
 public enum CrawlStatus {
     INIT,
     PEND,
+    IURL,
     SUCC,
     FAIL
 }

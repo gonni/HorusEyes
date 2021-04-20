@@ -12,6 +12,6 @@ import java.util.List;
 public interface CrawlRepository  extends JpaRepository<CrawlUnit, Long> {
     List<CrawlUnit> findByStatus(String status) ;
     List<CrawlUnit> findByAnchorText(String anchorText) ;
-    List<CrawlUnit> findByUrl(String url) ;
+    CrawlUnit findOneByUrl(String url) ;
 
 }
