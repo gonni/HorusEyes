@@ -1,11 +1,11 @@
 package com.yg.horus.scheduler;
 
 import com.yg.horus.crawl.CrawlDataUnit;
-import com.yg.horus.crawl.HttpResourceCrawler;
+import com.yg.horus.crawl.ListPageCrawler;
 import com.yg.horus.data.CrawlRepository;
 import com.yg.horus.data.CrawlStatus;
 import com.yg.horus.data.CrawlUnit;
-import lombok.Builder;
+import com.yg.horus.data.TopSeeds;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
@@ -16,24 +16,27 @@ import java.util.Observable;
  */
 @Slf4j
 public class ListUrlCrawllJob extends Observable implements Job {
-
     private JobStatus jobStatus = JobStatus.INIT;
     CrawlRepository crawlRepository = null ;
-    private String seedUrl = null ;
     String crawlUrlRegxPattern = null ;
     String crawlUrlAreaQuery = null ;
+    private TopSeeds topSeeds = null ;
 
-    @Builder
-    public ListUrlCrawllJob(String seedUrl) {
-        this.seedUrl = seedUrl;
+    public ListUrlCrawllJob(TopSeeds topSeeds) {
+        this.topSeeds = topSeeds ;
+    }
+
+    public ListUrlCrawllJob(String targetUrl) {
+        this.topSeeds = TopSeeds.builder().urlPattern(targetUrl).build();
+        this.topSeeds.setSeedNo(-1L);
     }
 
     @Override
     public void start() {
         this.jobStatus = JobStatus.PROCESSING ;
-        HttpResourceCrawler crawler = new HttpResourceCrawler();
+        ListPageCrawler crawler = new ListPageCrawler();
 
-        List<CrawlDataUnit> matchedLinks = crawler.getMatchedLinks(this.seedUrl, this.crawlUrlRegxPattern, this.crawlUrlAreaQuery);
+        List<CrawlDataUnit> matchedLinks = crawler.getMatchedLinks(this.topSeeds.getUrlPattern(), this.crawlUrlRegxPattern, this.crawlUrlAreaQuery);
         int cntNew = 0;
         for(CrawlDataUnit link : matchedLinks) {
             CrawlUnit crawlUnit = this.crawlRepository.findOneByUrl(link.getUrl());
@@ -45,12 +48,26 @@ public class ListUrlCrawllJob extends Observable implements Job {
                         .status(CrawlStatus.IURL)
                         .build();
 
-                this.crawlRepository.save(crawlUnit);
+//                crawlUnit.setSeedNo(this.seedNo);
+                if(link.getAnchorType().equals(CrawlDataUnit.AnchorType.IMG)) {
+                    crawlUnit.setAnchorImg(link.getAnchorText());
+                    crawlUnit.setAnchorText(null);
+                }
                 cntNew++;
             } else {
                 log.info("Dupplicated : {}", link);
+
+                if(link.getAnchorType().equals(CrawlDataUnit.AnchorType.IMG)) {
+                    crawlUnit.setAnchorImg(link.getAnchorText());
+                } else if(link.getAnchorType().equals(CrawlDataUnit.AnchorType.TEXT)) {
+                    crawlUnit.setAnchorText(link.getAnchorText());
+                }
             }
+            crawlUnit.setTopSeeds(this.topSeeds);
+
+            this.crawlRepository.save(crawlUnit);
         }
+
 
         log.info("Added News Links : {}/{}", cntNew, matchedLinks.size());
         this.jobStatus = JobStatus.COMPLETED ;

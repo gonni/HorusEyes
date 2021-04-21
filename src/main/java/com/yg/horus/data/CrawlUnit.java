@@ -6,6 +6,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 /**
@@ -22,9 +23,11 @@ public class CrawlUnit {
     private long crawlNo;
     private String url ;
     private String anchorText ;
+    private String anchorImg ;
     @Setter
     @Enumerated(EnumType.STRING)
     private CrawlStatus status ;
+//    private long seedNo ;
     @CreationTimestamp
     private LocalDateTime regDate ;
     @CreationTimestamp

@@ -12,19 +12,19 @@ import java.io.IOException;
 @Slf4j
 public class PageWrapper {
 
-    private HttpResourceCrawler httpResourceCrawler = null ;
+    private ListPageCrawler listPageCrawler = null ;
 
     public PageWrapper() {
-        this.httpResourceCrawler = new HttpResourceCrawler() ;
+        this.listPageCrawler = new ListPageCrawler() ;
     }
 
     //TODO need to consider ...
-    public ContentPageDoc getContentPageDoc(String url, WrappingRule wrappingRule) {
+    public ContentPageDoc getContentPageDoc(String url, ContentsPageWrappingRule contentsPageWrappingRule) {
         ContentPageDoc contentPageDoc = new ContentPageDoc() ;
 
         Document pageDoc = null ;
         try {
-            pageDoc = this.httpResourceCrawler.getPageDoc(url);
+            pageDoc = this.listPageCrawler.getPageDoc(url);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -32,11 +32,11 @@ public class PageWrapper {
         }
 
         contentPageDoc.setTitle(pageDoc.title());
-        contentPageDoc.setTitleOnContent(pageDoc.select(wrappingRule.getTitleOnContents()).text());
-        contentPageDoc.setDateOnContent(pageDoc.select(wrappingRule.getContDate()).text());
+        contentPageDoc.setTitleOnContent(pageDoc.select(contentsPageWrappingRule.getTitleOnContents()).text());
+        contentPageDoc.setDateOnContent(pageDoc.select(contentsPageWrappingRule.getContDate()).text());
 
         StringBuilder sb = new StringBuilder();
-        for(String rule : wrappingRule.getContents()) {
+        for(String rule : contentsPageWrappingRule.getContents()) {
             sb.append(pageDoc.select(rule).text()).append("\n---\n");
         }
 
@@ -49,11 +49,11 @@ public class PageWrapper {
         System.out.println("Active System ..");
 
         String targetUrl = "https://finance.naver.com/news/news_read.nhn?article_id=0004570979&office_id=014&mode=LSS3D&type=0&section_id=101&section_id2=258&section_id3=402&date=20210124&page=2";
-
+        targetUrl = "https://finance.naver.com/news/news_read.nhn?article_id=0004575978&office_id=008&mode=LSS3D&type=0&section_id=101&section_id2=258&section_id3=401&date=20210421&page=1";
 
         PageWrapper pageWrapper = new PageWrapper();
 
-        WrappingRule wrapRule = new WrappingRule() ;
+        ContentsPageWrappingRule wrapRule = new ContentsPageWrappingRule() ;
         wrapRule.setTitleOnContents("div.article_info > h3");
         wrapRule.getContents().add("div#content");
         wrapRule.setContDate("span.article_date");

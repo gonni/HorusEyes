@@ -25,16 +25,15 @@ import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
  * Created by a1000074 on 07/01/2021.
  */
 @Service
-public class HttpResourceCrawler {
+public class ListPageCrawler {
 
-    public HttpResourceCrawler() {
+    public ListPageCrawler() {
         this.initSslConnection(); ;
     }
 
@@ -98,7 +97,7 @@ public class HttpResourceCrawler {
                 String linkUrl = link.attr("abs:href");
                 Elements imgElement = link.select("img");
                 if(imgElement != null && imgElement.size() > 0) {
-                    anchorText = "[IMG]" ;
+                    anchorText = imgElement.attr("src") ;
                     lstUrls.add(new CrawlDataUnit(CrawlDataUnit.AnchorType.IMG, anchorText, linkUrl));
                 } else {
                     lstUrls.add(new CrawlDataUnit(CrawlDataUnit.AnchorType.TEXT, anchorText, linkUrl));
@@ -189,7 +188,7 @@ public class HttpResourceCrawler {
     }
 
     public static void main(String ... v) throws Exception {
-        HttpResourceCrawler test = new HttpResourceCrawler();
+        ListPageCrawler test = new ListPageCrawler();
         String seedUrl = "https://finance.naver.com/news/news_list.nhn?mode=LSS3D&section_id=101&section_id2=258&section_id3=402&date=20200124&page=1";
         seedUrl = "https://finance.naver.com/news/news_list.nhn?mode=LSS3D&section_id=101&section_id2=258&section_id3=401";
 

@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -94,11 +96,21 @@ public class CrawlRepositoryTest {
 //        System.out.println("Test completed for SeedRep ..");
 //    }
 
+//    @Test
+//    public void testFind() {
+//        CrawlUnit oneByUrl = this.crawlRepository.findOneByUrl("https://www.naver.com/news/test3.hml");
+//        System.out.println("Result ->" + oneByUrl);
+//        assertTrue(oneByUrl != null);
+//    }
+
     @Test
-    public void testFind() {
-        CrawlUnit oneByUrl = this.crawlRepository.findOneByUrl("https://www.naver.com/news/test3.hml");
-        System.out.println("Result ->" + oneByUrl);
-        assertTrue(oneByUrl != null);
+    public void testLimit() {
+        PageRequest pageRequest = PageRequest.of(1, 5);
+        List<CrawlUnit> crawlUnits = this.crawlRepository.findByStatusOrderByCrawlNoDesc(CrawlStatus.IURL, pageRequest);
+
+        crawlUnits.stream().forEach(System.out::println);
+
+        assertTrue(crawlUnits.size() == 5);
     }
 
 }

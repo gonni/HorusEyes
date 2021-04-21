@@ -1,10 +1,13 @@
 package com.yg.horus.scheduler;
 
+import com.yg.horus.crawl.ContentsPageWrappingRule;
 import com.yg.horus.data.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -21,8 +24,8 @@ public class JobManager {
     private CrawlRepository crawlRepository = null ;
     @Autowired
     private SeedRepository seedRepository = null ;
-
-
+    @Autowired
+    private WrapperRepository wrapperRepository = null ;
 
     public JobManager() {
         this.singleWorkerQueue = new LinkedBlockingQueue<>();
@@ -48,7 +51,11 @@ public class JobManager {
             return null ;
         }
 
-        ListUrlCrawllJob job = ListUrlCrawllJob.builder().seedUrl(seed.getUrlPattern()).build() ;
+//        ListUrlCrawllJob job = ListUrlCrawllJob.builder()
+//                .seedUrl(seed.getUrlPattern())
+//                .seedNo(seedNo).build() ;
+
+        ListUrlCrawllJob job = new ListUrlCrawllJob(seed);
         job.crawlRepository = this.crawlRepository ;
 
         List<WrapperRule> wrapperRules = seed.getWrapperRules();
@@ -64,6 +71,36 @@ public class JobManager {
 
         return job ;
     }
+
+    public List<Job> createLatestContentsCrawlJobs(int topN) {
+        List<Job> retJobs = new ArrayList<>() ;
+
+        List<CrawlUnit> seed4cont = this.crawlRepository.findByStatusOrderByCrawlNoDesc(CrawlStatus.IURL, PageRequest.of(1, topN));
+
+        for(CrawlUnit cu : seed4cont) {
+            if(cu.getTopSeeds() != null && cu.getTopSeeds().getSeedNo() > 0) {
+                List<WrapperRule> lstWrapperRule = this.wrapperRepository.findBySeedNo(cu.getTopSeeds().getSeedNo());
+                ContentsPageWrappingRule wrapRule = new ContentsPageWrappingRule();
+
+                for(WrapperRule wrule : lstWrapperRule) {
+                    if(wrule.getWrapType().equals(WrapType.CONT_DATE_ON_PAGE)) {
+                        wrapRule.setContDate(wrule.getWrapVal());
+                    } else if(wrule.getWrapType().equals(WrapType.CONT_MAIN_CONT)) {
+                        wrapRule.getContents().add(wrule.getWrapVal());
+                    } else if(wrule.getWrapType().equals(WrapType.CONT_TITLE_ON_PAGE)) {
+                        wrapRule.setTitleOnContents(wrule.getWrapVal());
+                    }
+                }
+
+                // Create !!! ContentJob
+                retJobs.add(new ContentCrawlJob(cu.getUrl(), wrapRule, this.crawlRepository));
+            }
+
+        }
+
+        return retJobs;
+    }
+
 
     public Job createContentCrawlJob() {
         return null ;

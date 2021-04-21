@@ -28,11 +28,18 @@ public class WrapperRuleTest {
 
     @Test
     public void testInsertSample() {
+//        WrapperRule wrapperRule = WrapperRule.builder()
+//                .seedNo(19)
+//                .wrapName("ListFiltering")
+//                .wrapType(WrapType.LIST_URL_PATTERN_FILTER)
+//                .wrapVal("^(https:\\/\\/finance.naver.com\\/news\\/news_read.nhn\\?article_id=).*$")
+//                .build();
+
         WrapperRule wrapperRule = WrapperRule.builder()
                 .seedNo(19)
                 .wrapName("ListFiltering")
-                .wrapType(WrapType.LIST_URL_PATTERN_FILTER)
-                .wrapVal("^(https:\\/\\/finance.naver.com\\/news\\/news_read.nhn\\?article_id=).*$")
+                .wrapType(WrapType.LIST_URL_TOP_AREA_FILTER)
+                .wrapVal("ul.realtimeNewsList")
                 .build();
 
         this.wrapperRepository.save(wrapperRule) ;

@@ -11,6 +11,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import java.util.List;
+
 import static org.junit.Assert.assertTrue;
 
 
@@ -28,17 +30,26 @@ public class CrawlJobTest {
     @Autowired
     private JobManager jobManager = null ;
 
-    @Test
-    public void testListCrawlJob() {
-        Job newJob = this.jobManager.createSeedListCrawlJob(19);
-        System.out.println("Job Creation Test Completed for " + newJob);
-
-        newJob.start();
-
-        System.out.println("Successfully Job Completed ..");
-        assertTrue(newJob.getStatus().equals(JobStatus.COMPLETED));
-//        newJob = this.jobManager.createSeedListCrawlJob(20);
+//    @Test
+//    public void testListCrawlJob() {
+//        Job newJob = this.jobManager.createSeedListCrawlJob(19);
 //        System.out.println("Job Creation Test Completed for " + newJob);
+//
+//        newJob.start();
+//
+//        System.out.println("Successfully Job Completed ..");
+//        assertTrue(newJob.getStatus().equals(JobStatus.COMPLETED));
+////        newJob = this.jobManager.createSeedListCrawlJob(20);
+////        System.out.println("Job Creation Test Completed for " + newJob);
+//    }
+
+    @Test
+    public void testCreateContCrawlJob() {
+        List<Job> contJobs = this.jobManager.createLatestContentsCrawlJobs(10);
+        contJobs.forEach(System.out::println);
+
+        assertTrue(contJobs.size() == 10);
+        ;
     }
 
 }
