@@ -105,7 +105,7 @@ public class CrawlRepositoryTest {
 
     @Test
     public void testLimit() {
-        PageRequest pageRequest = PageRequest.of(1, 5);
+        PageRequest pageRequest = PageRequest.of(0, 5);
         List<CrawlUnit> crawlUnits = this.crawlRepository.findByStatusOrderByCrawlNoDesc(CrawlStatus.IURL, pageRequest);
 
         crawlUnits.stream().forEach(System.out::println);

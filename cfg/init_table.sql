@@ -8,7 +8,8 @@ create table CRAWL_UNIT(
 	PAGE_DATE VARCHAR(50),
 	REG_DATE datetime,
 	UPD_DATE datetime,
-	PAGE_TEXT text(200000)
+	PAGE_TEXT text(200000),
+	PAGE_TITLE VARCHAR(1024)
 );
 
 create table CRAWL_SEEDS(

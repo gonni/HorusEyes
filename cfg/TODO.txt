@@ -1,0 +1,3 @@
+- ListCrawl과 ContentsCrawl 이중화 scheduling
+- 과거정보 수집을 위한 전용 Job 생성기 (Naver News 우선)
+- 형태소분석기 명사사전 별도관리

@@ -36,6 +36,7 @@ public class CrawlUnit {
     private String pageText ;
     @Setter
     private String pageDate ;
+    private String pageTitle ;
 
     @Setter
     @ManyToOne(targetEntity = TopSeeds.class, fetch = FetchType.LAZY)

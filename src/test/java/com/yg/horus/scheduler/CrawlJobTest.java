@@ -45,10 +45,16 @@ public class CrawlJobTest {
 
     @Test
     public void testCreateContCrawlJob() {
-        List<Job> contJobs = this.jobManager.createLatestContentsCrawlJobs(10);
+        int cntJobs = 1;
+        List<Job> contJobs = this.jobManager.createLatestContentsCrawlJobs(cntJobs);
         contJobs.forEach(System.out::println);
 
-        assertTrue(contJobs.size() == 10);
+        for (Job contJob : contJobs) {
+            System.out.println("Start Job :" + contJob);
+            contJob.start();
+        }
+
+        assertTrue(contJobs.size() == cntJobs);
         ;
     }
 

@@ -75,7 +75,7 @@ public class JobManager {
     public List<Job> createLatestContentsCrawlJobs(int topN) {
         List<Job> retJobs = new ArrayList<>() ;
 
-        List<CrawlUnit> seed4cont = this.crawlRepository.findByStatusOrderByCrawlNoDesc(CrawlStatus.IURL, PageRequest.of(1, topN));
+        List<CrawlUnit> seed4cont = this.crawlRepository.findByStatusOrderByCrawlNoDesc(CrawlStatus.IURL, PageRequest.of(0, topN));
 
         for(CrawlUnit cu : seed4cont) {
             if(cu.getTopSeeds() != null && cu.getTopSeeds().getSeedNo() > 0) {
@@ -93,9 +93,9 @@ public class JobManager {
                 }
 
                 // Create !!! ContentJob
-                retJobs.add(new ContentCrawlJob(cu.getUrl(), wrapRule, this.crawlRepository));
+//                retJobs.add(new ContentCrawlJob(cu.getUrl(), wrapRule, this.crawlRepository));
+                retJobs.add(new ContentCrawlJob(cu, wrapRule, this.crawlRepository));
             }
-
         }
 
         return retJobs;
