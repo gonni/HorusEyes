@@ -36,6 +36,32 @@ public class JobManager {
         return this.seedRepository.findByStatus(SeedStatus.ACTV) ;
     }
 
+    public Job createSeedListCrawlJob(String url, long referSeedNo) {
+//        TopSeeds seed = this.seedRepository.findBySeedNo(referSeedNo);
+//        log.info("--> Detected Job Creation for Seed : {}", seed);
+//        if(seed == null||
+//                seed.getWrapperRules() == null ||
+//                seed.getWrapperRules().size() < 1) {
+//            return null ;
+//        }
+
+        ListUrlCrawllJob job = new ListUrlCrawllJob(url, referSeedNo);
+        job.crawlRepository = this.crawlRepository ;
+
+        List<WrapperRule> wrapperRules = this.wrapperRepository.findBySeedNo(referSeedNo) ;
+
+        for(WrapperRule wr : wrapperRules) {
+            WrapType wrapType = wr.getWrapType();
+
+            if(wrapType.equals(WrapType.LIST_URL_TOP_AREA_FILTER)) {
+                job.crawlUrlAreaQuery = wr.getWrapVal();
+            } else if(wrapType.equals(WrapType.LIST_URL_PATTERN_FILTER)) {
+                job.crawlUrlRegxPattern = wr.getWrapVal();
+            }
+        }
+
+        return job ;
+    }
 
     public Job createSeedListCrawlJob(long seedNo) {
         TopSeeds seed = this.seedRepository.findBySeedNo(seedNo);

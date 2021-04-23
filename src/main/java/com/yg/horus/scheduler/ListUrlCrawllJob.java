@@ -26,9 +26,9 @@ public class ListUrlCrawllJob extends Observable implements Job {
         this.topSeeds = topSeeds ;
     }
 
-    public ListUrlCrawllJob(String targetUrl) {
+    public ListUrlCrawllJob(String targetUrl, long referSeedNo) {
         this.topSeeds = TopSeeds.builder().urlPattern(targetUrl).build();
-        this.topSeeds.setSeedNo(-1L);
+        this.topSeeds.setSeedNo(referSeedNo);
     }
 
     @Override
