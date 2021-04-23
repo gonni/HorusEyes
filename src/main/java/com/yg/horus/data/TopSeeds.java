@@ -26,6 +26,9 @@ public class TopSeeds {
     private String urlPattern ;
     @Column(name = "TITLE")
     private String title ;
+    @Column(name = "STATUS")
+    @Enumerated(EnumType.STRING)
+    private SeedStatus status ;
     @OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
     @JoinColumn(name="SEED_NO")
     private List<WrapperRule> wrapperRules ;
@@ -45,7 +48,10 @@ public class TopSeeds {
 
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(this.seedNo).append("|").append(this.title).append("|").append(this.urlPattern);
+        sb.append(this.seedNo).append("|")
+                .append(this.title).append("|")
+                .append(this.urlPattern).append("|")
+                .append(this.status);
         return sb.toString() ;
     }
 }

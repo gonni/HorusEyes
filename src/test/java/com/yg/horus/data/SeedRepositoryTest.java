@@ -44,12 +44,23 @@ public class SeedRepositoryTest {
 //        this.seedRepository.save(topSeeds);
 //    }
 
-    @Test
-    public void testUpdateData() {
-        TopSeeds topSeed = this.seedRepository.findBySeedNo(21);
-        topSeed.setTitle("Modified Title for JPA");
+//    @Test
+//    public void testUpdateData() {
+//        TopSeeds topSeed = this.seedRepository.findBySeedNo(21);
+//        if(topSeed != null)
+//            topSeed.setTitle("Modified Title for JPA");
+//
+//        this.seedRepository.save(topSeed);
+//        assertTrue(true);
+//    }
 
-        this.seedRepository.save(topSeed);
+    @Test
+    public void testGetActiveData() {
+        List<TopSeeds> activeSeeds = this.seedRepository.findByStatus(SeedStatus.ACTV);
+        System.out.println("Count of Active Seeds : " + activeSeeds.size());
+
+        activeSeeds.forEach(System.out::println);
+
         assertTrue(true);
     }
 }

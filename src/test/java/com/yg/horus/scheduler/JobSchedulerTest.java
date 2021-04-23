@@ -36,7 +36,7 @@ public class JobSchedulerTest {
     @Test
     public void testRunningJob() {
         for(int i=0;i<10;i++) {
-            this.jobScheduler.executeJobPeriod1sec(new Job(){
+            this.jobScheduler.execute(new Job(){
 
                 @Override
                 public void start() {

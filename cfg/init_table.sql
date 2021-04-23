@@ -15,7 +15,8 @@ create table CRAWL_UNIT(
 create table CRAWL_SEEDS(
 	SEED_NO INT not null AUTO_INCREMENT PRIMARY KEY,
 	URL_PATTERN varchar(2048),
-	TITLE varchar(128)
+	TITLE varchar(128),
+	STATUS varchar(4)
 );
 
 create table WRAPPER_RULE(

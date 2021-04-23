@@ -32,15 +32,10 @@ public class JobManager {
         this.multiWorkerJobQueue = new LinkedBlockingQueue<>();
     }
 
-    private int addSingleWorkerJob(Job job) {
-
-        return this.singleWorkerQueue.size() ;
+    public List<TopSeeds> getActiveTopSeeds() {
+        return this.seedRepository.findByStatus(SeedStatus.ACTV) ;
     }
 
-    private int addMultiWorkerJob(Job job) {
-
-        return this.multiWorkerJobQueue.size() ;
-    }
 
     public Job createSeedListCrawlJob(long seedNo) {
         TopSeeds seed = this.seedRepository.findBySeedNo(seedNo);
@@ -50,10 +45,6 @@ public class JobManager {
                 seed.getWrapperRules().size() < 1) {
             return null ;
         }
-
-//        ListUrlCrawllJob job = ListUrlCrawllJob.builder()
-//                .seedUrl(seed.getUrlPattern())
-//                .seedNo(seedNo).build() ;
 
         ListUrlCrawllJob job = new ListUrlCrawllJob(seed);
         job.crawlRepository = this.crawlRepository ;
@@ -99,15 +90,6 @@ public class JobManager {
         }
 
         return retJobs;
-    }
-
-
-    public Job createContentCrawlJob() {
-        return null ;
-    }
-
-    public Job createTimeRangeSeedCrawlJob() {
-        return null ;
     }
 
     public static void main(String ... v) {

@@ -70,7 +70,11 @@ public class ListUrlCrawllJob extends Observable implements Job {
 
 
         log.info("Added News Links : {}/{}", cntNew, matchedLinks.size());
-        this.jobStatus = JobStatus.COMPLETED ;
+        if(cntNew > 0) {
+            this.jobStatus = JobStatus.COMPLETED;
+        } else {
+            this.jobStatus = JobStatus.COMPLETED_NORESULT;
+        }
     }
 
     @Override
