@@ -36,19 +36,29 @@ public class JobManager {
         return this.seedRepository.findByStatus(SeedStatus.ACTV) ;
     }
 
-    public Job createSeedListCrawlJob(String url, long referSeedNo) {
-//        TopSeeds seed = this.seedRepository.findBySeedNo(referSeedNo);
-//        log.info("--> Detected Job Creation for Seed : {}", seed);
-//        if(seed == null||
-//                seed.getWrapperRules() == null ||
-//                seed.getWrapperRules().size() < 1) {
-//            return null ;
-//        }
+    //TODO this can be used for serial job which crawls past data
+    public Job<CrawlUnit> createSeedListCrawlJob(String url, long referSeedNo) {
 
         ListUrlCrawllJob job = new ListUrlCrawllJob(url, referSeedNo);
         job.crawlRepository = this.crawlRepository ;
 
         List<WrapperRule> wrapperRules = this.wrapperRepository.findBySeedNo(referSeedNo) ;
+
+//        for(WrapperRule wr : wrapperRules) {
+//            WrapType wrapType = wr.getWrapType();
+//
+//            if(wrapType.equals(WrapType.LIST_URL_TOP_AREA_FILTER)) {
+//                job.crawlUrlAreaQuery = wr.getWrapVal();
+//            } else if(wrapType.equals(WrapType.LIST_URL_PATTERN_FILTER)) {
+//                job.crawlUrlRegxPattern = wr.getWrapVal();
+//            }
+//        }
+
+        return this.createJobWithRules(job, wrapperRules) ;
+    }
+
+    private Job createJobWithRules(ListUrlCrawllJob job, List<WrapperRule> wrapperRules) {
+//        List<WrapperRule> wrapperRules = this.wrapperRepository.findBySeedNo(referSeedNo) ;
 
         for(WrapperRule wr : wrapperRules) {
             WrapType wrapType = wr.getWrapType();
@@ -76,17 +86,17 @@ public class JobManager {
         job.crawlRepository = this.crawlRepository ;
 
         List<WrapperRule> wrapperRules = seed.getWrapperRules();
-        for(WrapperRule wr : wrapperRules) {
-            WrapType wrapType = wr.getWrapType();
+//        for(WrapperRule wr : wrapperRules) {
+//            WrapType wrapType = wr.getWrapType();
+//
+//            if(wrapType.equals(WrapType.LIST_URL_TOP_AREA_FILTER)) {
+//                job.crawlUrlAreaQuery = wr.getWrapVal();
+//            } else if(wrapType.equals(WrapType.LIST_URL_PATTERN_FILTER)) {
+//                job.crawlUrlRegxPattern = wr.getWrapVal();
+//            }
+//        }
 
-            if(wrapType.equals(WrapType.LIST_URL_TOP_AREA_FILTER)) {
-                job.crawlUrlAreaQuery = wr.getWrapVal();
-            } else if(wrapType.equals(WrapType.LIST_URL_PATTERN_FILTER)) {
-                job.crawlUrlRegxPattern = wr.getWrapVal();
-            }
-        }
-
-        return job ;
+        return this.createJobWithRules(job, wrapperRules) ;
     }
 
     public List<Job> createLatestContentsCrawlJobs(int topN) {

@@ -15,7 +15,7 @@ import java.util.Observable;
  * Created by jeff on 21. 4. 18.
  */
 @Slf4j
-public class ListUrlCrawllJob extends Observable implements Job {
+public class ListUrlCrawllJob extends Observable implements Job<List<CrawlDataUnit>> {
     private JobStatus jobStatus = JobStatus.INIT;
     CrawlRepository crawlRepository = null ;
     String crawlUrlRegxPattern = null ;
@@ -32,7 +32,7 @@ public class ListUrlCrawllJob extends Observable implements Job {
     }
 
     @Override
-    public void start() {
+    public List<CrawlDataUnit> start() {
         this.jobStatus = JobStatus.PROCESSING ;
         ListPageCrawler crawler = new ListPageCrawler();
 
@@ -75,6 +75,8 @@ public class ListUrlCrawllJob extends Observable implements Job {
         } else {
             this.jobStatus = JobStatus.COMPLETED_NORESULT;
         }
+
+        return matchedLinks ;
     }
 
     @Override

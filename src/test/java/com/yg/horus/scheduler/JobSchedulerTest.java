@@ -39,7 +39,7 @@ public class JobSchedulerTest {
             this.jobScheduler.execute(new Job(){
 
                 @Override
-                public void start() {
+                public Object start() {
                     long ts = System.currentTimeMillis();
                     System.out.println(ts + "# Started at " + new Date(System.currentTimeMillis()));
                     try {
@@ -48,6 +48,7 @@ public class JobSchedulerTest {
                         e.printStackTrace();
                     }
                     System.out.println(ts + "# Stopped at " + new Date(System.currentTimeMillis()));
+                    return null ;
                 }
 
                 @Override

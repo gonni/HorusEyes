@@ -12,12 +12,13 @@ import java.security.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Observable;
+import java.util.concurrent.Future;
 
 /**
  * Created by jeff on 21. 4. 18.
  */
 @Slf4j
-public class ContentCrawlJob extends Observable implements Job {
+public class ContentCrawlJob extends Observable implements Job<CrawlUnit> {
     private JobStatus jobStatus = JobStatus.INIT ;
     private CrawlRepository crawlRepository = null ;
 //    private String url ;
@@ -37,10 +38,10 @@ public class ContentCrawlJob extends Observable implements Job {
     }
 
     @Override
-    public void start() {
+    public CrawlUnit start() {
         if(this.crawlUnit == null) {
             log.info("Invalid Unit to crawl contents ..");
-            return ;
+            return null ;
         }
 
         PageWrapper pageWrapper = new PageWrapper();
@@ -56,6 +57,8 @@ public class ContentCrawlJob extends Observable implements Job {
         this.crawlUnit.setUpdDate(LocalDateTime.now());
 
         this.crawlRepository.save(this.crawlUnit);
+
+        return this.crawlUnit ;
     }
 
     @Override
