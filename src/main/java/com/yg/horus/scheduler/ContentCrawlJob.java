@@ -6,6 +6,7 @@ import com.yg.horus.data.CrawlRepository;
 import com.yg.horus.data.CrawlStatus;
 import com.yg.horus.data.CrawlUnit;
 import com.yg.horus.doc.ContentPageDoc;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.security.Timestamp;
@@ -22,6 +23,7 @@ public class ContentCrawlJob extends Observable implements Job<CrawlUnit> {
     private JobStatus jobStatus = JobStatus.INIT ;
     private CrawlRepository crawlRepository = null ;
 //    private String url ;
+    @Getter
     private CrawlUnit crawlUnit = null ;
     private ContentsPageWrappingRule wrapRule ;
 

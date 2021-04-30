@@ -35,6 +35,8 @@ public class JobSchedulerTest {
 
     @Test
     public void testRunningJob() {
+        this.jobScheduler.start();
+
         for(int i=0;i<10;i++) {
             this.jobScheduler.execute(new Job(){
 

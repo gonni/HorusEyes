@@ -45,8 +45,8 @@ public class CrawlJobTest {
 
     @Test
     public void testCreateContCrawlJob() {
-        int cntJobs = 1;
-        List<Job> contJobs = this.jobManager.createLatestContentsCrawlJobs(cntJobs);
+        int cntJobs = 10;
+        List<ContentCrawlJob> contJobs = this.jobManager.createLatestContentsCrawlJobs(-1L, cntJobs);
         contJobs.forEach(System.out::println);
 
         for (Job contJob : contJobs) {

@@ -2,6 +2,7 @@ package com.yg.horus.data;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -15,5 +16,6 @@ public interface CrawlRepository  extends JpaRepository<CrawlUnit, Long> {
     List<CrawlUnit> findByAnchorText(String anchorText) ;
     CrawlUnit findOneByUrl(String url) ;
     List<CrawlUnit> findByStatusOrderByCrawlNoDesc(CrawlStatus crawlStatus, Pageable pageable) ;
+    List<CrawlUnit> findByStatusAndTopSeedsSeedNoOrderByCrawlNoDesc(CrawlStatus crawlStatus, long seedNo, Pageable pageable) ;
 
 }

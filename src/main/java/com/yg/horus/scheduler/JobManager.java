@@ -99,10 +99,44 @@ public class JobManager {
         return this.createJobWithRules(job, wrapperRules) ;
     }
 
-    public List<Job> createLatestContentsCrawlJobs(int topN) {
-        List<Job> retJobs = new ArrayList<>() ;
+//    public List<Job> createLatestContentsCrawlJobs(int topN) {
+//        List<Job> retJobs = new ArrayList<>() ;
+//
+//        List<CrawlUnit> seed4cont = this.crawlRepository.findByStatusOrderByCrawlNoDesc(CrawlStatus.IURL, PageRequest.of(0, topN));
+//
+//        for(CrawlUnit cu : seed4cont) {
+//            if(cu.getTopSeeds() != null && cu.getTopSeeds().getSeedNo() > 0) {
+//                List<WrapperRule> lstWrapperRule = this.wrapperRepository.findBySeedNo(cu.getTopSeeds().getSeedNo());
+//                ContentsPageWrappingRule wrapRule = new ContentsPageWrappingRule();
+//
+//                for(WrapperRule wrule : lstWrapperRule) {
+//                    if(wrule.getWrapType().equals(WrapType.CONT_DATE_ON_PAGE)) {
+//                        wrapRule.setContDate(wrule.getWrapVal());
+//                    } else if(wrule.getWrapType().equals(WrapType.CONT_MAIN_CONT)) {
+//                        wrapRule.getContents().add(wrule.getWrapVal());
+//                    } else if(wrule.getWrapType().equals(WrapType.CONT_TITLE_ON_PAGE)) {
+//                        wrapRule.setTitleOnContents(wrule.getWrapVal());
+//                    }
+//                }
+//
+//                // Create !!! ContentJob
+////                retJobs.add(new ContentCrawlJob(cu.getUrl(), wrapRule, this.crawlRepository));
+//                retJobs.add(new ContentCrawlJob(cu, wrapRule, this.crawlRepository));
+//            }
+//        }
+//
+//        return retJobs;
+//    }
 
-        List<CrawlUnit> seed4cont = this.crawlRepository.findByStatusOrderByCrawlNoDesc(CrawlStatus.IURL, PageRequest.of(0, topN));
+    public List<ContentCrawlJob> createLatestContentsCrawlJobs(long seedNo, int topN) {
+        List<ContentCrawlJob> retJobs = new ArrayList<>() ;
+
+        List<CrawlUnit> seed4cont = null ;
+        if(seedNo > 0){
+            seed4cont = this.crawlRepository.findByStatusAndTopSeedsSeedNoOrderByCrawlNoDesc(CrawlStatus.IURL, seedNo, PageRequest.of(0, topN));
+        } else {
+            seed4cont = this.crawlRepository.findByStatusOrderByCrawlNoDesc(CrawlStatus.IURL, PageRequest.of(0, topN));
+        }
 
         for(CrawlUnit cu : seed4cont) {
             if(cu.getTopSeeds() != null && cu.getTopSeeds().getSeedNo() > 0) {
@@ -127,6 +161,8 @@ public class JobManager {
 
         return retJobs;
     }
+
+
 
     public static void main(String ... v) {
         System.out.println("Active Job Manager ..");

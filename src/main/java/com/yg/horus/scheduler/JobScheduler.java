@@ -24,7 +24,11 @@ public class JobScheduler extends Thread implements Runnable, Observer {
 
     public JobScheduler() {
         this.jobQueue = new LinkedBlockingQueue<>();
-        this.executorService = new ThreadPoolExecutor(1, 10 ,3, TimeUnit.SECONDS, new SynchronousQueue<>());
+        this.executorService = new ThreadPoolExecutor(1, THREAD_POOL_SIZE ,3, TimeUnit.SECONDS, new SynchronousQueue<>());
+    }
+
+    public synchronized int getCntPendingJobs() {
+        return this.jobQueue.size();
     }
 
     @Override

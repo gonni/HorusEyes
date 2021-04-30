@@ -34,34 +34,39 @@ public class CrawlRepositoryTest {
     @Autowired
     private SeedRepository seedRepository = null ;
 
-//    @Test
-//    public void testInOutCrawl() {
-//        String anchorText = "Test Title Anchor at " + System.currentTimeMillis() ;
-//
-//        TopSeeds topSeeds = TopSeeds.builder()
-//                .urlPattern("http://navertest.com/news/today")
-//                .title("TEST SITE").build();
-//
-//        this.seedRepository.save(topSeeds) ;
-//
-//        CrawlUnit crawlUnit = CrawlUnit.builder()
-//                .url("https://www.naver.com/news/test3.hml")
-//                .anchorText(anchorText)
-//                .status(CrawlStatus.INIT)
-//                .build();
-//        crawlUnit.setPageDate("2021-01-24 15:12");
-//        crawlUnit.setTopSeeds(topSeeds);
-//
-//
-//        CrawlUnit save = this.crawlRepository.save(crawlUnit);
-//        System.out.println("Inserted Crawl No -> " + save.getCrawlNo());
-//
+    @Test
+    public void testInOutCrawl() {
+        String anchorText = "Test Title Anchor at " + System.currentTimeMillis() ;
+
+        TopSeeds topSeeds = TopSeeds.builder()
+                .urlPattern("http://navertest.com/news/today")
+                .title("TEST SITE").build();
+
+        this.seedRepository.save(topSeeds) ;
+
+        CrawlUnit crawlUnit = CrawlUnit.builder()
+                .url("https://www.naver.com/news/test3.hml")
+                .anchorText(anchorText)
+                .status(CrawlStatus.INIT)
+                .build();
+        crawlUnit.setPageDate("2021-01-24 15:12");
+        crawlUnit.setTopSeeds(topSeeds);
+
+
+        CrawlUnit save = this.crawlRepository.save(crawlUnit);
+        System.out.println("Inserted Crawl No -> " + save.getCrawlNo() + " --> " + topSeeds.toString());
+
+        List<CrawlUnit> icu = this.crawlRepository.findByStatusAndTopSeedsSeedNoOrderByCrawlNoDesc(CrawlStatus.INIT,
+                save.getTopSeeds().getSeedNo(), PageRequest.of(0, 2));
+        icu.forEach(System.out::println);
+
+
 //        save.setPageText("This is Text message for test created at " + System.currentTimeMillis() + " #id:"
 //                + save.getCrawlNo()) ;
 //        save.setStatus(CrawlStatus.SUCC);
 //
 //        this.crawlRepository.save(save);
-//
+//List<CrawlUnit> findByStatusOrderByCrawlNoDesc(CrawlStatus crawlStatus, Pageable pageable) ;
 //        System.out.println("CrawlNo ->" + save.getCrawlNo());
 //
 //        this.crawlRepository.findAll().forEach(c -> {
@@ -78,9 +83,9 @@ public class CrawlRepositoryTest {
 //            System.out.println("Find -> " + byUrl.get(0).getUrl());
 //        else
 //            System.out.println("Failed ..");
-//
-//        assertTrue(true) ;
-//    }
+
+        assertTrue(true) ;
+    }
 
 //    @Test
 //    public void testCrawlSeed() {
@@ -103,14 +108,14 @@ public class CrawlRepositoryTest {
 //        assertTrue(oneByUrl != null);
 //    }
 
-    @Test
-    public void testLimit() {
-        PageRequest pageRequest = PageRequest.of(0, 5);
-        List<CrawlUnit> crawlUnits = this.crawlRepository.findByStatusOrderByCrawlNoDesc(CrawlStatus.IURL, pageRequest);
-
-        crawlUnits.stream().forEach(System.out::println);
-
-        assertTrue(crawlUnits.size() == 5);
-    }
+//    @Test
+//    public void testLimit() {
+//        PageRequest pageRequest = PageRequest.of(0, 5);
+//        List<CrawlUnit> crawlUnits = this.crawlRepository.findByStatusOrderByCrawlNoDesc(CrawlStatus.IURL, pageRequest);
+//
+//        crawlUnits.stream().forEach(System.out::println);
+//
+//        assertTrue(crawlUnits.size() == 5);
+//    }
 
 }
