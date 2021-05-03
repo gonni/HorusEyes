@@ -55,10 +55,14 @@ public class ServiceCtr {
 
     @RequestMapping("/crawl/naver/stocknews")
     public String crawlNaverUrlsList(String start, String end) {
-
-        new Thread(() ->{
-            this.naverStockJobManager.execSerialJobs(19, start, end);
-        }).start();
+        if(start.length() == 8 && end.length() == 8) {
+            new Thread(() -> {
+                this.naverStockJobManager.execSerialJobs(19, start, end);
+            }).start();
+        } else {
+            log.info("Invalid parameters : {} -> {}", start, end);
+            return "Invalid params which should be yyyyMMdd format ..";
+        }
 
         return "Naver Thread Started .." ;
     }
