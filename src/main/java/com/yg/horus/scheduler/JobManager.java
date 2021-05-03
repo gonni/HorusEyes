@@ -73,7 +73,7 @@ public class JobManager {
         return job ;
     }
 
-    public Job createSeedListCrawlJob(long seedNo) {
+    public Job<ListUrlCrawllJob> createSeedListCrawlJob(long seedNo) {
         TopSeeds seed = this.seedRepository.findBySeedNo(seedNo);
         log.info("--> Detected Job Creation for Seed : {}", seed);
         if(seed == null||
