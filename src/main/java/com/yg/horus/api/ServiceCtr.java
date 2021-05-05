@@ -45,7 +45,7 @@ public class ServiceCtr {
     @RequestMapping("/system/start")
     public String startSystem() {
         log.info("start contents crawl workers ..");
-        this.jobProducer.addJobSet(19);
+        this.jobProducer.addJobSet(2);
         this.jobProducer.startWorker();
 
         return "Started Contents Crawler ..";

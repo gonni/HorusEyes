@@ -39,12 +39,14 @@ public class NaverStockJobManager {
     }
 
     public void execSerialJobs(long seedNo, String start, String end) {
+        //https://finance.naver.com/news/news_list.nhn?
+        // mode=LSS3D&section_id=101&section_id2=258&section_id3=401&date=20210504
         String seedUrlFormat = "https://finance.naver.com/news/news_list.nhn?" +
                 "mode=LSS3D&section_id=101&section_id2=258&section_id3=402&date=%s&page=%s";
 
         String targetUrl = null; //String.format(seedUrlFormat, "AAAA", 9);
 
-        System.out.println("TargetURL -> " + targetUrl);
+//        System.out.println("TargetURL -> " + targetUrl);
 
         int id = 0;
         while(start.compareTo(end) >= 0) {

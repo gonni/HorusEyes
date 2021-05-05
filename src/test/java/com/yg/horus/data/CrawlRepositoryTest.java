@@ -34,7 +34,7 @@ public class CrawlRepositoryTest {
     @Autowired
     private SeedRepository seedRepository = null ;
 
-    @Test
+    //@Test
     public void testInOutCrawl() {
         String anchorText = "Test Title Anchor at " + System.currentTimeMillis() ;
 

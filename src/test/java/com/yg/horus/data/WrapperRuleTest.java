@@ -19,7 +19,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 //@DataJpaTest
 @EnableJpaRepositories(basePackages = "com.yg.horus.data")
 @WebAppConfiguration
-@ActiveProfiles("local")
+@ActiveProfiles("localhome")
 @PropertySource("classpath:application.properties")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class WrapperRuleTest {
@@ -28,19 +28,19 @@ public class WrapperRuleTest {
 
     @Test
     public void testInsertSample() {
+        WrapperRule wrapperRule = WrapperRule.builder()
+                .seedNo(2)
+                .wrapName("ListFiltering")
+                .wrapType(WrapType.LIST_URL_PATTERN_FILTER)
+                .wrapVal("^(https:\\/\\/finance.naver.com\\/news\\/news_read.nhn\\?article_id=).*$")
+                .build();
+
 //        WrapperRule wrapperRule = WrapperRule.builder()
 //                .seedNo(19)
 //                .wrapName("ListFiltering")
-//                .wrapType(WrapType.LIST_URL_PATTERN_FILTER)
-//                .wrapVal("^(https:\\/\\/finance.naver.com\\/news\\/news_read.nhn\\?article_id=).*$")
+//                .wrapType(WrapType.LIST_URL_TOP_AREA_FILTER)
+//                .wrapVal("ul.realtimeNewsList")
 //                .build();
-
-        WrapperRule wrapperRule = WrapperRule.builder()
-                .seedNo(19)
-                .wrapName("ListFiltering")
-                .wrapType(WrapType.LIST_URL_TOP_AREA_FILTER)
-                .wrapVal("ul.realtimeNewsList")
-                .build();
 
         this.wrapperRepository.save(wrapperRule) ;
     }

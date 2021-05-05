@@ -18,6 +18,7 @@ import java.util.Observable;
 public class ListUrlCrawllJob extends Observable implements Job<List<CrawlDataUnit>> {
     private JobStatus jobStatus = JobStatus.INIT;
     CrawlRepository crawlRepository = null ;
+
     String crawlUrlRegxPattern = null ;
     String crawlUrlAreaQuery = null ;
     private TopSeeds topSeeds = null ;
@@ -29,6 +30,10 @@ public class ListUrlCrawllJob extends Observable implements Job<List<CrawlDataUn
     public ListUrlCrawllJob(String targetUrl, long referSeedNo) {
         this.topSeeds = TopSeeds.builder().urlPattern(targetUrl).build();
         this.topSeeds.setSeedNo(referSeedNo);
+    }
+
+    public String toString() {
+        return this.crawlUrlRegxPattern + "/" + this.crawlUrlAreaQuery ;
     }
 
     @Override
