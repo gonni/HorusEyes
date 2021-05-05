@@ -16,7 +16,7 @@ import java.util.List;
 @Setter
 @Getter
 @NoArgsConstructor
-@Table(name="CRAWL_UNIT")
+@Table(name="CRAWL_UNIT1")
 public class CrawlUnit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

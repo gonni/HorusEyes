@@ -27,6 +27,10 @@ public class JobScheduler extends Thread implements Runnable, Observer {
         this.executorService = new ThreadPoolExecutor(1, THREAD_POOL_SIZE ,3, TimeUnit.SECONDS, new SynchronousQueue<>());
     }
 
+    public String getStatusMessage() {
+        return String.format("Scheduled Jobs : %d, Pending Jobs : %d", COUNTER, this.getCntPendingJobs());
+    }
+
     public synchronized int getCntPendingJobs() {
         return this.jobQueue.size();
     }
@@ -36,6 +40,7 @@ public class JobScheduler extends Thread implements Runnable, Observer {
         while(this.running) {
             try {
                 Job job = jobQueue.take();
+                COUNTER++;
                 log.info("New job scheduled : {}", job);
 
                 this.executorService.execute(() -> {
@@ -48,7 +53,6 @@ public class JobScheduler extends Thread implements Runnable, Observer {
                 log.info("Job Producing Error : {}", e.getMessage());
             }
         }
-
     }
 
     @Override

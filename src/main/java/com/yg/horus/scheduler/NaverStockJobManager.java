@@ -48,23 +48,24 @@ public class NaverStockJobManager {
 
         int id = 0;
         while(start.compareTo(end) >= 0) {
-            System.out.println(id++ + " --> " + start) ;
+//            log.info(id++ + " --> " + start) ;
 
             for(int i=1;i<30;i++) {
                 targetUrl = String.format(seedUrlFormat, start, i);
-                System.out.println("Target URL -> " + targetUrl);
+//                System.out.println("Target URL -> " + targetUrl);
                 Job scJob = this.jobManager.createSeedListCrawlJob(targetUrl, seedNo);
-                System.out.println("Created Job -> " + scJob);
+//                System.out.println("Created Job -> " + scJob);
 
                 try {
                     List<CrawlDataUnit> lstSeed = (List<CrawlDataUnit>)scJob.start();
-                    lstSeed.forEach(System.out::println);
+//                    lstSeed.forEach(System.out::println);
+                    log.info("id: {}, date: {} - index: {} -> crawled: {}", id++, start, i, lstSeed.size());
 
-                    Thread.sleep(1000L);    // for delay crawl
+                    Thread.sleep(1013L);    // for delay crawl
 
 
                     if(lstSeed == null || lstSeed.size() == 0) {
-                        System.out.println("---------> Escape condition : " + i) ;
+//                        System.out.println("---------> Escape condition : " + i) ;
                         break ;
                     }
                 } catch(Exception e) {

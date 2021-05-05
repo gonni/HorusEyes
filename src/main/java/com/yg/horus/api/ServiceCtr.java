@@ -5,11 +5,13 @@ import com.yg.horus.crawl.CrawlDataUnit;
 import com.yg.horus.scheduler.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -20,17 +22,35 @@ import java.util.List;
 public class ServiceCtr {
     @Autowired
     private JobProducer jobProducer = null ;
-
     @Autowired
     private JobManager jobManager = null ;
-
+    @Autowired
+    private JobScheduler jobScheduler = null ;
     @Autowired
     private NaverStockJobManager naverStockJobManager = null ;
+    @Value("${horus.engine.version}")
+    private String version ;
 
     @RequestMapping("/system/version")
     public String getVersion() {
-        return "NA" ;
+        return this.version + " at " + new Date(System.currentTimeMillis()) ;
     }
+
+    @RequestMapping("/system/status")
+    public String getSystemStatus() {
+        String schedulerMsg = this.jobScheduler.getStatusMessage();
+        return "JobScheduler Status :" + schedulerMsg ;
+    }
+
+    @RequestMapping("/system/start")
+    public String startSystem() {
+        log.info("start contents crawl workers ..");
+        this.jobProducer.addJobSet(19);
+        this.jobProducer.startWorker();
+
+        return "Started Contents Crawler ..";
+    }
+
 
     @RequestMapping("/crawl/contents")
     public String crawlContents(@RequestParam long seedNo, @RequestParam int maxJobCnt) {
@@ -54,10 +74,10 @@ public class ServiceCtr {
     }
 
     @RequestMapping("/crawl/naver/stocknews")
-    public String crawlNaverUrlsList(String start, String end) {
+    public String crawlNaverUrlsList(@RequestParam long seedNo, @RequestParam String start, @RequestParam String end) {
         if(start.length() == 8 && end.length() == 8) {
             new Thread(() -> {
-                this.naverStockJobManager.execSerialJobs(19, start, end);
+                this.naverStockJobManager.execSerialJobs(seedNo, start, end);
             }).start();
         } else {
             log.info("Invalid parameters : {} -> {}", start, end);
