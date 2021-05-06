@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.yg.horus</groupId>
-    <artifactId>demo</artifactId>
+    <artifactId>ra</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>demo</name>
     <description>Demo project for Spring Boot</description>
@@ -124,6 +124,12 @@
             <groupId>org.deeplearning4j</groupId>
             <artifactId>deeplearning4j-util</artifactId>
             <version>1.0.0-beta4</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.deeplearning4j</groupId>
+            <artifactId>dl4j-examples</artifactId>
+            <version>1.0.0-beta3</version>
         </dependency>
 
     </dependencies>
