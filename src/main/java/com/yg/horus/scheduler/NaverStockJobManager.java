@@ -38,6 +38,10 @@ public class NaverStockJobManager {
         test.execSerialJobs(19L, "20210428", "20210425");
     }
 
+    public void execSerialJobsCrawlInvest() {
+        return ;
+    }
+
     public void execSerialJobs(long seedNo, String start, String end) {
         //https://finance.naver.com/news/news_list.nhn?
         // mode=LSS3D&section_id=101&section_id2=258&section_id3=401&date=20210504
