@@ -31,31 +31,10 @@ import java.util.regex.Pattern;
  * Created by a1000074 on 07/01/2021.
  */
 @Service
-public class ListPageCrawler {
+public class ListPageCrawler extends CrawlBase {
 
     public ListPageCrawler() {
-        this.initSslConnection(); ;
-    }
-
-    private void initSslConnection() {
-        TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager(){
-            public X509Certificate[] getAcceptedIssuers(){return new X509Certificate[0];}
-            public void checkClientTrusted(X509Certificate[] certs, String authType){}
-            public void checkServerTrusted(X509Certificate[] certs, String authType){}
-        }};
-
-        try {
-
-            SSLContext sc = SSLContext.getInstance("TLS");
-            sc.init(null, trustAllCerts, new SecureRandom());
-            HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
-
-            System.out.println("Custom SSL setting is just initialized ..");
-
-        } catch (NoSuchAlgorithmException | KeyManagementException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
+        super() ;
     }
 
     public List<CrawlDataUnit> getMatchedLinks(String url, String urlPattern, String innerNodeSelector) {
@@ -63,12 +42,9 @@ public class ListPageCrawler {
         Pattern p = Pattern.compile(urlPattern) ;
 
         List<CrawlDataUnit> lstFiltered = new ArrayList<>() ;
-
         subUrls.stream().forEach(subUrl -> {
             String targetUlr = subUrl.getUrl();
-//            System.out.println("-> " + targetUlr);
             if(p.matcher(targetUlr).matches()) {
-//                System.out.println("Matched -> " +  subUrl);
                 lstFiltered.add(subUrl);
             }
         });
@@ -88,8 +64,6 @@ public class ListPageCrawler {
             else
                 filteredDoc = doc.select("html") ;
 
-//            System.out.println("Filtered Top Elem -> " + filteredDoc.outerHtml());
-
             Elements links = filteredDoc.select("a");
 
             links.forEach(link -> {
@@ -102,11 +76,7 @@ public class ListPageCrawler {
                 } else {
                     lstUrls.add(new CrawlDataUnit(CrawlDataUnit.AnchorType.TEXT, anchorText, linkUrl));
                 }
-
-//                System.out.println("URL ->" + linkUrl);
-
             });
-
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -122,17 +92,11 @@ public class ListPageCrawler {
             Document doc = Jsoup.connect(url).get();
             Elements links = doc.select("a");
 
-//            System.out.println("Links : " + links.size());
-
-
             links.forEach(link -> {
-//                System.out.println("HTML ->" + link.outerHtml());
-
 
                 String anchorText = link.text();
                 Elements imgElement = link.select("img");
                 if(imgElement != null && imgElement.size() > 0) {
-//                    System.out.println("IMG detected ..");
                     anchorText = "[IMG]" ;
                 }
 
@@ -148,10 +112,6 @@ public class ListPageCrawler {
         }
 
         return lstUrls ;
-    }
-
-    public Document getPageDoc(String url) throws IOException {
-        return  Jsoup.connect(url).get();
     }
 
     public String getBodyData(String url) throws IOException{

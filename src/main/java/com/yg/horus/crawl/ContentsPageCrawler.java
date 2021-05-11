@@ -10,22 +10,19 @@ import java.io.IOException;
  * Created by a1000074 on 25/03/2021.
  */
 @Slf4j
-public class PageWrapper {
+public class ContentsPageCrawler extends CrawlBase {
 
-    private ListPageCrawler listPageCrawler = null ;
-
-    public PageWrapper() {
-        this.listPageCrawler = new ListPageCrawler() ;
+    public ContentsPageCrawler() {
+        ;
     }
 
     //TODO need to consider ...
     public ContentPageDoc getContentPageDoc(String url, ContentsPageWrappingRule contentsPageWrappingRule) {
         ContentPageDoc contentPageDoc = new ContentPageDoc() ;
-
         Document pageDoc = null ;
-        try {
-            pageDoc = this.listPageCrawler.getPageDoc(url);
 
+        try {
+            pageDoc = this.getPageDoc(url) ;
         } catch (IOException e) {
             e.printStackTrace();
             contentPageDoc.setStatus(ContentPageDoc.PageDocStatus.FAIL);
@@ -51,14 +48,14 @@ public class PageWrapper {
         String targetUrl = "https://finance.naver.com/news/news_read.nhn?article_id=0004570979&office_id=014&mode=LSS3D&type=0&section_id=101&section_id2=258&section_id3=402&date=20210124&page=2";
         targetUrl = "https://finance.naver.com/news/news_read.nhn?article_id=0004575978&office_id=008&mode=LSS3D&type=0&section_id=101&section_id2=258&section_id3=401&date=20210421&page=1";
 
-        PageWrapper pageWrapper = new PageWrapper();
+        ContentsPageCrawler contentsPageCrawler = new ContentsPageCrawler();
 
         ContentsPageWrappingRule wrapRule = new ContentsPageWrappingRule() ;
         wrapRule.setTitleOnContents("div.article_info > h3");
         wrapRule.getContents().add("div#content");
         wrapRule.setContDate("span.article_date");
 
-        ContentPageDoc contentPageDoc = pageWrapper.getContentPageDoc(targetUrl, wrapRule);
+        ContentPageDoc contentPageDoc = contentsPageCrawler.getContentPageDoc(targetUrl, wrapRule);
 
         System.out.println("Result --> \n" + contentPageDoc);
     }

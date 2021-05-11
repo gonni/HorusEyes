@@ -1,7 +1,7 @@
 package com.yg.horus.scheduler;
 
 import com.yg.horus.crawl.ContentsPageWrappingRule;
-import com.yg.horus.crawl.PageWrapper;
+import com.yg.horus.crawl.ContentsPageCrawler;
 import com.yg.horus.data.CrawlRepository;
 import com.yg.horus.data.CrawlStatus;
 import com.yg.horus.data.CrawlUnit;
@@ -9,11 +9,8 @@ import com.yg.horus.doc.ContentPageDoc;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
-import java.security.Timestamp;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.Observable;
-import java.util.concurrent.Future;
 
 /**
  * Created by jeff on 21. 4. 18.
@@ -46,8 +43,8 @@ public class ContentCrawlJob extends Observable implements Job<CrawlUnit> {
             return null ;
         }
 
-        PageWrapper pageWrapper = new PageWrapper();
-        ContentPageDoc contentPageDoc = pageWrapper.getContentPageDoc(this.crawlUnit.getUrl(), wrapRule);
+        ContentsPageCrawler contentsPageCrawler = new ContentsPageCrawler();
+        ContentPageDoc contentPageDoc = contentsPageCrawler.getContentPageDoc(this.crawlUnit.getUrl(), wrapRule);
         if(contentPageDoc != null) {
             this.crawlUnit.setPageTitle(contentPageDoc.getTitleOnContent());
             this.crawlUnit.setPageText(contentPageDoc.getContent());
