@@ -47,6 +47,27 @@ create table WRAPPER_RULE(
 	REG_DT datetime
 );
 
+create table CRAWL_KOSPI(
+	TARGET_DT	VARCHAR(10) not null PRIMARY KEY,
+
+	INDEX_VALUE	FLOAT4,
+	INDEX_UP	BOOLEAN,
+	DIFF_AMOUNT	FLOAT4,
+	UP_DOWN_PER	FLOAT4,
+	TOTAL_EA	INT,
+	TOTAL_VOLUME	INT,
+
+	ANT	INT,
+	FOREIGNER INT,
+	COMPANY INT,
+	INVEST_BANK INT,
+	INSURANCE INT,
+	INVEST_TRUST INT,
+	BANK INT,
+	ETC_BANK INT,
+	PENSION_FUND INT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+
 insert into CRAWL_SEEDS(URL_PATTERN, TITLE)
 values('https://finance.naver.com/news/news_list.nhn?mode=LSS3D&section_id=101&section_id2=258&section_id3=402',
 '네이버>뉴스포커스>기업종목분석');

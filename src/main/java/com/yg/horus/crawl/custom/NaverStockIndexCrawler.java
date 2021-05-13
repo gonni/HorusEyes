@@ -2,9 +2,12 @@ package com.yg.horus.crawl.custom;
 
 import com.yg.horus.crawl.CrawlBase;
 import com.yg.horus.doc.DailyIndexDoc;
-import com.yg.horus.doc.DailyInvestersDoc;
+import com.yg.horus.doc.DailyInvestDoc;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.lang.NonNull;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -15,16 +18,18 @@ import java.util.List;
 /**
  * Created by a1000074 on 11/05/2021.
  */
+@Service
 public class NaverStockIndexCrawler extends CrawlBase {
 
-    private static final DecimalFormat NumFormat = new DecimalFormat("###,###,###");
+    private static final DecimalFormat NumFormat = new DecimalFormat("###,###,###.##");
+    private static final DecimalFormat UpDownPerFormat = new DecimalFormat("+##.##;-##.##");
 
     public NaverStockIndexCrawler() {
         ;
     }
 
-    public List<DailyInvestersDoc> getInvesters(String url) {
-        ArrayList<DailyInvestersDoc> lstInvesters = new ArrayList<>() ;
+    public List<DailyInvestDoc> getInvesters(String url) {
+        ArrayList<DailyInvestDoc> lstInvesters = new ArrayList<>() ;
 
         try {
             Document dom = super.getPageDoc(url);
@@ -33,20 +38,20 @@ public class NaverStockIndexCrawler extends CrawlBase {
             trs.forEach(element -> {
                 System.out.println("--->>> " + element.text()) ;
                 try {
-                    DailyInvestersDoc dailyInvestersDoc = DailyInvestersDoc.builder()
-                            .pageDatetime(element.text())
-                            .ant(NumFormat.parse((element = element.nextElementSibling()).text()).intValue())
-                            .foreigner(NumFormat.parse((element = element.nextElementSibling()).text()).intValue())
-                            .company(NumFormat.parse((element = element.nextElementSibling()).text()).intValue())
-                            .investBank(NumFormat.parse((element = element.nextElementSibling()).text()).intValue())
-                            .insurance(NumFormat.parse((element = element.nextElementSibling()).text()).intValue())
-                            .investTrust(NumFormat.parse((element = element.nextElementSibling()).text()).intValue())
-                            .bank(NumFormat.parse((element = element.nextElementSibling()).text()).intValue())
-                            .etcBank(NumFormat.parse((element = element.nextElementSibling()).text()).intValue())
-                            .pensionFund(NumFormat.parse((element = element.nextElementSibling()).text()).intValue())
-                            .build();
+                    DailyInvestDoc dailyInvestDoc = new DailyInvestDoc();
+                    dailyInvestDoc.setTargetDt(element.text());
+                    dailyInvestDoc.setAnt(NumFormat.parse((element = element.nextElementSibling()).text()).intValue());
+                    dailyInvestDoc.setForeigner(NumFormat.parse((element = element.nextElementSibling()).text()).intValue());
+                    dailyInvestDoc.setCompany(NumFormat.parse((element = element.nextElementSibling()).text()).intValue());
+                    dailyInvestDoc.setInvestBank(NumFormat.parse((element = element.nextElementSibling()).text()).intValue());
+                    dailyInvestDoc.setInsurance(NumFormat.parse((element = element.nextElementSibling()).text()).intValue());
+                    dailyInvestDoc.setInvestTrust(NumFormat.parse((element = element.nextElementSibling()).text()).intValue());
+                    dailyInvestDoc.setBank(NumFormat.parse((element = element.nextElementSibling()).text()).intValue());
+                    dailyInvestDoc.setEtcBank(NumFormat.parse((element = element.nextElementSibling()).text()).intValue());
+                    dailyInvestDoc.setPensionFund(NumFormat.parse((element = element.nextElementSibling()).text()).intValue());
 
-                    lstInvesters.add(dailyInvestersDoc) ;
+
+                    lstInvesters.add(dailyInvestDoc) ;
                 } catch(Exception ee) {
                     ee.printStackTrace();
                 }
@@ -59,23 +64,75 @@ public class NaverStockIndexCrawler extends CrawlBase {
         return lstInvesters ;
     }
 
+//    public List<DailyIndexDoc> getIndexValue(@NonNull String url) {
+    public List<DailyInvestDoc> getIndexValue(@NonNull String url) {
+        ArrayList<DailyInvestDoc> lstDailyIndex = new ArrayList<>() ;
 
-    public List<DailyIndexDoc> getIndexValue() {
-        return null ;
+        Document dom = null;
+        try {
+            dom = super.getPageDoc(url);
+            // table.type_1 tr:gt(1) > td.date / table.type_1 tr:has(td.date) > td:eq(0)
+            Elements trs = dom.select("table.type_1 tr:has(td.date) ");
+
+            trs.forEach(element -> {
+                DailyInvestDoc did = new DailyInvestDoc() ;
+                did.setTargetDt(element.select("td.date").text());
+                did.setIndexValue(this.getFloatAmount(element, "td:eq(1)")) ;
+                did.setDiffAmount(this.getFloatAmount(element, "td:eq(2)")) ;
+                did.setUpDownPer(this.getPerValue(element, "td:eq(3)")) ;
+                did.setTotalEa((int)this.getFloatAmount(element, "td:eq(4)")) ;
+                did.setTotalVolume((int)this.getFloatAmount(element, "td:eq(5)")) ;
+
+                if(element.select("td.rate_down").select("span.red02").size() > 0) {
+                    did.setIndexUp(true);
+                }
+
+                lstDailyIndex.add(did);
+
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return lstDailyIndex ;
     }
 
-    public static void main(String ... v) {
+    private float getPerValue(@NonNull Element elem, @NonNull String selectQry) {
+
+        try {
+            String strVal = elem.select(selectQry).text() ;
+            if(strVal != null && strVal.endsWith("%"))
+                strVal = strVal.substring(0, strVal.length() -1);
+            return UpDownPerFormat.parse(strVal).floatValue();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return -1F;
+    }
+
+    private float getFloatAmount(@NonNull Element elem, @NonNull String selectQry) {
+        try {
+            return NumFormat.parse(elem.select(selectQry).text()).floatValue();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return -1F;
+    }
+
+    public static void main(String ... v) throws Exception {
         String targetUrl = "https://finance.naver.com/sise/investorDealTrendDay.nhn?bizdate=20210511&sosok=&page=2";
         NaverStockIndexCrawler test = new NaverStockIndexCrawler();
-
-        List<DailyInvestersDoc> investers = test.getInvesters(targetUrl);
-
-        System.out.println("Wrapped Result ------ ");
-        investers.forEach(System.out::println);
-
-
+//        List<DailyInvestDoc> investers = test.getInvesters(targetUrl);
+//
+//        System.out.println("Wrapped Result ------ ");
+//        investers.forEach(System.out::println);
 
         String kospiUrl = "https://finance.naver.com/sise/sise_index_day.nhn?code=KOSPI&page=1";
+        test.getIndexValue(kospiUrl).forEach(System.out::println);
+
+//        System.out.println("Parsed -> " + test.UpDownPerFormat.parse("+0.78").floatValue());
+//        System.out.println(test.getPerValue());
+
     }
 
 }

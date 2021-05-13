@@ -1,15 +1,22 @@
 package com.yg.horus.doc;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  * Created by jeff on 21. 5. 10.
  */
-@Data
-@Builder
-public class DailyInvestersDoc implements PageDoc {
-    private String pageDatetime ;
+@Entity
+@Table(name = "CRAWL_KOSPI")
+@Setter
+@Getter
+public class DailyInvestDoc extends DailyIndexDoc implements PageDoc {
+    @Id
+    private String targetDt ;
 
     private int ant ;
     private int foreigner ;
