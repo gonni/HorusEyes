@@ -23,7 +23,7 @@ import java.util.List;
 @RunWith(SpringRunner.class)
 @EnableJpaRepositories(basePackages = "com.yg.horus.data")
 @WebAppConfiguration
-@ActiveProfiles("local")
+//@ActiveProfiles("local")
 @PropertySource("classpath:application.properties")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class KospiRepositoryTest {
@@ -45,5 +45,12 @@ public class KospiRepositoryTest {
         DailyInvestDoc save = this.kospiRepository.save(indexValue.get(0));
 
         assert(save != null);
+
+        String invsterSeed = "https://finance.naver.com/sise/investorDealTrendDay.nhn?bizdate=20210513&sosok=&page=1";
+        List<DailyInvestDoc> investers = this.naverStockIndexCrawler.getInvesters(invsterSeed);
+
+        System.out.println("==>" + investers.get(0));
+        this.kospiRepository.save(investers.get(0));
+
     }
 }

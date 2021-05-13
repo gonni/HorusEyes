@@ -22,6 +22,7 @@ import java.util.List;
 public class NaverStockIndexCrawler extends CrawlBase {
 
     private static final DecimalFormat NumFormat = new DecimalFormat("###,###,###.##");
+    private static final DecimalFormat IntNumFormat = new DecimalFormat("###,###;-###,###");
     private static final DecimalFormat UpDownPerFormat = new DecimalFormat("+##.##;-##.##");
 
     public NaverStockIndexCrawler() {
@@ -39,17 +40,18 @@ public class NaverStockIndexCrawler extends CrawlBase {
                 System.out.println("--->>> " + element.text()) ;
                 try {
                     DailyInvestDoc dailyInvestDoc = new DailyInvestDoc();
-                    dailyInvestDoc.setTargetDt(element.text());
-                    dailyInvestDoc.setAnt(NumFormat.parse((element = element.nextElementSibling()).text()).intValue());
-                    dailyInvestDoc.setForeigner(NumFormat.parse((element = element.nextElementSibling()).text()).intValue());
-                    dailyInvestDoc.setCompany(NumFormat.parse((element = element.nextElementSibling()).text()).intValue());
-                    dailyInvestDoc.setInvestBank(NumFormat.parse((element = element.nextElementSibling()).text()).intValue());
-                    dailyInvestDoc.setInsurance(NumFormat.parse((element = element.nextElementSibling()).text()).intValue());
-                    dailyInvestDoc.setInvestTrust(NumFormat.parse((element = element.nextElementSibling()).text()).intValue());
-                    dailyInvestDoc.setBank(NumFormat.parse((element = element.nextElementSibling()).text()).intValue());
-                    dailyInvestDoc.setEtcBank(NumFormat.parse((element = element.nextElementSibling()).text()).intValue());
-                    dailyInvestDoc.setPensionFund(NumFormat.parse((element = element.nextElementSibling()).text()).intValue());
-
+                    dailyInvestDoc.setTargetDt("20" + element.text());
+                    String a = (element = element.nextElementSibling()).text();
+                    System.out.println("a -> " + a);
+                    dailyInvestDoc.setAnt(IntNumFormat.parse(a).intValue());
+                    dailyInvestDoc.setForeigner(IntNumFormat.parse((element = element.nextElementSibling()).text()).intValue());
+                    dailyInvestDoc.setCompany(IntNumFormat.parse((element = element.nextElementSibling()).text()).intValue());
+                    dailyInvestDoc.setInvestBank(IntNumFormat.parse((element = element.nextElementSibling()).text()).intValue());
+                    dailyInvestDoc.setInsurance(IntNumFormat.parse((element = element.nextElementSibling()).text()).intValue());
+                    dailyInvestDoc.setInvestTrust(IntNumFormat.parse((element = element.nextElementSibling()).text()).intValue());
+                    dailyInvestDoc.setBank(IntNumFormat.parse((element = element.nextElementSibling()).text()).intValue());
+                    dailyInvestDoc.setEtcBank(IntNumFormat.parse((element = element.nextElementSibling()).text()).intValue());
+                    dailyInvestDoc.setPensionFund(IntNumFormat.parse((element = element.nextElementSibling()).text()).intValue());
 
                     lstInvesters.add(dailyInvestDoc) ;
                 } catch(Exception ee) {
@@ -122,17 +124,17 @@ public class NaverStockIndexCrawler extends CrawlBase {
     public static void main(String ... v) throws Exception {
         String targetUrl = "https://finance.naver.com/sise/investorDealTrendDay.nhn?bizdate=20210511&sosok=&page=2";
         NaverStockIndexCrawler test = new NaverStockIndexCrawler();
-//        List<DailyInvestDoc> investers = test.getInvesters(targetUrl);
-//
-//        System.out.println("Wrapped Result ------ ");
-//        investers.forEach(System.out::println);
+        List<DailyInvestDoc> investers = test.getInvesters(targetUrl);
 
-        String kospiUrl = "https://finance.naver.com/sise/sise_index_day.nhn?code=KOSPI&page=1";
-        test.getIndexValue(kospiUrl).forEach(System.out::println);
+        System.out.println("Wrapped Result ------ ");
+        investers.forEach(System.out::println);
+
+//        String kospiUrl = "https://finance.naver.com/sise/sise_index_day.nhn?code=KOSPI&page=1";
+//        test.getIndexValue(kospiUrl).forEach(System.out::println);
 
 //        System.out.println("Parsed -> " + test.UpDownPerFormat.parse("+0.78").floatValue());
 //        System.out.println(test.getPerValue());
-
+        System.out.println("=====>" + IntNumFormat.parse("1,003").intValue());
     }
 
 }
