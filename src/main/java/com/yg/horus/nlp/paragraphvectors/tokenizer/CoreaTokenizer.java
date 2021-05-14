@@ -1,17 +1,50 @@
-package com.yg.horus.nlp;
+package com.yg.horus.nlp.paragraphvectors.tokenizer;
 
 import kr.co.shineware.nlp.komoran.constant.DEFAULT_MODEL;
 import kr.co.shineware.nlp.komoran.core.Komoran;
 import kr.co.shineware.nlp.komoran.model.KomoranResult;
 import kr.co.shineware.nlp.komoran.model.Token;
+import org.deeplearning4j.text.tokenization.tokenizer.TokenPreProcess;
+import org.deeplearning4j.text.tokenization.tokenizer.Tokenizer;
 
+import java.util.Iterator;
 import java.util.List;
 
 
 /**
  * Created by a1000074 on 16/03/2021.
  */
-public class KoreanTokenizer {
+public class CoreaTokenizer implements Tokenizer {
+    private Iterator<String> tokenIter;
+    private List<String> tokenList;
+    private TokenPreProcess preProcess;
+
+    public CoreaTokenizer(String targetSentence) {
+        ;
+    }
+
+    @Override
+    public boolean hasMoreTokens() {
+        return false;
+    }
+
+    @Override
+    public int countTokens() {
+        return 0;
+    }
+
+    @Override
+    public String nextToken() {
+        return null;
+    }
+
+    public List<String> getTokens() {
+        return this.tokenList;
+    }
+
+    public void setTokenPreProcessor(TokenPreProcess tokenPreProcess) {
+        this.preProcess = tokenPreProcess;
+    }
 
     public static void main(String ... v) {
         System.out.println("Active System ..") ;
