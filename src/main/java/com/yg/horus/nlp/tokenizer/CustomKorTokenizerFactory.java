@@ -1,4 +1,4 @@
-package com.yg.horus.nlp.paragraphvectors.tokenizer;
+package com.yg.horus.nlp.tokenizer;
 
 import org.deeplearning4j.text.tokenization.tokenizer.TokenPreProcess;
 import org.deeplearning4j.text.tokenization.tokenizer.Tokenizer;

@@ -1,4 +1,4 @@
-package com.yg.horus.nlp.paragraphvectors.tokenizer;
+package com.yg.horus.nlp.tokenizer;
 
 import kr.co.shineware.nlp.komoran.constant.DEFAULT_MODEL;
 import kr.co.shineware.nlp.komoran.core.Komoran;

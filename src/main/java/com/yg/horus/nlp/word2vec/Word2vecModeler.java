@@ -1,4 +1,4 @@
-package com.yg.horus.nlp.paragraphvectors.word2vec;
+package com.yg.horus.nlp.word2vec;
 
 import com.yg.horus.data.CrawlRepository;
 import com.yg.horus.data.CrawlUnit;
