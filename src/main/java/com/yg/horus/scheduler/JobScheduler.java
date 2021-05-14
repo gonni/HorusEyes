@@ -15,6 +15,7 @@ import java.util.concurrent.*;
 @Slf4j
 public class JobScheduler extends Thread implements Runnable, Observer {
     public static int COUNTER = 0;
+    public final static int MAX_PENDING_JOB_COUNT = 10000;
     public final static long JOB_PRODUCE_PERIOD = 1000L;
     public final static int THREAD_POOL_SIZE = 10 ;
 
@@ -35,6 +36,9 @@ public class JobScheduler extends Thread implements Runnable, Observer {
         return this.jobQueue.size();
     }
 
+    /**
+     * Job excution period between current and next at least JOB_PRODUCE_PERIOD milliSec.
+     */
     @Override
     public void run() {
         while(this.running) {
@@ -60,7 +64,7 @@ public class JobScheduler extends Thread implements Runnable, Observer {
         throw new NotImplementedException();
     }
 
-    public synchronized void execute(Job job) {
+    public synchronized boolean execute(Job job) {
         this.running = true;
         if(!this.isAlive()) {
             log.info("Start Main Thread ..");
@@ -68,10 +72,16 @@ public class JobScheduler extends Thread implements Runnable, Observer {
         }
 
         try {
-            this.jobQueue.put(job);
+            if(this.jobQueue.size() + 1 < MAX_PENDING_JOB_COUNT) {
+                this.jobQueue.put(job);
+                return true;
+            } else {
+                log.info("Too many pending jobs in queue ..");
+            }
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        return false ;
     }
 
     public void instantExec(Job job) {

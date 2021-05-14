@@ -1,5 +1,6 @@
 package com.yg.horus.scheduler;
 
+import com.yg.horus.scheduler.custom.NaverStockJobManager;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

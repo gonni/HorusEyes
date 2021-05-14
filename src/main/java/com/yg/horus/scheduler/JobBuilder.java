@@ -16,7 +16,7 @@ import java.util.concurrent.LinkedBlockingQueue;
  */
 @Slf4j
 @Service
-public class JobManager {
+public class JobBuilder {
 
     private LinkedBlockingQueue<Job> singleWorkerQueue = null ;
     private LinkedBlockingQueue<Job> multiWorkerJobQueue = null ;
@@ -27,7 +27,7 @@ public class JobManager {
     @Autowired
     private WrapperRepository wrapperRepository = null ;
 
-    public JobManager() {
+    public JobBuilder() {
         this.singleWorkerQueue = new LinkedBlockingQueue<>();
         this.multiWorkerJobQueue = new LinkedBlockingQueue<>();
     }

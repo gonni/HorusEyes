@@ -42,15 +42,18 @@ public class KospiRepositoryTest {
 
         assert(indexValue.size() > 5);
 
-        DailyInvestDoc save = this.kospiRepository.save(indexValue.get(0));
+//        DailyInvestDoc save = this.kospiRepository.save(indexValue.get(0));
+        List<DailyInvestDoc> dailyInvestDocs = this.kospiRepository.saveAll(indexValue);
 
-        assert(save != null);
+//        assert(save != null);
 
-        String invsterSeed = "https://finance.naver.com/sise/investorDealTrendDay.nhn?bizdate=20210513&sosok=&page=1";
+        String invsterSeed = "https://finance.naver.com/sise/investorDealTrendDay.nhn?bizdate=20210514&sosok=&page=1";
         List<DailyInvestDoc> investers = this.naverStockIndexCrawler.getInvesters(invsterSeed);
 
-        System.out.println("==>" + investers.get(0));
-        this.kospiRepository.save(investers.get(0));
+//        System.out.println("==>" + investers.get(0));
+//        this.kospiRepository.save(investers.get(0));
+        this.kospiRepository.saveAll(investers);
 
+        assert(true);
     }
 }

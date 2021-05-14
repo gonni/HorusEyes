@@ -3,12 +3,12 @@ package com.yg.horus.api;
 //import com.yg.horus.data.MemberRepository;
 import com.yg.horus.crawl.CrawlDataUnit;
 import com.yg.horus.scheduler.*;
+import com.yg.horus.scheduler.custom.NaverStockJobManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
@@ -23,7 +23,7 @@ public class ServiceCtr {
     @Autowired
     private JobProducer jobProducer = null ;
     @Autowired
-    private JobManager jobManager = null ;
+    private JobBuilder jobBuilder = null ;
     @Autowired
     private JobScheduler jobScheduler = null ;
     @Autowired
@@ -63,7 +63,7 @@ public class ServiceCtr {
     @RequestMapping("/crawl/lsturls")
     public String crawlTargetUrlList(@RequestParam long seedNo) {
         log.info("Detected list crawl for seed #{}", seedNo);
-        Job<ListUrlCrawllJob> lstCrawlJob = this.jobManager.createSeedListCrawlJob(seedNo);
+        Job<ListUrlCrawllJob> lstCrawlJob = this.jobBuilder.createSeedListCrawlJob(seedNo);
 
         List<CrawlDataUnit> lstCrawlData = (List<CrawlDataUnit>)lstCrawlJob.start();
         lstCrawlData.forEach(du -> {
@@ -87,21 +87,13 @@ public class ServiceCtr {
         return "Naver Thread Started .." ;
     }
 
-//    @Autowired
-//    private MemberRepository memberRepository = null;
-//
-//    public ServiceCtr() {
-//        log.info("Init Common Service Controller ..");
-//    }
-//
-//    @RequestMapping("/yg/horus/hell")
-//    public @ResponseBody String hell() {
-//        log.info("Detencted Hell-Ha ..");
-//
-//
-//        this.memberRepository.findAll().forEach(System.out::println);
-//
-//
-//        return "{\"dt\": "+System.currentTimeMillis()+"}" ;
-//    }
+    @RequestMapping("/crawl/naver/kospi")
+    public String crawlKospiIndexFromNaver() {
+        log.info("Crawl All KOSPI Invester Values");
+        long ts = System.currentTimeMillis() ;
+
+        this.naverStockJobManager.execSerialJobsCrawlKospiInvest();
+
+        return "Crawl Kospi Job Completed, estimated " + (System.currentTimeMillis() - ts);
+    }
 }

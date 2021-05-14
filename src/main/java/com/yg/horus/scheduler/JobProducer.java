@@ -24,7 +24,7 @@ public class JobProducer implements Runnable {
     private final static int MAX_PENDING = 10000;
 
     @Autowired
-    private JobManager jobManager = null ;
+    private JobBuilder jobBuilder = null ;
     @Autowired
     private JobScheduler jobScheduler = null;
 
@@ -43,10 +43,10 @@ public class JobProducer implements Runnable {
 
     //TODO need to be called by crobJob
     public void crawlSeedsList() {
-        List<TopSeeds> activeTopSeeds = this.jobManager.getActiveTopSeeds();
+        List<TopSeeds> activeTopSeeds = this.jobBuilder.getActiveTopSeeds();
 
         activeTopSeeds.forEach(seed -> {
-            Job seedListCrawlJob = this.jobManager.createSeedListCrawlJob(seed.getSeedNo());
+            Job seedListCrawlJob = this.jobBuilder.createSeedListCrawlJob(seed.getSeedNo());
 
             this.jobScheduler.execute(seedListCrawlJob);
         });
@@ -58,7 +58,7 @@ public class JobProducer implements Runnable {
      */
     public void crawlContents() {
         int cntJobs = 10;
-        List<ContentCrawlJob> contJobs = this.jobManager.createLatestContentsCrawlJobs(-1L, cntJobs);
+        List<ContentCrawlJob> contJobs = this.jobBuilder.createLatestContentsCrawlJobs(-1L, cntJobs);
         log.info("Get New Job");
         contJobs.forEach(System.out::println);
 
@@ -71,7 +71,7 @@ public class JobProducer implements Runnable {
 
         int cntExcuted = 0;
 
-        List<ContentCrawlJob> newContJobs = this.jobManager.createLatestContentsCrawlJobs(seedNo, maxCrawlSize);
+        List<ContentCrawlJob> newContJobs = this.jobBuilder.createLatestContentsCrawlJobs(seedNo, maxCrawlSize);
         System.out.println("New Job : " + newContJobs.size());
         for(ContentCrawlJob job : newContJobs) {
             this.jobScheduler.execute(job);

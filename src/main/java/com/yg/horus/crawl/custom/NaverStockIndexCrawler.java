@@ -25,11 +25,19 @@ public class NaverStockIndexCrawler extends CrawlBase {
     private static final DecimalFormat IntNumFormat = new DecimalFormat("###,###;-###,###");
     private static final DecimalFormat UpDownPerFormat = new DecimalFormat("+##.##;-##.##");
 
+    public static final String INDEX_URL_PATTERN = "https://finance.naver.com/sise/sise_index_day.nhn?code=KOSPI&page=%d" ;
+    public static final String INVESTER_URL_PATTERN = "https://finance.naver.com/sise/investorDealTrendDay.nhn?bizdate=%s&sosok=&page=%d";
+
     public NaverStockIndexCrawler() {
         ;
     }
 
-    public List<DailyInvestDoc> getInvesters(String url) {
+    public List<DailyInvestDoc> getInvesters(@NonNull String yyyyMMdd, @NonNull int pageNo) {
+        String targetUrl = String.format(INVESTER_URL_PATTERN, yyyyMMdd, pageNo) ;
+        return this.getInvesters(targetUrl) ;
+    }
+
+    public List<DailyInvestDoc> getInvesters(@NonNull String url) {
         ArrayList<DailyInvestDoc> lstInvesters = new ArrayList<>() ;
 
         try {
@@ -37,12 +45,12 @@ public class NaverStockIndexCrawler extends CrawlBase {
             Elements trs = dom.select("table.type_1 tr > td.date2");
 
             trs.forEach(element -> {
-                System.out.println("--->>> " + element.text()) ;
+
                 try {
                     DailyInvestDoc dailyInvestDoc = new DailyInvestDoc();
                     dailyInvestDoc.setTargetDt("20" + element.text());
                     String a = (element = element.nextElementSibling()).text();
-                    System.out.println("a -> " + a);
+
                     dailyInvestDoc.setAnt(IntNumFormat.parse(a).intValue());
                     dailyInvestDoc.setForeigner(IntNumFormat.parse((element = element.nextElementSibling()).text()).intValue());
                     dailyInvestDoc.setCompany(IntNumFormat.parse((element = element.nextElementSibling()).text()).intValue());
@@ -64,6 +72,10 @@ public class NaverStockIndexCrawler extends CrawlBase {
         }
 
         return lstInvesters ;
+    }
+    public List<DailyInvestDoc> getIndexValue(@NonNull int pageNo) {
+        String targetUrl = String.format(INDEX_URL_PATTERN, pageNo) ;
+        return  this.getIndexValue(targetUrl) ;
     }
 
 //    public List<DailyIndexDoc> getIndexValue(@NonNull String url) {

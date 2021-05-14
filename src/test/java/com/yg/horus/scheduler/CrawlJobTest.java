@@ -28,7 +28,7 @@ import static org.junit.Assert.assertTrue;
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class CrawlJobTest {
     @Autowired
-    private JobManager jobManager = null ;
+    private JobBuilder jobBuilder = null ;
 
 //    @Test
 //    public void testListCrawlJob() {
@@ -46,7 +46,7 @@ public class CrawlJobTest {
     @Test
     public void testCreateContCrawlJob() {
         int cntJobs = 10;
-        List<ContentCrawlJob> contJobs = this.jobManager.createLatestContentsCrawlJobs(-1L, cntJobs);
+        List<ContentCrawlJob> contJobs = this.jobBuilder.createLatestContentsCrawlJobs(-1L, cntJobs);
         contJobs.forEach(System.out::println);
 
         for (Job contJob : contJobs) {

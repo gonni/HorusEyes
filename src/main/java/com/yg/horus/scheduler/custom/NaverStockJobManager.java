@@ -1,6 +1,12 @@
-package com.yg.horus.scheduler;
+package com.yg.horus.scheduler.custom;
 
 import com.yg.horus.crawl.CrawlDataUnit;
+import com.yg.horus.crawl.custom.NaverStockIndexCrawler;
+import com.yg.horus.data.KospiRepository;
+import com.yg.horus.doc.DailyInvestDoc;
+import com.yg.horus.scheduler.Job;
+import com.yg.horus.scheduler.JobBuilder;
+import com.yg.horus.scheduler.JobScheduler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,10 +26,13 @@ public class NaverStockJobManager {
     private final SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd") ;
 
     @Autowired
-    private JobManager jobManager = null ;
+    private JobBuilder jobBuilder = null ;
     @Autowired
     private JobScheduler jobScheduler = null ;
-
+    @Autowired
+    private NaverStockIndexCrawler naverStockIndexCrawler = null ;
+    @Autowired
+    private KospiRepository kospiRepository = null ;
 
     public static void main(String ... v) {
         String seedUrlFormat = "https://finance.naver.com/news/news_list.nhn?" +
@@ -38,8 +47,34 @@ public class NaverStockJobManager {
         test.execSerialJobs(19L, "20210428", "20210425");
     }
 
-    public void execSerialJobsCrawlInvest() {
-        return ;
+    public void execSerialJobsCrawlKospiInvest() {
+        for(int i = 0;i < 1362; i++) {
+            List<DailyInvestDoc> idxValues = this.naverStockIndexCrawler.getIndexValue(i);
+            log.info("Crawl KOSPI Values : {}", idxValues.get(0));
+
+            this.kospiRepository.saveAll(idxValues);
+
+            try {
+                Thread.sleep(1000L);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        for(int i=1;i<=405;i++) {
+            List<DailyInvestDoc> investers = this.naverStockIndexCrawler.getInvesters("20210514", i);
+            log.info("Crawl KOSPI Invester : {}", investers.get(0));
+
+            this.kospiRepository.saveAll(investers);
+
+            try {
+                Thread.sleep(1000L);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        log.info("KOSPI Crawl Job Completed ..");
     }
 
     public void execSerialJobs(long seedNo, String start, String end) {
@@ -50,28 +85,21 @@ public class NaverStockJobManager {
 
         String targetUrl = null; //String.format(seedUrlFormat, "AAAA", 9);
 
-//        System.out.println("TargetURL -> " + targetUrl);
-
         int id = 0;
         while(start.compareTo(end) >= 0) {
-//            log.info(id++ + " --> " + start) ;
 
             for(int i=1;i<30;i++) {
                 targetUrl = String.format(seedUrlFormat, start, i);
-//                System.out.println("Target URL -> " + targetUrl);
-                Job scJob = this.jobManager.createSeedListCrawlJob(targetUrl, seedNo);
-//                System.out.println("Created Job -> " + scJob);
+                Job scJob = this.jobBuilder.createSeedListCrawlJob(targetUrl, seedNo);
 
                 try {
                     List<CrawlDataUnit> lstSeed = (List<CrawlDataUnit>)scJob.start();
-//                    lstSeed.forEach(System.out::println);
                     log.info("id: {}, date: {} - index: {} -> crawled: {}", id++, start, i, lstSeed.size());
 
                     Thread.sleep(1013L);    // for delay crawl
 
 
                     if(lstSeed == null || lstSeed.size() == 0) {
-//                        System.out.println("---------> Escape condition : " + i) ;
                         break ;
                     }
                 } catch(Exception e) {
