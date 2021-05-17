@@ -34,7 +34,7 @@ public class CrawlRepositoryTest {
 
     @Test
     public void getGetRange() {
-        List<CrawlUnit> rangeUnits = this.crawlRepository.getData("2021-05-01", "2021-05-03");
+        List<CrawlUnit> rangeUnits = this.crawlRepository.getDateRangedUnits("2021-05-01", "2021-05-03");
         assert(rangeUnits.size() > 0);
         System.out.println("Count of Range Data = " + rangeUnits.size());
         rangeUnits.forEach(System.out::println);

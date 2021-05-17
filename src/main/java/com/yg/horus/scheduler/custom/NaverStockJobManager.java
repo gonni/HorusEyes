@@ -48,7 +48,7 @@ public class NaverStockJobManager {
     }
 
     public void execSerialJobsCrawlKospiInvest() {
-        for(int i = 0;i < 1362; i++) {
+        for(int i = 1;i <= 1362; i++) {
             List<DailyInvestDoc> idxValues = this.naverStockIndexCrawler.getIndexValue(i);
             log.info("Crawl KOSPI Values : {}", idxValues.get(0));
 
