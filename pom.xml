@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.yg.horus</groupId>
     <artifactId>ra</artifactId>
-    <version>0.1.3</version>
+    <version>0.3.1</version>
     <name>ra</name>
     <description>Demo project for Spring Boot</description>
 
