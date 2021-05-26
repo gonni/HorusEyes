@@ -1,5 +1,7 @@
 package com.yg.horus.nlp.paragraphvectors;
 
+import com.yg.horus.nlp.tokenizer.CustomKorTokenizerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.datavec.api.util.ClassPathResource;
 import com.yg.horus.nlp.paragraphvectors.tools.Pair;
 import com.yg.horus.nlp.paragraphvectors.tools.LabelSeeker;
@@ -16,18 +18,26 @@ import org.deeplearning4j.text.tokenization.tokenizerfactory.TokenizerFactory;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
+@Slf4j
+@Service
 public class TopicCluster {
 
     ParagraphVectors paragraphVectors;
     LabelAwareIterator iterator;
     TokenizerFactory tokenizerFactory;
 
-    private static final Logger log = LoggerFactory.getLogger(TopicCluster.class);
+    @Value("${horus.nlp.pv.train.up-dir}")
+    private String upNewsDir = null ;
+    @Value("${horus.nlp.pv.train.down-dir}")
+    private String downNewsDir = null ;
 
     public static void main(String[] args) throws Exception {
 
@@ -52,15 +62,19 @@ public class TopicCluster {
     }
 
     void makeParagraphVectors()  throws Exception {
-        ClassPathResource resource = new ClassPathResource("paravec/labeled");
+//        ClassPathResource resource = new ClassPathResource("paravec/labeled");
+//        ClassPathResource resource = new ClassPathResource("/home/jeff/dev/temp-dl/train");
 
         // build a iterator for our dataset
         iterator = new FileLabelAwareIterator.Builder()
-                .addSourceFolder(resource.getFile())
+//                .addSourceFolder(resource.getFile())
+                .addSourceFolder(new File("/home/jeff/dev/temp-dl/train"))
                 .build();
 
-        tokenizerFactory = new DefaultTokenizerFactory();
+//        tokenizerFactory = new DefaultTokenizerFactory();
+        tokenizerFactory = new CustomKorTokenizerFactory();
         tokenizerFactory.setTokenPreProcessor(new CommonPreprocessor());
+
 
         // ParagraphVectors training configuration
         paragraphVectors = new ParagraphVectors.Builder()
@@ -83,9 +97,9 @@ public class TopicCluster {
       which categories our unlabeled document falls into.
       So we'll start loading our unlabeled documents and checking them
      */
-        ClassPathResource unClassifiedResource = new ClassPathResource("paravec/unlabeled");
+//        ClassPathResource unClassifiedResource = new ClassPathResource("/home/jeff/dev/temp-dl/test");
         FileLabelAwareIterator unClassifiedIterator = new FileLabelAwareIterator.Builder()
-                .addSourceFolder(unClassifiedResource.getFile())
+                .addSourceFolder(new File("/home/jeff/dev/temp-dl/test"))
                 .build();
 
      /*

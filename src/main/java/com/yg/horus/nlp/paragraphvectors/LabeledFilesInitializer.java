@@ -31,9 +31,9 @@ public class LabeledFilesInitializer {
     private final DateFormat dateFormatNewsKey = new SimpleDateFormat("yyyy-MM-dd") ;
     private final DateFormat dateFormatNewsFs = new SimpleDateFormat("yyyyMMdd");
 
-    @Value("${horus.nlp.pv.up-dir}")
+    @Value("${horus.nlp.pv.train.up-dir}")
     private String upNewsDir = null ;
-    @Value("${horus.nlp.pv.down-dir}")
+    @Value("${horus.nlp.pv.train.down-dir}")
     private String downNewsDir = null ;
 
     @Autowired
@@ -60,7 +60,7 @@ public class LabeledFilesInitializer {
     private void createFiles(List<DailyInvestDoc> rangedIndexes, String targetDir) {
 
         File dir = new File(targetDir);
-        log.info("delete files : {}", dir.listFiles().length);
+//        log.info("delete files : {}", dir.listFiles().length);
         for(File file : dir.listFiles()) {
             file.delete();
         }

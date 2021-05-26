@@ -29,7 +29,11 @@ spring:
 horus:
   nlp:
     pv:
-      up-dir: /home/jeff/dev/temp-dl/up/
-      down-dir: /home/jeff/dev/temp-dl/down/
+      train:
+        up-dir: /home/jeff/dev/temp-dl/train/up/
+        down-dir: /home/jeff/dev/temp-dl/train/down/
+      test:
+        up-dir: /home/jeff/dev/temp-dl/test/up/
+        down-dir: /home/jeff/dev/temp-dl/test/down/
 logging:
   config: classpath:logback-spring.xml

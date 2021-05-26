@@ -17,7 +17,6 @@ import org.springframework.test.context.web.WebAppConfiguration;
 @RunWith(SpringRunner.class)
 @EnableJpaRepositories(basePackages = "com.yg.horus.data")
 @WebAppConfiguration
-@ActiveProfiles("local")
 @PropertySource("classpath:application.properties")
 public class LabeledFilesInitializerTest {
     @Autowired
