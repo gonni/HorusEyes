@@ -19,7 +19,7 @@ public interface CrawlRepository  extends JpaRepository<CrawlUnit, Long> {
     List<CrawlUnit> findByStatusOrderByCrawlNoDesc(CrawlStatus crawlStatus, Pageable pageable) ;
     List<CrawlUnit> findByStatusAndTopSeedsSeedNoOrderByCrawlNoDesc(CrawlStatus crawlStatus, long seedNo, Pageable pageable) ;
 
-    @Query("SELECT u FROM CrawlUnit u WHERE u.pageDate > :startDate AND u.pageDate < :endDate")
+    @Query("SELECT u FROM CrawlUnit u WHERE u.pageDate >= :startDate AND u.pageDate < :endDate")
     List<CrawlUnit> getDateRangedUnits(@Param("startDate") String startDate, @Param("endDate") String endDate) ;
-
+    List<CrawlUnit> findByPageDateStartsWith(String targetDt);
 }

@@ -8,6 +8,11 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
     hikari:
       maximum-pool-size: 10
+horus:
+  nlp:
+    pv:
+      up-dir: /Users/a1000074/dev/temp-dl/up/
+      down-dir: /Users/a1000074/dev/temp-dl/down/
 logging:
   config: classpath:logback-spring.xml
 ---
@@ -21,5 +26,10 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
     hikari:
       maximum-pool-size: 10
+horus:
+  nlp:
+    pv:
+      up-dir: /home/jeff/dev/temp-dl/up/
+      down-dir: /home/jeff/dev/temp-dl/down/
 logging:
   config: classpath:logback-spring.xml
