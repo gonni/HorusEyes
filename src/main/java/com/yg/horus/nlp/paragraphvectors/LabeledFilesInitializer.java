@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -46,8 +47,23 @@ public class LabeledFilesInitializer {
     }
 
     public void initLabeledFiles() {
-        List<DailyInvestDoc> rangedIndexes = this.kospiRepository.getRangedIndexes(3f, 15);
+        List<DailyInvestDoc> rangedIndexes = this.kospiRepository.getRangedIndexes(3f, 15f);
         log.info("Count of Target Days : {}", rangedIndexes.size());
+        this.createFiles(rangedIndexes, this.upNewsDir);
+
+        rangedIndexes = this.kospiRepository.getRangedIndexes(-15f, -3f);
+        log.info("Count of Target Days : {}", rangedIndexes.size());
+        this.createFiles(rangedIndexes, this.downNewsDir);
+
+    }
+
+    private void createFiles(List<DailyInvestDoc> rangedIndexes, String targetDir) {
+
+        File dir = new File(targetDir);
+        log.info("delete files : {}", dir.listFiles().length);
+        for(File file : dir.listFiles()) {
+            file.delete();
+        }
 
         for(DailyIndexDoc index : rangedIndexes) {
             try {
@@ -62,7 +78,7 @@ public class LabeledFilesInitializer {
                     String pageText = cu.getPageText();
                     if(pageText == null || pageText.length() <= 0) continue;
 
-                    String fileContents = this.upNewsDir + strNewsDateFs + "_cont_" + i++;
+                    String fileContents = targetDir + strNewsDateFs + "_cont_" + i++;
                     log.info("Write File : {}", fileContents);
                     Files.write(Paths.get(fileContents), pageText.getBytes());
                 }
@@ -70,7 +86,6 @@ public class LabeledFilesInitializer {
                 e.printStackTrace();
             }
         }
-
     }
 
 }
