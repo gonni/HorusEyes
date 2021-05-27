@@ -7,6 +7,7 @@ import com.yg.horus.nlp.paragraphvectors.tools.Pair;
 import com.yg.horus.nlp.paragraphvectors.tools.LabelSeeker;
 import com.yg.horus.nlp.paragraphvectors.tools.MeansBuilder;
 import org.deeplearning4j.models.embeddings.inmemory.InMemoryLookupTable;
+import org.deeplearning4j.models.embeddings.loader.WordVectorSerializer;
 import org.deeplearning4j.models.paragraphvectors.ParagraphVectors;
 import org.deeplearning4j.models.word2vec.VocabWord;
 import org.deeplearning4j.text.documentiterator.FileLabelAwareIterator;
@@ -30,20 +31,23 @@ import java.util.List;
 @Service
 public class TopicCluster {
 
-    ParagraphVectors paragraphVectors;
-    LabelAwareIterator iterator;
-    TokenizerFactory tokenizerFactory;
+    private ParagraphVectors paragraphVectors;
+    private LabelAwareIterator iterator;
+    private TokenizerFactory tokenizerFactory;
 
-    @Value("${horus.nlp.pv.train.up-dir}")
-    private String upNewsDir = null ;
-    @Value("${horus.nlp.pv.train.down-dir}")
-    private String downNewsDir = null ;
+    @Value("${horus.nlp.pv.train.root}")
+    private String trainDir = null ;
+    @Value("${horus.nlp.pv.test.root}")
+    private String testDir = null ;
 
     public static void main(String[] args) throws Exception {
-
+        long ts = System.currentTimeMillis() ;
         TopicCluster app = new TopicCluster();
         app.makeParagraphVectors();
         app.checkUnlabeledData();
+
+
+        log.info("Build time spent : {}", (System.currentTimeMillis() - ts));
         /*
                 Your output should be like this:
 
@@ -61,14 +65,14 @@ public class TopicCluster {
          */
     }
 
-    void makeParagraphVectors()  throws Exception {
+    public void makeParagraphVectors()  throws Exception {
 //        ClassPathResource resource = new ClassPathResource("paravec/labeled");
 //        ClassPathResource resource = new ClassPathResource("/home/jeff/dev/temp-dl/train");
 
         // build a iterator for our dataset
         iterator = new FileLabelAwareIterator.Builder()
 //                .addSourceFolder(resource.getFile())
-                .addSourceFolder(new File("/home/jeff/dev/temp-dl/train"))
+                .addSourceFolder(new File(this.trainDir))
                 .build();
 
 //        tokenizerFactory = new DefaultTokenizerFactory();
@@ -81,7 +85,7 @@ public class TopicCluster {
                 .learningRate(0.025)
                 .minLearningRate(0.001)
                 .batchSize(1000)
-                .epochs(20)
+                .epochs(1)
                 .iterate(iterator)
                 .trainWordVectors(true)
                 .tokenizerFactory(tokenizerFactory)
@@ -89,9 +93,11 @@ public class TopicCluster {
 
         // Start model training
         paragraphVectors.fit();
+
+        WordVectorSerializer.writeParagraphVectors(paragraphVectors, new File("pvec_" + System.currentTimeMillis() + ".mdl"));
     }
 
-    void checkUnlabeledData() throws IOException {
+    public void checkUnlabeledData() throws IOException {
       /*
       At this point we assume that we have model built and we can check
       which categories our unlabeled document falls into.
@@ -99,7 +105,7 @@ public class TopicCluster {
      */
 //        ClassPathResource unClassifiedResource = new ClassPathResource("/home/jeff/dev/temp-dl/test");
         FileLabelAwareIterator unClassifiedIterator = new FileLabelAwareIterator.Builder()
-                .addSourceFolder(new File("/home/jeff/dev/temp-dl/test"))
+                .addSourceFolder(new File(this.testDir))
                 .build();
 
      /*

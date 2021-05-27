@@ -22,7 +22,7 @@ public class CustomKorTokenizerFactory implements TokenizerFactory {
     public CustomKorTokenizerFactory() {
         if(komoran == null) {
             komoran = new Komoran(DEFAULT_MODEL.LIGHT);
-            komoran.setUserDic("/home/jeff/dev/temp/user.dic");
+//            komoran.setUserDic("/home/jeff/dev/temp/user.dic");
         }
     }
 

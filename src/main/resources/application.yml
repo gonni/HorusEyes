@@ -11,8 +11,12 @@ spring:
 horus:
   nlp:
     pv:
-      up-dir: /Users/a1000074/dev/temp-dl/up/
-      down-dir: /Users/a1000074/dev/temp-dl/down/
+      train:
+        root: /Users/a1000074/dev/temp-dl/train/
+        up-dir: /Users/a1000074/dev/temp-dl/train/up/
+        down-dir: /Users/a1000074/dev/temp-dl/train/down/
+      test:
+        root: /Users/a1000074/dev/temp-dl/test/
 logging:
   config: classpath:logback-spring.xml
 ---

@@ -2,6 +2,7 @@ package com.yg.horus.api;
 
 //import com.yg.horus.data.MemberRepository;
 import com.yg.horus.crawl.CrawlDataUnit;
+import com.yg.horus.nlp.paragraphvectors.TopicCluster;
 import com.yg.horus.nlp.word2vec.Word2vecModeler;
 import com.yg.horus.scheduler.*;
 import com.yg.horus.scheduler.custom.NaverStockJobManager;
@@ -31,9 +32,14 @@ public class ServiceCtr {
     private NaverStockJobManager naverStockJobManager = null ;
     @Autowired
     private Word2vecModeler word2vecModeler = null;
+    @Autowired
+    private TopicCluster topicCluster = null ;
+
 
     @Value("${horus.engine.version}")
     private String version ;
+
+
 
     @RequestMapping("/system/version")
     public String getVersion() {
@@ -132,4 +138,16 @@ public class ServiceCtr {
 
         return "load completed for " + (System.currentTimeMillis() - ts) ;
     }
+
+    @RequestMapping("/p2v/simulate")
+    public String paraVecSimulate() {
+        try {
+            this.topicCluster.makeParagraphVectors();
+            this.topicCluster.checkUnlabeledData();
+            return "completed ..";
+        } catch (Exception e) {
+            return "failed .." + e.getMessage();
+        }
+    }
+
 }

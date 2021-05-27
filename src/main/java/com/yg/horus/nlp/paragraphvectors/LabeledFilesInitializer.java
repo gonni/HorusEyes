@@ -35,6 +35,8 @@ public class LabeledFilesInitializer {
     private String upNewsDir = null ;
     @Value("${horus.nlp.pv.train.down-dir}")
     private String downNewsDir = null ;
+    @Value("${horus.nlp.pv.test.root}")
+    private String testRootDir = null ;
 
     @Autowired
     private KospiRepository kospiRepository = null ;
@@ -47,11 +49,11 @@ public class LabeledFilesInitializer {
     }
 
     public void initLabeledFiles() {
-        List<DailyInvestDoc> rangedIndexes = this.kospiRepository.getRangedIndexes(3f, 15f);
+        List<DailyInvestDoc> rangedIndexes = this.kospiRepository.getRangedIndexes(1.5f, 15f);
         log.info("Count of Target Days : {}", rangedIndexes.size());
         this.createFiles(rangedIndexes, this.upNewsDir);
 
-        rangedIndexes = this.kospiRepository.getRangedIndexes(-15f, -3f);
+        rangedIndexes = this.kospiRepository.getRangedIndexes(-15f, -1.5f);
         log.info("Count of Target Days : {}", rangedIndexes.size());
         this.createFiles(rangedIndexes, this.downNewsDir);
 

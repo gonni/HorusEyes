@@ -26,7 +26,7 @@ public class CoreaTokenizer implements Tokenizer {
         this.komoran = komoranTokenizer;
         if(this.komoran == null) {
             komoran = new Komoran(DEFAULT_MODEL.LIGHT);
-            komoran.setUserDic("/home/jeff/dev/temp/user.dic");
+//            komoran.setUserDic("/home/jeff/dev/temp/user.dic");
         }
 
         KomoranResult result = komoran.analyze(targetSentence);
@@ -70,7 +70,7 @@ public class CoreaTokenizer implements Tokenizer {
 
 
         Komoran komoran = new Komoran(DEFAULT_MODEL.LIGHT);
-        komoran.setUserDic("/home/jeff/dev/temp/user.dic");
+//        komoran.setUserDic("/home/jeff/dev/temp/user.dic");
 //        komoran.setUserDic("cfg/kor_dic.user");
 //        komoran.setUserDic("/Users/a1000074/dev/dic/kor_dic.user");
         String strToAnalyze = "대한민국은 민주공화국이다.";
