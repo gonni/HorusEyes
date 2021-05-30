@@ -1,28 +1,11 @@
 package com.yg.horus.crawl;
 
-
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.util.EntityUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
 import java.io.IOException;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -83,68 +66,6 @@ public class ListPageCrawler extends CrawlBase {
         }
 
         return lstUrls ;
-    }
-
-    public List<CrawlDataUnit> getSubUrls(String url) {
-        List<CrawlDataUnit> lstUrls = new ArrayList<>();
-
-        try {
-            Document doc = Jsoup.connect(url).get();
-            Elements links = doc.select("a");
-
-            links.forEach(link -> {
-
-                String anchorText = link.text();
-                Elements imgElement = link.select("img");
-                if(imgElement != null && imgElement.size() > 0) {
-                    anchorText = "[IMG]" ;
-                }
-
-                String linkUrl = link.attr("abs:href");
-
-                System.out.println("URL ->" + linkUrl);
-                lstUrls.add(new CrawlDataUnit(null, anchorText, linkUrl));
-            });
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return lstUrls ;
-    }
-
-    public String getBodyData(String url) throws IOException{
-        String responseBody = null ;
-        CloseableHttpClient httpclient = HttpClients.createDefault();
-        try {
-            HttpGet httpget = new HttpGet(url);
-
-            System.out.println("Executing request " + httpget.getRequestLine());
-
-            // Create a custom response handler
-            ResponseHandler<String> responseHandler = new ResponseHandler<String>() {
-
-                @Override
-                public String handleResponse(
-                        final HttpResponse response) throws ClientProtocolException, IOException {
-                    int status = response.getStatusLine().getStatusCode();
-                    if (status >= 200 && status < 300) {
-                        HttpEntity entity = response.getEntity();
-                        return entity != null ? EntityUtils.toString(entity) : null;
-                    } else {
-                        throw new ClientProtocolException("Unexpected response status: " + status);
-                    }
-                }
-
-            };
-            responseBody = httpclient.execute(httpget, responseHandler);
-
-        } finally {
-            httpclient.close();
-        }
-
-        return responseBody ;
     }
 
     public static void main(String ... v) throws Exception {
