@@ -3,6 +3,10 @@ package com.yg.horus.data;
 import com.yg.horus.crawl.custom.NaverStockIndexCrawler;
 import com.yg.horus.doc.DailyIndexDoc;
 import com.yg.horus.doc.DailyInvestDoc;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.engine.spi.EntityEntry;
+import org.hibernate.engine.spi.SessionImplementor;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,11 +14,23 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.stereotype.Repository;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceContext;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Created by a1000074 on 13/05/2021.
@@ -57,12 +73,27 @@ public class KospiRepositoryTest {
 //        assert(true);
 //    }
 
-    @Test
-    public void testGetRangedIndexes() {
-        List<DailyInvestDoc> rangedIndexes = this.kospiRepository.getRangedIndexes(1.0f, 2.0f);
-        assert (rangedIndexes != null && rangedIndexes.size() > 0);
+//    @Test
+//    public void testGetRangedIndexes() {
+//        List<DailyInvestDoc> rangedIndexes = this.kospiRepository.getRangedIndexes(1.0f, 2.0f);
+//        assert (rangedIndexes != null && rangedIndexes.size() > 0);
+//
+//        rangedIndexes.forEach(System.out::println);
+//        assert (true);
+//    }
 
-        rangedIndexes.forEach(System.out::println);
+    @Test
+    @Transactional
+    @Rollback(true)
+    public void addSampleData() {
+
+        DailyInvestDoc did = new DailyInvestDoc();
+
+        did.setTargetDt("1921.05.16");
+        did.setIndexValue(3001f);
+
+        this.kospiRepository.save(did);
+
         assert (true);
     }
 }

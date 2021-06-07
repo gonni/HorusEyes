@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.PostPersist;
+import javax.persistence.PrePersist;
 import java.util.List;
 
 /**
@@ -17,4 +19,5 @@ public interface KospiRepository extends JpaRepository<DailyInvestDoc, String> {
     List<DailyInvestDoc> findAll() ;
     @Query("SELECT u FROM DailyInvestDoc u WHERE u.upDownPer > :gtValue AND u.upDownPer < :ltValue")
     List<DailyInvestDoc> getRangedIndexes(@Param("gtValue") float gtValue, @Param("ltValue") float ltValue);
+
 }

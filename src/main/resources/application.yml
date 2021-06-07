@@ -34,9 +34,11 @@ horus:
   nlp:
     pv:
       train:
+        root: /home/jeff/dev/temp-dl/train/
         up-dir: /home/jeff/dev/temp-dl/train/up/
         down-dir: /home/jeff/dev/temp-dl/train/down/
       test:
+        root: home/jeff/dev/temp-dl/test/
         up-dir: /home/jeff/dev/temp-dl/test/up/
         down-dir: /home/jeff/dev/temp-dl/test/down/
 logging:
