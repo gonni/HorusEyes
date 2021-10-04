@@ -6,13 +6,13 @@
 
 Main Features
 ---
-### Web Crawler
+#### Web Crawler
 Seed URL의 보안툴에 의한 감지 차단이 발생하지 않도록 안정적인 Slow Crawl을 지향합니다.
 
-### Web Document Wrapper
+#### Web Document Wrapper
 웹페이지의 특정 영역추출을 용이하게 할 수 있도록 규칙 기반 및 자동화 필터링을 개발합니다.
 
-### 동일 흐름(현상) 검색, 예측, 추천
+#### 동일 흐름(현상) 검색, 예측, 추천
 뉴스, 게시판, 주가지수 등의 데이터를 분석하여 가장 동일한 시기의 검색과 예측, 추천을 개발합니다. 
 
 
