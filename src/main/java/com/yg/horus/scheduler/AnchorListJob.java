@@ -1,4 +1,5 @@
-package com.yg.horus.scheduler.custom;
+package com.yg.horus.scheduler;
 
-public interface AnchorListJob {
+public interface AnchorListJob extends Job {
+    boolean isEndPageCondition() ;
 }

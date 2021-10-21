@@ -9,7 +9,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @SpringBootApplication
 //@EnableTransactionManagement
 @EnableWebMvc
-@ComponentScan("com.yg.horus")
+//@ComponentScan("com.yg.horus")
 public class HorusCrawlMain {
 
 	public static void main(String[] args) {

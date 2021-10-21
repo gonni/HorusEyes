@@ -98,7 +98,7 @@ public class NaverStockJobManager {
 
                     Thread.sleep(1013L);    // for delay crawl
 
-
+                    //TODO add condition (duplicated result compared to before process)
                     if(lstSeed == null || lstSeed.size() == 0) {
                         break ;
                     }

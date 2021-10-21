@@ -71,10 +71,15 @@ public class ListPageCrawler extends CrawlBase {
     public static void main(String ... v) throws Exception {
         ListPageCrawler test = new ListPageCrawler();
         String seedUrl = "https://finance.naver.com/news/news_list.nhn?mode=LSS3D&section_id=101&section_id2=258&section_id3=402&date=20200124&page=1";
-        seedUrl = "https://finance.naver.com/news/news_list.nhn?mode=LSS3D&section_id=101&section_id2=258&section_id3=402";
+//        seedUrl = "https://finance.naver.com/news/news_list.nhn?mode=LSS3D&section_id=101&section_id2=258&section_id3=402";
+//
+//        String regexFilter = "^(https:\\/\\/finance.naver.com\\/news\\/news_read.nhn\\?article_id=).*$";
+//        List<CrawlDataUnit> matchedLinks = test.getMatchedLinks(seedUrl, regexFilter, "ul.realtimeNewsList");
 
-        String regexFilter = "^(https:\\/\\/finance.naver.com\\/news\\/news_read.nhn\\?article_id=).*$";
-        List<CrawlDataUnit> matchedLinks = test.getMatchedLinks(seedUrl, regexFilter, "ul.realtimeNewsList");
+        seedUrl = "https://news.naver.com/main/list.naver?mode=LS2D&sid2=263&sid1=101&mid=sec&listType=title&date=20211020&page=3";
+        String regexFilter = "^(https:\\/\\/news.naver.com\\/main\\/read.naver\\?).*$";
+        List<CrawlDataUnit> matchedLinks = test.getMatchedLinks(seedUrl, regexFilter, "ul.type02");
+
 
         final Pattern p = Pattern.compile(regexFilter) ;
         System.out.println("====> ReX Filtered :" + matchedLinks.size());

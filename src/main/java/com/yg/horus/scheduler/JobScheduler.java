@@ -3,7 +3,7 @@ package com.yg.horus.scheduler;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+//import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -61,7 +61,7 @@ public class JobScheduler extends Thread implements Runnable, Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        throw new NotImplementedException();
+        ;
     }
 
     public synchronized boolean execute(Job job) {
