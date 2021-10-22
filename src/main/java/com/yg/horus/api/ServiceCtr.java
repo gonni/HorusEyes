@@ -87,7 +87,7 @@ public class ServiceCtr {
     public String crawlNaverUrlsList(@RequestParam long seedNo, @RequestParam String start, @RequestParam String end) {
         if(start.length() == 8 && end.length() == 8) {
             new Thread(() -> {
-                this.naverStockJobManager.execSerialJobs(seedNo, start, end);
+                this.naverStockJobManager.execSerialNewsJobs(seedNo, start, end);
             }).start();
         } else {
             log.info("Invalid parameters : {} -> {}", start, end);

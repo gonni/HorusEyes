@@ -44,7 +44,7 @@ public class NaverStockJobManager {
         NaverStockJobManager test = new NaverStockJobManager();
         System.out.println("Yesterday -> " + test.getYesterday("20210501"));
 
-        test.execSerialJobs(19L, "20210428", "20210425");
+        test.execSerialNewsJobs(19L, "20210428", "20210425");
     }
 
     public void execSerialJobsCrawlKospiInvest() {
@@ -77,7 +77,7 @@ public class NaverStockJobManager {
         log.info("KOSPI Crawl Job Completed ..");
     }
 
-    public void execSerialJobs(long seedNo, String start, String end) {
+    public void execSerialNewsJobs(long seedNo, String start, String end) {
         //https://finance.naver.com/news/news_list.nhn?
         // mode=LSS3D&section_id=101&section_id2=258&section_id3=401&date=20210504
         String seedUrlFormat = "https://finance.naver.com/news/news_list.nhn?" +

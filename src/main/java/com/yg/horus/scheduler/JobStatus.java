@@ -9,5 +9,6 @@ public enum JobStatus {
     PROCESSING,
     COMPLETED,
     COMPLETED_NORESULT,
-    FAILED
+    FAILED,
+    NOT_AVAILABLE
 }

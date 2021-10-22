@@ -29,7 +29,7 @@ public class NaverSerialJobTest {
     public void createNaverSerialJob() {
         System.out.println("====> Active Test ..");
 
-        this.naverStockJobManager.execSerialJobs(19L, "20210424", "20210423");
+        this.naverStockJobManager.execSerialNewsJobs(19L, "20210424", "20210423");
 
         System.out.println("====> Test completed ..");;
     }

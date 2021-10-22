@@ -44,18 +44,12 @@ public class JobBuilder {
 
         List<WrapperRule> wrapperRules = this.wrapperRepository.findBySeedNo(referSeedNo) ;
 
-//        for(WrapperRule wr : wrapperRules) {
-//            WrapType wrapType = wr.getWrapType();
-//
-//            if(wrapType.equals(WrapType.LIST_URL_TOP_AREA_FILTER)) {
-//                job.crawlUrlAreaQuery = wr.getWrapVal();
-//            } else if(wrapType.equals(WrapType.LIST_URL_PATTERN_FILTER)) {
-//                job.crawlUrlRegxPattern = wr.getWrapVal();
-//            }
-//        }
 
         return this.createJobWithRules(job, wrapperRules) ;
     }
+
+
+
 
     private Job createJobWithRules(ListUrlCrawllJob job, List<WrapperRule> wrapperRules) {
 //        List<WrapperRule> wrapperRules = this.wrapperRepository.findBySeedNo(referSeedNo) ;
