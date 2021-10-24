@@ -1,7 +1,8 @@
-package com.yg.horus.scheduler;
+package com.yg.horus.scheduler.listcrawl;
 
 import com.yg.horus.crawl.CrawlDataUnit;
 import com.yg.horus.crawl.ListPageCrawler;
+import com.yg.horus.scheduler.Joblet;
 import lombok.extern.slf4j.Slf4j;
 
 import java.text.SimpleDateFormat;
@@ -9,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
-public class PageIndexListUrlCrawlJoblet {
+public class PageIndexListUrlCrawlJoblet implements Joblet<CrawlDataUnit> {
     private static final int PAGE_INDEX_LIMIT = 55 ;
 
     private final SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd") ;
@@ -20,9 +21,6 @@ public class PageIndexListUrlCrawlJoblet {
 
     private String urlGrabPattern = "^(https:\\/\\/news.naver.com\\/main\\/read.naver\\?).*$";
     private String groupHeadPath = "ul.type02";
-
-    List<CrawlDataUnit> latestCrawled = null ;
-    private boolean isEnd = false ;
 
     public PageIndexListUrlCrawlJoblet(String seedUrlPattern, String startDateString, String endDateString) {
         this.seedUrlPattern = seedUrlPattern ;
@@ -50,6 +48,13 @@ public class PageIndexListUrlCrawlJoblet {
         return matchedLinks ;
     }
 
-    
+    @Override
+    public CrawlDataUnit start() {
+        return null;
+    }
 
+    @Override
+    public void onCompleted(CrawlDataUnit crawlDataUnit) {
+
+    }
 }

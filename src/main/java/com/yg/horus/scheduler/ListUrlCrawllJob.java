@@ -15,7 +15,7 @@ import java.util.Observable;
  * Created by jeff on 21. 4. 18.
  */
 @Slf4j
-public class ListUrlCrawllJob extends Observable implements Job<List<CrawlDataUnit>> {
+public class ListUrlCrawllJob implements Job<List<CrawlDataUnit>> {
     private JobStatus jobStatus = JobStatus.INIT;
     CrawlRepository crawlRepository = null ;
 

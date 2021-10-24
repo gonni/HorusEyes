@@ -28,8 +28,6 @@ public class NaverStockJobManager {
     @Autowired
     private JobBuilder jobBuilder = null ;
     @Autowired
-    private JobScheduler jobScheduler = null ;
-    @Autowired
     private NaverStockIndexCrawler naverStockIndexCrawler = null ;
     @Autowired
     private KospiRepository kospiRepository = null ;
