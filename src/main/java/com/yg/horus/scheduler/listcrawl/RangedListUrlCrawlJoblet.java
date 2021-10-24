@@ -1,11 +1,10 @@
-package com.yg.horus.scheduler;
+package com.yg.horus.scheduler.listcrawl;
 
 import com.yg.horus.crawl.CrawlDataUnit;
 import com.yg.horus.crawl.ListPageCrawler;
-import com.yg.horus.data.WrapType;
-import com.yg.horus.data.WrapperRule;
+import com.yg.horus.scheduler.Job;
+import com.yg.horus.scheduler.JobStatus;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -15,13 +14,10 @@ import java.util.*;
  * Created by a1000074 on 22/10/2021.
  */
 @Slf4j
-public class RangedListUrlCrawlJob implements Job<List<CrawlDataUnit>>{
+public class RangedListUrlCrawlJoblet implements Job<List<CrawlDataUnit>> {
     private static final int PAGE_INDEX_LIMIT = 55 ;
 
     private final SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd") ;
-
-//    @Autowired
-//    private JobBuilder jobBuilder = null ;
 
     private String seedUrlPattern = null ;
     private String startDateString = null ;
@@ -30,12 +26,16 @@ public class RangedListUrlCrawlJob implements Job<List<CrawlDataUnit>>{
     private String urlGrabPattern = "^(https:\\/\\/news.naver.com\\/main\\/read.naver\\?).*$";
     private String groupHeadPath = "ul.type02";
 
-    public RangedListUrlCrawlJob(String seedUrlPattern, String startDateString, String endDateString) {
+    List<CrawlDataUnit> latestCrawled = null ;
+    private boolean isEnd = false ;
+
+    public RangedListUrlCrawlJoblet(String seedUrlPattern, String startDateString, String endDateString) {
         this.seedUrlPattern = seedUrlPattern ;
         this.startDateString = startDateString ;
         this.endDateString = endDateString ;
         ;
     }
+
 
 
     @Override
@@ -51,7 +51,8 @@ public class RangedListUrlCrawlJob implements Job<List<CrawlDataUnit>>{
                 log.info("TURN:{}, Check Page Num : {}", cursorDateString, i);
                 targetUrl = String.format(this.seedUrlPattern, cursorDateString, i) ;
                 log.info("Target ==> {}", targetUrl);
-                List<CrawlDataUnit> crawlDataUnits = this.processingCrawlList(targetUrl, urlGrabPattern, groupHeadPath);
+                List<CrawlDataUnit> crawlDataUnits = this.processingCrawlList(targetUrl,
+                        urlGrabPattern, groupHeadPath);
                 log.info("Grabbed : {} turn no #{}", crawlDataUnits.size(), i);
 //                crawlDataUnits.forEach(System.out::println);
 
@@ -124,7 +125,7 @@ public class RangedListUrlCrawlJob implements Job<List<CrawlDataUnit>>{
     public static void main(String ... v) {
         System.out.println("Hella");
 
-        RangedListUrlCrawlJob test = new RangedListUrlCrawlJob(
+        RangedListUrlCrawlJoblet test = new RangedListUrlCrawlJoblet(
                 "https://news.naver.com/main/list.naver?mode=LS2D&sid2=263&sid1=101&mid=sec&listType=title&date=%s&page=%s",
                 "20211020",
                 "20211020"
