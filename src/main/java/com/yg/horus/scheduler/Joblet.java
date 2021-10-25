@@ -1,16 +1,14 @@
 package com.yg.horus.scheduler;
 
 public interface Joblet<R> {
-    interface JobletStatus<R> {
-        enum JOBLET_STATUS {
-            SUCCESS,
-            NULL,
-            FAILED
-        }
-        JOBLET_STATUS getStatus() ;
-        R getResult() ;
+    enum JOBLET_STATUS {
+        COMPLETED,
+        NULL,
+        FAILED
     }
 
     R start();
-    void onCompleted(R r);
+    JOBLET_STATUS getStatus();
+
+    void addActionListener(JobletEventListener listener);
 }

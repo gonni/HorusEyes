@@ -36,8 +36,6 @@ public class RangedListUrlCrawlJoblet implements Job<List<CrawlDataUnit>> {
         ;
     }
 
-
-
     @Override
     public List<CrawlDataUnit> start() {
         List<CrawlDataUnit> latestCrawled = null ;
