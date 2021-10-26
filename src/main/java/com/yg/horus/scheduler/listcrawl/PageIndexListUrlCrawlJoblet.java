@@ -45,7 +45,10 @@ public class PageIndexListUrlCrawlJoblet extends AbstrackJoblet<List<CrawlDataUn
 
     @Override
     public List<CrawlDataUnit> start() {
+        System.out.println("joblet started");
         List<CrawlDataUnit> crawlDataUnits = this.processingCrawlList();
+
+        System.out.println("joblet started .. " + crawlDataUnits);
         if(crawlDataUnits != null) {
             super.updateAll(JOBLET_STATUS.COMPLETED, crawlDataUnits);
         } else {

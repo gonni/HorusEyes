@@ -36,6 +36,11 @@ public class JobBuilder {
         return this.seedRepository.findByStatus(SeedStatus.ACTV) ;
     }
 
+
+    public Job<CrawlUnit> createManagedSeedListCrawlJob() {
+        return null ;
+    }
+
     //TODO this can be used for serial job which crawls past data
     public Job<CrawlUnit> createSeedListCrawlJob(String url, long referSeedNo) {
 

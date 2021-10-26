@@ -10,19 +10,20 @@ public class JobletProcessor implements Runnable {
     private LinkedBlockingQueue<Joblet> jobletQueue = null ;
 
     private volatile boolean running = false ;
-    private Thread worker = new Thread(this);
+    private Thread worker = null ;
 
     private long count = 0L;
+    private String name = null ;
 
-    public JobletProcessor() {
+    public JobletProcessor(String name) {
         this.jobletQueue = new LinkedBlockingQueue<>();
-
+        this.name = name ;
     }
 
     public void schedule(Joblet joblet){
-        synchronized(this.jobletQueue){
-            this.jobletQueue.add(joblet);
-        }
+        log.info("added joblet : {}", joblet.toString());
+        this.jobletQueue.offer(joblet);
+
     }
 
     private void process(Joblet joblet) {
@@ -33,9 +34,10 @@ public class JobletProcessor implements Runnable {
     public void run() {
         while(this.running) {
             try {
+                log.info("Waiting joblet .. {}, total: {}", this.count, this.jobletQueue.size());
                 Joblet joblet = this.jobletQueue.take();
+                log.info("{} handle Joblet : {}", this.name, this.count++);
                 this.process(joblet);
-                log.info("Handle Joblet : {}", this.count++);
                 Thread.sleep(1000L);
             } catch (InterruptedException e) {
                 e.printStackTrace();

@@ -57,6 +57,25 @@ public class CommonListCrawlJob implements Job<List<CrawlDataUnit>>, JobletEvent
         if(startPageIndex > 0) this.pageIndex = startPageIndex;
     }
 
+    public static void main(String ... v) {
+        System.out.println("Hella ..");
+
+        JobletProcessor jp = new JobletProcessor("NaverEcoNewsWorker");
+        jp.startWorker();
+
+        CommonListCrawlJob testJob = new CommonListCrawlJob(
+                28,
+                "https://news.naver.com/main/list.naver?mode=LS2D&sid2=263&sid1=101&mid=sec&listType=title&date=%s&page=%s",
+                "^(https:\\/\\/news.naver.com\\/main\\/read.naver\\?).*$",
+                "ul.type02",
+                "20211016",
+                "20211016",
+                1);
+        testJob.jobletProcessor = jp ;
+
+        testJob.start() ;
+    }
+
     private PageIndexListUrlCrawlJoblet createNewJoblet() {
 
         PageIndexListUrlCrawlJoblet joblet = new PageIndexListUrlCrawlJoblet(this.topSeeds.getUrlPattern(),
@@ -68,20 +87,29 @@ public class CommonListCrawlJob implements Job<List<CrawlDataUnit>>, JobletEvent
 
     @Override
     public List<CrawlDataUnit> start() {
-
-        this.processNext();
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                processNext();
+//            }
+//        }).start();
+         // Async
+        processNext();;
 
         return null;
     }
 
 
     private boolean processNext() {
+        log.info("process next ..");
         if(this.endDateString.compareTo(this.startDateString) >= 0) {
             if(!this.jobStatus.equals(JobStatus.COMPLETED) && this.pageIndex < PAGE_INDEX_LIMIT) {
+                System.out.println("detected");
 
                 String targetUrl = String.format(this.topSeeds.getUrlPattern(), this.currentDateString, this.pageIndex) ;
                 log.info("Crawl Try : {}", targetUrl);
                 this.crawlJoblet = new PageIndexListUrlCrawlJoblet(targetUrl, this.crawlUrlRegxPattern, this.crawlUrlAreaQuery);
+                this.crawlJoblet.addActionListener(this);
 
                 this.jobletProcessor.schedule(crawlJoblet);
 
@@ -122,20 +150,23 @@ public class CommonListCrawlJob implements Job<List<CrawlDataUnit>>, JobletEvent
 
     @Override
     public void eventOccurred(Joblet joblet, Joblet.JOBLET_STATUS status, List<CrawlDataUnit> result) {
+        System.out.println("ev " + status + " -> " + result);
         if(status.equals(Joblet.JOBLET_STATUS.COMPLETED)
-                || status.equals(Joblet.JOBLET_STATUS.FAILED)) {
+                || status.equals(Joblet.JOBLET_STATUS.NULL)) {
             if(latestCrawled!= null && latestCrawled.containsAll(result)) {
                 // break condition
                 log.info("====> Detected Same Array page : {} = {}", latestCrawled.size());
                 this.jobStatus = JobStatus.COMPLETED ;
+
+            } else {
+                log.info("=====> Detected Next : {) -> {}", status, result);
+                processNext();
             }
         } else if(status.equals(Joblet.JOBLET_STATUS.FAILED)) {
             this.jobStatus = JobStatus.FAILED ;
         }
-    }
 
-    public static void main(String ... v) {
-        System.out.println("Hella ..");
+        this.latestCrawled = result;
     }
 
 }
