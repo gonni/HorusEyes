@@ -68,8 +68,8 @@ public class CommonListCrawlJob implements Job<List<CrawlDataUnit>>, JobletEvent
                 "https://news.naver.com/main/list.naver?mode=LS2D&sid2=263&sid1=101&mid=sec&listType=title&date=%s&page=%s",
                 "^(https:\\/\\/news.naver.com\\/main\\/read.naver\\?).*$",
                 "ul.type02",
-                "20211016",
-                "20211016",
+                "20211023",
+                "20211023",
                 1);
         testJob.jobletProcessor = jp ;
 
@@ -102,7 +102,7 @@ public class CommonListCrawlJob implements Job<List<CrawlDataUnit>>, JobletEvent
 
     private boolean processNext() {
         log.info("process next ..");
-        if(this.endDateString.compareTo(this.startDateString) >= 0) {
+        if(!this.jobStatus.equals(JobStatus.COMPLETED) && this.endDateString.compareTo(this.currentDateString) >= 0) {
             if(!this.jobStatus.equals(JobStatus.COMPLETED) && this.pageIndex < PAGE_INDEX_LIMIT) {
                 System.out.println("detected");
 
@@ -114,7 +114,7 @@ public class CommonListCrawlJob implements Job<List<CrawlDataUnit>>, JobletEvent
                 this.jobletProcessor.schedule(crawlJoblet);
 
                 this.pageIndex ++;
-                this.currentDateString = this.getNextday(this.currentDateString);
+//                this.currentDateString = this.getNextday(this.currentDateString);
                 return true ;
 
             } else {
@@ -155,11 +155,21 @@ public class CommonListCrawlJob implements Job<List<CrawlDataUnit>>, JobletEvent
                 || status.equals(Joblet.JOBLET_STATUS.NULL)) {
             if(latestCrawled!= null && latestCrawled.containsAll(result)) {
                 // break condition
-                log.info("====> Detected Same Array page : {} = {}", latestCrawled.size());
-                this.jobStatus = JobStatus.COMPLETED ;
+                log.info("====> Detected Same Array page : {}.{} = {}", this.currentDateString, this.pageIndex, latestCrawled.size());
+//                this.jobStatus = JobStatus.COMPLETED ;
+
+                //TODO need
+                this.currentDateString = this.getNextday(this.currentDateString);
+                if(this.endDateString.compareTo(this.currentDateString) >= 0) {
+                    log.info("Day Changed Detected ..");
+                    processNext();
+                } else {
+                    log.info("Detected Job Completed !! Need to stop ..");
+                    this.jobStatus = JobStatus.COMPLETED ;
+                }
 
             } else {
-                log.info("=====> Detected Next : {) -> {}", status, result);
+                log.info("=====> Detected Next : {} -> {}", status, result);
                 processNext();
             }
         } else if(status.equals(Joblet.JOBLET_STATUS.FAILED)) {
