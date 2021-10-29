@@ -2,6 +2,8 @@ package com.yg.horus.scheduler.listcrawl;
 
 import com.yg.horus.crawl.CrawlDataUnit;
 import com.yg.horus.data.CrawlRepository;
+import com.yg.horus.data.CrawlStatus;
+import com.yg.horus.data.CrawlUnit;
 import com.yg.horus.data.TopSeeds;
 import com.yg.horus.scheduler.*;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +30,7 @@ public class CommonListCrawlJob implements Job<List<CrawlDataUnit>>, JobletEvent
     String crawlUrlAreaQuery = null ;
 
     private String currentDateString = null ;
-    private String startDateString = null ;
+//    private String startDateString = null ;
     private String endDateString = null ;
 
     private int pageIndex = 0;
@@ -45,7 +47,7 @@ public class CommonListCrawlJob implements Job<List<CrawlDataUnit>>, JobletEvent
                               String endDate,
                               int startPageIndex) {
         this.currentDateString = startDate ;
-        this.startDateString = startDate ;
+//        this.startDateString = startDate ;
         this.endDateString = endDate ;
 
         this.topSeeds = TopSeeds.builder().urlPattern(seedUrlPattern).build();
@@ -170,6 +172,9 @@ public class CommonListCrawlJob implements Job<List<CrawlDataUnit>>, JobletEvent
 
             } else {
                 log.info("=====> Detected Next : {} -> {}", status, result);
+                if(!this.storeCrawlData(result)) {
+                    log.info("Store data failed ..");
+                }
                 processNext();
             }
         } else if(status.equals(Joblet.JOBLET_STATUS.FAILED)) {
@@ -177,6 +182,42 @@ public class CommonListCrawlJob implements Job<List<CrawlDataUnit>>, JobletEvent
         }
 
         this.latestCrawled = result;
+    }
+
+    private boolean storeCrawlData(List<CrawlDataUnit> result) {
+        if(this.crawlRepository != null ) {
+            result.forEach(link -> {
+                CrawlUnit crawlUnit = this.crawlRepository.findOneByUrl(link.getUrl());
+
+                if(crawlUnit == null) {
+                    crawlUnit = CrawlUnit.builder()
+                            .url(link.getUrl())
+                            .anchorText(link.getAnchorText())
+                            .status(CrawlStatus.IURL)
+                            .build();
+
+//                crawlUnit.setSeedNo(this.seedNo);
+                    if(link.getAnchorType().equals(CrawlDataUnit.AnchorType.IMG)) {
+                        crawlUnit.setAnchorImg(link.getAnchorText());
+                        crawlUnit.setAnchorText(null);
+                    }
+                    // cnt++
+                } else {
+                    log.info("Dupplicated : {}", link);
+
+                    if(link.getAnchorType().equals(CrawlDataUnit.AnchorType.IMG)) {
+                        crawlUnit.setAnchorImg(link.getAnchorText());
+                    } else if(link.getAnchorType().equals(CrawlDataUnit.AnchorType.TEXT)) {
+                        crawlUnit.setAnchorText(link.getAnchorText());
+                    }
+                }
+                crawlUnit.setTopSeeds(this.topSeeds);
+
+                this.crawlRepository.save(crawlUnit);
+            });
+        }
+
+        return false ;
     }
 
 }
