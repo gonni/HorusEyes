@@ -6,6 +6,7 @@ import com.yg.horus.data.CrawlStatus;
 import com.yg.horus.data.CrawlUnit;
 import com.yg.horus.data.TopSeeds;
 import com.yg.horus.scheduler.*;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.text.ParseException;
@@ -16,26 +17,25 @@ import java.util.List;
 
 @Slf4j
 public class CommonListCrawlJob implements Job<List<CrawlDataUnit>>, JobletEventListener<List<CrawlDataUnit>> {
-    private static final int PAGE_INDEX_LIMIT = 55 ;
+    private static final int PAGE_INDEX_LIMIT = 200 ;
     private final SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd") ;
 
     private JobStatus jobStatus = JobStatus.INIT ;
     private PageIndexListUrlCrawlJoblet crawlJoblet = null ;
     private List<CrawlDataUnit> latestCrawled = null ;
 
-    protected JobletProcessor jobletProcessor = null ;
-    protected CrawlRepository crawlRepository = null ;
+    @Setter
+    private JobletProcessor jobletProcessor = null ;
+    @Setter
+    private CrawlRepository crawlRepository = null ;
 
-    String crawlUrlRegxPattern = null ;
-    String crawlUrlAreaQuery = null ;
-
+    private String crawlUrlRegxPattern = null ;
+    private String crawlUrlAreaQuery = null ;
     private String currentDateString = null ;
 //    private String startDateString = null ;
     private String endDateString = null ;
 
     private int pageIndex = 0;
-
-
     private TopSeeds topSeeds = null ;
 
     //Data Range, SeedIndex
@@ -70,8 +70,8 @@ public class CommonListCrawlJob implements Job<List<CrawlDataUnit>>, JobletEvent
                 "https://news.naver.com/main/list.naver?mode=LS2D&sid2=263&sid1=101&mid=sec&listType=title&date=%s&page=%s",
                 "^(https:\\/\\/news.naver.com\\/main\\/read.naver\\?).*$",
                 "ul.type02",
-                "20211023",
-                "20211023",
+                "20211024",
+                "20211029",
                 1);
         testJob.jobletProcessor = jp ;
 
@@ -103,7 +103,7 @@ public class CommonListCrawlJob implements Job<List<CrawlDataUnit>>, JobletEvent
 
 
     private boolean processNext() {
-        log.info("process next ..");
+        log.info("process next {} => {}", currentDateString, pageIndex);
         if(!this.jobStatus.equals(JobStatus.COMPLETED) && this.endDateString.compareTo(this.currentDateString) >= 0) {
             if(!this.jobStatus.equals(JobStatus.COMPLETED) && this.pageIndex < PAGE_INDEX_LIMIT) {
                 System.out.println("detected");
@@ -122,6 +122,9 @@ public class CommonListCrawlJob implements Job<List<CrawlDataUnit>>, JobletEvent
             } else {
                 //TODO ...
                 log.info("Detected Job Completed page index :{} at {}", this.pageIndex, this.currentDateString);
+                this.pageIndex = 0;
+                this.currentDateString = this.getNextday(this.currentDateString);
+                processNext();
             }
         }
 
@@ -151,6 +154,11 @@ public class CommonListCrawlJob implements Job<List<CrawlDataUnit>>, JobletEvent
     }
 
     @Override
+    public long getSeedId() {
+        return this.topSeeds.getSeedNo();
+    }
+
+    @Override
     public void eventOccurred(Joblet joblet, Joblet.JOBLET_STATUS status, List<CrawlDataUnit> result) {
         System.out.println("ev " + status + " -> " + result);
         if(status.equals(Joblet.JOBLET_STATUS.COMPLETED)
@@ -162,6 +170,8 @@ public class CommonListCrawlJob implements Job<List<CrawlDataUnit>>, JobletEvent
 
                 //TODO need
                 this.currentDateString = this.getNextday(this.currentDateString);
+                this.pageIndex = 1;
+
                 if(this.endDateString.compareTo(this.currentDateString) >= 0) {
                     log.info("Day Changed Detected ..");
                     processNext();

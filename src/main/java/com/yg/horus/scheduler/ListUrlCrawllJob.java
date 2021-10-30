@@ -14,6 +14,7 @@ import java.util.Observable;
 /**
  * Created by jeff on 21. 4. 18.
  */
+@Deprecated
 @Slf4j
 public class ListUrlCrawllJob implements Job<List<CrawlDataUnit>> {
     private JobStatus jobStatus = JobStatus.INIT;
@@ -87,6 +88,11 @@ public class ListUrlCrawllJob implements Job<List<CrawlDataUnit>> {
     @Override
     public JobStatus getStatus() {
         return this.jobStatus ;
+    }
+
+    @Override
+    public long getSeedId() {
+        return this.topSeeds.getSeedNo();
     }
 
     public static void main(String ... v) {

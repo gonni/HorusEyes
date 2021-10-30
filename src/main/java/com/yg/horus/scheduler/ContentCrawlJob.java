@@ -66,6 +66,11 @@ public class ContentCrawlJob extends Observable implements Job<CrawlUnit> {
     }
 
     @Override
+    public long getSeedId() {
+        return -1;
+    }
+
+    @Override
     public String toString() {
         return String.format("%s -> %s", this.crawlUnit, this.wrapRule);
     }

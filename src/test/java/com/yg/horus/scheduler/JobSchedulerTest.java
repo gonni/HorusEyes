@@ -57,6 +57,11 @@ public class JobSchedulerTest {
                 public JobStatus getStatus() {
                     return null;
                 }
+
+                @Override
+                public long getSeedId() {
+                    return 0;
+                }
             });
 
             System.out.println("Schedulered Job #" + i);

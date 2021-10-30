@@ -6,6 +6,7 @@ import com.yg.horus.nlp.paragraphvectors.TopicCluster;
 import com.yg.horus.nlp.word2vec.Word2vecModeler;
 import com.yg.horus.scheduler.*;
 import com.yg.horus.scheduler.custom.NaverStockJobManager;
+import com.yg.horus.scheduler.listcrawl.CommonListCrawlJob;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,17 +30,16 @@ public class ServiceCtr {
     @Autowired
     private JobScheduler jobScheduler = null ;
     @Autowired
+    private ManagedJobScheduler managedJobScheduler = null ;
+    @Autowired
     private NaverStockJobManager naverStockJobManager = null ;
     @Autowired
     private Word2vecModeler word2vecModeler = null;
     @Autowired
     private TopicCluster topicCluster = null ;
 
-
     @Value("${horus.engine.version}")
     private String version ;
-
-
 
     @RequestMapping("/system/version")
     public String getVersion() {
@@ -59,6 +59,15 @@ public class ServiceCtr {
         this.jobProducer.startWorker();
 
         return "Started Contents Crawler ..";
+    }
+
+    @RequestMapping("/crawl/managed/list")
+    public String crawlMananaged() {
+        Job<List<CrawlDataUnit>> job = this.managedJobScheduler.createManagedListCrawlJob(
+                2L, "20211023", "20211029");
+        job.start();
+
+        return "Scheduled managed job ..";
     }
 
 

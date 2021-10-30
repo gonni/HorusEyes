@@ -120,6 +120,11 @@ public class RangedListUrlCrawlJoblet implements Job<List<CrawlDataUnit>> {
         return JobStatus.NOT_AVAILABLE ;
     }
 
+    @Override
+    public long getSeedId() {
+        return -1;
+    }
+
     public static void main(String ... v) {
         System.out.println("Hella");
 

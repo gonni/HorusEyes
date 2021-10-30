@@ -9,4 +9,5 @@ public interface Job<R> {
 //    void start() ;
     R start();
     JobStatus getStatus();
+    long getSeedId();
 }

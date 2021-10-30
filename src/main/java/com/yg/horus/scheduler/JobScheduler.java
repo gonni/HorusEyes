@@ -11,6 +11,7 @@ import java.util.concurrent.*;
 /**
  * Created by a1000074 on 22/04/2021.
  */
+@Deprecated
 @Service
 @Slf4j
 public class JobScheduler extends Thread implements Runnable, Observer {
