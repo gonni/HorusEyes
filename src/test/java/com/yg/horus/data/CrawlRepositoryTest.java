@@ -70,8 +70,9 @@ public class CrawlRepositoryTest {
         crawlUnit.setTopSeeds(topSeeds);
 
 
-
         CrawlUnit save = this.crawlRepository.save(crawlUnit);
+
+
         System.out.println("Inserted Crawl No -> " + save.getCrawlNo() + " --> " + topSeeds.toString());
 
         List<CrawlUnit> icu = this.crawlRepository.findByStatusAndTopSeedsSeedNoOrderByCrawlNoDesc(CrawlStatus.INIT,

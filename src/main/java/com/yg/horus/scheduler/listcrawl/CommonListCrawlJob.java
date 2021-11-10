@@ -38,6 +38,8 @@ public class CommonListCrawlJob implements Job<List<CrawlDataUnit>>, JobletEvent
     private int pageIndex = 0;
     private TopSeeds topSeeds = null ;
 
+    private long latestEv = System.currentTimeMillis() ;
+
     //Data Range, SeedIndex
     public CommonListCrawlJob(long seedId,
                               String seedUrlPattern,
@@ -89,14 +91,46 @@ public class CommonListCrawlJob implements Job<List<CrawlDataUnit>>, JobletEvent
 
     @Override
     public List<CrawlDataUnit> start() {
+        //TODO need add logic : monitor status and latest event time gab
+
 //        new Thread(new Runnable() {
 //            @Override
 //            public void run() {
 //                processNext();
 //            }
 //        }).start();
+
+        processNext();
+
+        // Thread for blocking monitor
+        new Thread(()->{
+            int cntBlock = 0;
+
+            while(!this.jobStatus.equals(JobStatus.COMPLETED)) {
+
+                if((System.currentTimeMillis() - latestEv) > 10000L ){
+                    log.info("[Critical] Detected Blocked Job Status ..");
+                    processNext();
+
+                    if(cntBlock++ > 5) {
+                        break ;
+                    }
+                }
+
+                try {
+                    Thread.sleep(10000L);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+            }
+            log.info("Detected ranged job completed ..");
+        }).start();
+
+
+
          // Async
-        processNext();;
+//
 
         return null;
     }
@@ -161,6 +195,7 @@ public class CommonListCrawlJob implements Job<List<CrawlDataUnit>>, JobletEvent
     @Override
     public void eventOccurred(Joblet joblet, Joblet.JOBLET_STATUS status, List<CrawlDataUnit> result) {
         System.out.println("ev " + status + " -> " + result);
+        this.latestEv = System.currentTimeMillis() ;
         if(status.equals(Joblet.JOBLET_STATUS.COMPLETED)
                 || status.equals(Joblet.JOBLET_STATUS.NULL)) {
             if(latestCrawled!= null && latestCrawled.containsAll(result)) {

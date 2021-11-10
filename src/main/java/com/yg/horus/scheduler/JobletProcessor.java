@@ -6,7 +6,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 @Slf4j
 public class JobletProcessor implements Runnable {
-    private static long MINIMUM_DELAY = 1000L ;
+    public static long MINIMUM_DELAY = 1000L ;
     private LinkedBlockingQueue<Joblet> jobletQueue = null ;
 
     private volatile boolean running = false ;
@@ -38,7 +38,7 @@ public class JobletProcessor implements Runnable {
                 Joblet joblet = this.jobletQueue.take();
                 log.info("{} handle Joblet : {}", this.name, this.count++);
                 this.process(joblet);
-                Thread.sleep(1000L);
+                Thread.sleep(MINIMUM_DELAY);
             } catch (InterruptedException e) {
                 e.printStackTrace();
                 continue;
