@@ -79,6 +79,7 @@ public class ServiceCtr {
         return String.format("Job linked with seedNo:%s scheduled : %d", seedNo, scheduled);
     }
 
+    @Deprecated
     @RequestMapping("/crawl/lsturls")
     public String crawlTargetUrlList(@RequestParam long seedNo) {
         log.info("Detected list crawl for seed #{}", seedNo);

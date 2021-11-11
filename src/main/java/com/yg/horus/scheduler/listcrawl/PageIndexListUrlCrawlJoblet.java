@@ -2,17 +2,15 @@ package com.yg.horus.scheduler.listcrawl;
 
 import com.yg.horus.crawl.CrawlDataUnit;
 import com.yg.horus.crawl.ListPageCrawler;
-import com.yg.horus.scheduler.AbstrackJoblet;
+import com.yg.horus.scheduler.AbstractJoblet;
 import com.yg.horus.scheduler.Joblet;
-import com.yg.horus.scheduler.JobletEventListener;
 import lombok.extern.slf4j.Slf4j;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
-public class PageIndexListUrlCrawlJoblet extends AbstrackJoblet<List<CrawlDataUnit>> implements Joblet<List<CrawlDataUnit>> {
+public class PageIndexListUrlCrawlJoblet extends AbstractJoblet<List<CrawlDataUnit>> implements Joblet<List<CrawlDataUnit>> {
     private static final int PAGE_INDEX_LIMIT = 55 ;
 
     private final SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd") ;

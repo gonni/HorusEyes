@@ -8,11 +8,11 @@ import java.util.ArrayList;
  * Created by a1000074 on 25/10/2021.
  */
 @Slf4j
-public abstract class AbstrackJoblet<R> implements Joblet<R> {
+public abstract class AbstractJoblet<R> implements Joblet<R> {
 
     protected ArrayList<JobletEventListener> subscribedJoblets = null ;
 
-    protected AbstrackJoblet() {
+    protected AbstractJoblet() {
         this.subscribedJoblets = new ArrayList<>();
     }
 

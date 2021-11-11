@@ -4,6 +4,7 @@ import com.yg.horus.data.CrawlRepository;
 import com.yg.horus.data.CrawlStatus;
 import com.yg.horus.data.CrawlUnit;
 import com.yg.horus.data.TopSeeds;
+import com.yg.horus.scheduler.contcrawl.ContentCrawlJob;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -64,6 +65,7 @@ public class JobProducer implements Runnable {
 
     }
 
+    //[CORE] Crawl Contents
     public int crawlContents(long seedNo, int maxCrawlSize) {
         if(this.jobScheduler.getCntPendingJobs() > MAX_PENDING) {
             return -1;
@@ -72,7 +74,8 @@ public class JobProducer implements Runnable {
         int cntExcuted = 0;
 
         List<ContentCrawlJob> newContJobs = this.jobBuilder.createLatestContentsCrawlJobs(seedNo, maxCrawlSize);
-        System.out.println("New Job : " + newContJobs.size());
+//        System.out.println("New Job : " + newContJobs.size());
+        log.info("Count of Jobs to crawl contents : {}", newContJobs.size());
         for(ContentCrawlJob job : newContJobs) {
             this.jobScheduler.execute(job);
 

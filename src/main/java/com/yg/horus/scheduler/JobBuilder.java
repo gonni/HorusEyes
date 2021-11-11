@@ -1,9 +1,8 @@
 package com.yg.horus.scheduler;
 
 import com.yg.horus.crawl.ContentsPageWrappingRule;
-import com.yg.horus.crawl.CrawlDataUnit;
 import com.yg.horus.data.*;
-import com.yg.horus.scheduler.listcrawl.CommonListCrawlJob;
+import com.yg.horus.scheduler.contcrawl.ContentCrawlJob;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -11,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * Created by a1000074 on 09/04/2021.

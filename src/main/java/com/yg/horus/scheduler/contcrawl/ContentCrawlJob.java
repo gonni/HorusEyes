@@ -1,4 +1,4 @@
-package com.yg.horus.scheduler;
+package com.yg.horus.scheduler.contcrawl;
 
 import com.yg.horus.crawl.ContentsPageWrappingRule;
 import com.yg.horus.crawl.ContentsPageCrawler;
@@ -6,6 +6,8 @@ import com.yg.horus.data.CrawlRepository;
 import com.yg.horus.data.CrawlStatus;
 import com.yg.horus.data.CrawlUnit;
 import com.yg.horus.doc.ContentPageDoc;
+import com.yg.horus.scheduler.Job;
+import com.yg.horus.scheduler.JobStatus;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
