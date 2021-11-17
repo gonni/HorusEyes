@@ -46,14 +46,20 @@ public class ContentsPageCrawler extends CrawlBase {
         System.out.println("Active System ..");
 
         String targetUrl = "https://finance.naver.com/news/news_read.nhn?article_id=0004570979&office_id=014&mode=LSS3D&type=0&section_id=101&section_id2=258&section_id3=402&date=20210124&page=2";
-        targetUrl = "https://finance.naver.com/news/news_read.nhn?article_id=0004575978&office_id=008&mode=LSS3D&type=0&section_id=101&section_id2=258&section_id3=401&date=20210421&page=1";
+//        targetUrl = "https://finance.naver.com/news/news_read.nhn?article_id=0004575978&office_id=008&mode=LSS3D&type=0&section_id=101&section_id2=258&section_id3=401&date=20210421&page=1";
+        targetUrl = "https://news.naver.com/main/read.naver?mode=LS2D&mid=sec&sid1=101&sid2=263&oid=001&aid=0012794919";
 
         ContentsPageCrawler contentsPageCrawler = new ContentsPageCrawler();
 
         ContentsPageWrappingRule wrapRule = new ContentsPageWrappingRule() ;
+//        wrapRule.setTitleOnContents("div.article_info > h3");
+//        wrapRule.getContents().add("div#content");
+//        wrapRule.setContDate("span.article_date");
+
         wrapRule.setTitleOnContents("div.article_info > h3");
-        wrapRule.getContents().add("div#content");
-        wrapRule.setContDate("span.article_date");
+//        wrapRule.getContents().add("div#articleBodyContents");
+        wrapRule.getContents().add("div._article_body_contents");
+        wrapRule.setContDate("span.t11");
 
         ContentPageDoc contentPageDoc = contentsPageCrawler.getContentPageDoc(targetUrl, wrapRule);
 

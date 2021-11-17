@@ -26,12 +26,6 @@ public class ContentCrawlJob extends Observable implements Job<CrawlUnit> {
     private CrawlUnit crawlUnit = null ;
     private ContentsPageWrappingRule wrapRule ;
 
-//    public ContentCrawlJob(String url, ContentsPageWrappingRule wrapRule, CrawlRepository cr) {
-//        this.url = url ;
-//        this.wrapRule = wrapRule ;
-//        this.crawlRepository = cr ;
-//    }
-
     public ContentCrawlJob(CrawlUnit cu, ContentsPageWrappingRule wrapRule, CrawlRepository cr) {
         this.crawlUnit = cu ;
         this.wrapRule = wrapRule ;
