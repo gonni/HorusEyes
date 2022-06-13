@@ -77,7 +77,7 @@ public class ListPageCrawler extends CrawlBase {
 //        List<CrawlDataUnit> matchedLinks = test.getMatchedLinks(seedUrl, regexFilter, "ul.realtimeNewsList");
 
         seedUrl = "https://news.naver.com/main/list.naver?mode=LS2D&sid2=263&sid1=101&mid=sec&listType=title&date=20211020&page=3";
-        String regexFilter = "^(https:\\/\\/news.naver.com\\/main\\/read.naver\\?).*$";
+        String regexFilter = "^(https:\\/\\/n.news.naver.com\\/mnews\\/).*$";
         List<CrawlDataUnit> matchedLinks = test.getMatchedLinks(seedUrl, regexFilter, "ul.type02");
 
 
