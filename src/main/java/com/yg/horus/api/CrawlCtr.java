@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,9 +25,11 @@ public class CrawlCtr {
     }
 
     @RequestMapping("/crawl/page/list")
+    @GetMapping("/http-servlet-response")
     public @ResponseBody
-    ListCrawlRes getListCrawl(@RequestBody ListCrawlOptionReq listCrawlOptionReq) {
+    ListCrawlRes getListCrawl(@RequestBody ListCrawlOptionReq listCrawlOptionReq, HttpServletResponse httpResponse) {
         log.info("Detected API {}", listCrawlOptionReq) ;
+        httpResponse.addHeader("Access-Control-Allow-Origin", "*");
         List<CrawlDataUnit> matchedLinks = this.listPageCrawler.getMatchedLinks(listCrawlOptionReq.getTargetSeedUrl(),
                 listCrawlOptionReq.getFilterCrawlUrlRxPattern(),
                 listCrawlOptionReq.getFilterDomGroupAttr());
