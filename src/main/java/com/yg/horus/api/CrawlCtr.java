@@ -2,6 +2,8 @@ package com.yg.horus.api;
 
 import com.yg.horus.crawl.CrawlDataUnit;
 import com.yg.horus.crawl.ListPageCrawler;
+import com.yg.horus.doc.ContentPageDoc;
+import com.yg.horus.dto.ContentCrawlOption;
 import com.yg.horus.dto.ListCrawl;
 import com.yg.horus.dto.ListCrawlOptionReq;
 import com.yg.horus.dto.ListCrawlRes;
@@ -25,11 +27,11 @@ public class CrawlCtr {
     }
 
     @RequestMapping("/crawl/page/list")
-    @GetMapping("/http-servlet-response")
+//    @GetMapping("/http-servlet-response")
     public @ResponseBody
-    ListCrawlRes getListCrawl(@RequestBody ListCrawlOptionReq listCrawlOptionReq, HttpServletResponse httpResponse) {
+    ListCrawlRes getListCrawl(@RequestBody ListCrawlOptionReq listCrawlOptionReq) {
         log.info("Detected API {}", listCrawlOptionReq) ;
-        httpResponse.addHeader("Access-Control-Allow-Origin", "*");
+//        httpResponse.addHeader("Access-Control-Allow-Origin", "*");
         List<CrawlDataUnit> matchedLinks = this.listPageCrawler.getMatchedLinks(listCrawlOptionReq.getTargetSeedUrl(),
                 listCrawlOptionReq.getFilterCrawlUrlRxPattern(),
                 listCrawlOptionReq.getFilterDomGroupAttr());
@@ -48,7 +50,13 @@ public class CrawlCtr {
 
     }
 
+    @RequestMapping("/crawl/page/content")
+    public @ResponseBody
+    ContentCrawlOption getContentCrawl(@RequestBody ContentCrawlOption req) {
+        ContentPageDoc contentPageDoc = new ContentPageDoc() ;
 
+        return null ;
+    }
 
 
 }

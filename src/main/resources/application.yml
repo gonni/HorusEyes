@@ -24,7 +24,7 @@ spring:
   profiles: localhomeMac
   datasource:
     username: root
-    password: 1999
+    password: 18651865
     jdbcUrl: jdbc:mysql://localhost:3306/horus?useUnicode=true&characterEncoding=utf8&useSSL=false
     url: jdbc:mysql://localhost:3306/horus?useUnicode=true&characterEncoding=utf8&useSSL=false
     driver-class-name: com.mysql.jdbc.Driver
