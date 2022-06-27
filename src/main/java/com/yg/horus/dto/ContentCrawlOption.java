@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class ContentCrawlOption {
+    private String targetUrl ;
     private String docTitle ;
     private String docDatetime ;
     private String htmlTitle ;

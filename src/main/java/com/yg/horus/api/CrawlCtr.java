@@ -1,5 +1,7 @@
 package com.yg.horus.api;
 
+import com.yg.horus.crawl.ContentsPageCrawler;
+import com.yg.horus.crawl.ContentsPageWrappingRule;
 import com.yg.horus.crawl.CrawlDataUnit;
 import com.yg.horus.crawl.ListPageCrawler;
 import com.yg.horus.doc.ContentPageDoc;
@@ -52,10 +54,17 @@ public class CrawlCtr {
 
     @RequestMapping("/crawl/page/content")
     public @ResponseBody
-    ContentCrawlOption getContentCrawl(@RequestBody ContentCrawlOption req) {
-        ContentPageDoc contentPageDoc = new ContentPageDoc() ;
+    ContentPageDoc getContentCrawl(@RequestBody ContentCrawlOption req) {
+        log.info("Detected API {}", req) ;
+        ContentsPageCrawler contentsPageCrawler = new ContentsPageCrawler();
+        ContentsPageWrappingRule wrapRule = new ContentsPageWrappingRule() ;
+        wrapRule.setTitleOnContents(req.getDocTitle()) ;
+        wrapRule.getContents().add(req.getContentGrp()) ;
+        wrapRule.setContDate(req.getDocDatetime());
 
-        return null ;
+        ContentPageDoc contentPageDoc = contentsPageCrawler.getContentPageDoc(req.getTargetUrl(), wrapRule);
+
+        return contentPageDoc ;
     }
 
 
