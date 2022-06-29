@@ -11,9 +11,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableWebMvc
 //@ComponentScan("com.yg.horus")
 public class HorusCrawlMain {
-
 	public static void main(String[] args) {
 		SpringApplication.run(HorusCrawlMain.class, args);
 	}
-
 }

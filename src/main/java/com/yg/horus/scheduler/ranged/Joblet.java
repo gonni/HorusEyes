@@ -1,4 +1,4 @@
-package com.yg.horus.scheduler;
+package com.yg.horus.scheduler.ranged;
 
 public interface Joblet<R> {
     enum JOBLET_STATUS {

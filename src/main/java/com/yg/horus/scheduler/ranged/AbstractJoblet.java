@@ -1,4 +1,4 @@
-package com.yg.horus.scheduler;
+package com.yg.horus.scheduler.ranged;
 
 import lombok.extern.slf4j.Slf4j;
 

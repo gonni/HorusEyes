@@ -29,7 +29,6 @@ public class CrawlCtr {
     }
 
     @RequestMapping("/crawl/page/list")
-//    @GetMapping("/http-servlet-response")
     public @ResponseBody
     ListCrawlRes getListCrawl(@RequestBody ListCrawlOptionReq listCrawlOptionReq) {
         log.info("Detected API {}", listCrawlOptionReq) ;
@@ -46,10 +45,6 @@ public class CrawlCtr {
             log.info("Count of Crawled : {}", response.getLstCrawls().size()) ;
 
         return response ;
-//        String crawlResult = matchedLinks.stream().map(unit -> unit.toString()).collect(Collectors.joining("\n<br>"));
-//        return "Crawled -> " + crawlResult ;
-
-
     }
 
     @RequestMapping("/crawl/page/content")

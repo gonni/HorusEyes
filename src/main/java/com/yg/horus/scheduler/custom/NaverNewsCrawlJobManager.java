@@ -2,8 +2,8 @@ package com.yg.horus.scheduler.custom;
 
 import com.yg.horus.crawl.custom.NaverStockIndexCrawler;
 import com.yg.horus.data.KospiRepository;
-import com.yg.horus.scheduler.JobBuilder;
-import com.yg.horus.scheduler.JobScheduler;
+import com.yg.horus.scheduler.ranged.JobBuilder;
+import com.yg.horus.scheduler.ranged.JobScheduler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

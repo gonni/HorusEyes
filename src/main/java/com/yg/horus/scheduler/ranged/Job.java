@@ -1,6 +1,4 @@
-package com.yg.horus.scheduler;
-
-import java.util.concurrent.Future;
+package com.yg.horus.scheduler.ranged;
 
 /**
  * Created by a1000074 on 18/03/2021.

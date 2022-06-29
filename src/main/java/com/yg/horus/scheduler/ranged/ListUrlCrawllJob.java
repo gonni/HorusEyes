@@ -1,4 +1,4 @@
-package com.yg.horus.scheduler;
+package com.yg.horus.scheduler.ranged;
 
 import com.yg.horus.crawl.CrawlDataUnit;
 import com.yg.horus.crawl.ListPageCrawler;
@@ -9,7 +9,6 @@ import com.yg.horus.data.TopSeeds;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
-import java.util.Observable;
 
 /**
  * Created by jeff on 21. 4. 18.
@@ -61,7 +60,7 @@ public class ListUrlCrawllJob implements Job<List<CrawlDataUnit>> {
                 }
                 cntNew++;
             } else {
-                log.info("Dupplicated : {}", link);
+                log.info("Duplicated : {}", link);
 
                 if(link.getAnchorType().equals(CrawlDataUnit.AnchorType.IMG)) {
                     crawlUnit.setAnchorImg(link.getAnchorText());

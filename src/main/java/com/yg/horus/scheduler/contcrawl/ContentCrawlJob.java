@@ -6,8 +6,8 @@ import com.yg.horus.data.CrawlRepository;
 import com.yg.horus.data.CrawlStatus;
 import com.yg.horus.data.CrawlUnit;
 import com.yg.horus.doc.ContentPageDoc;
-import com.yg.horus.scheduler.Job;
-import com.yg.horus.scheduler.JobStatus;
+import com.yg.horus.scheduler.ranged.Job;
+import com.yg.horus.scheduler.ranged.JobStatus;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 

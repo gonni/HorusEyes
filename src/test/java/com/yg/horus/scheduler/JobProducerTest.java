@@ -1,5 +1,7 @@
 package com.yg.horus.scheduler;
 
+import com.yg.horus.scheduler.ranged.JobProducer;
+import com.yg.horus.scheduler.ranged.JobScheduler;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

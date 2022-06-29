@@ -1,4 +1,4 @@
-package com.yg.horus.scheduler;
+package com.yg.horus.scheduler.ranged;
 
 /**
  * Created by a1000074 on 19/04/2021.

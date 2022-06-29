@@ -2,8 +2,8 @@ package com.yg.horus.scheduler.listcrawl;
 
 import com.yg.horus.crawl.CrawlDataUnit;
 import com.yg.horus.crawl.ListPageCrawler;
-import com.yg.horus.scheduler.AbstractJoblet;
-import com.yg.horus.scheduler.Joblet;
+import com.yg.horus.scheduler.ranged.AbstractJoblet;
+import com.yg.horus.scheduler.ranged.Joblet;
 import lombok.extern.slf4j.Slf4j;
 
 import java.text.SimpleDateFormat;

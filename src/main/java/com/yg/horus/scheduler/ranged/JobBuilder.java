@@ -1,4 +1,4 @@
-package com.yg.horus.scheduler;
+package com.yg.horus.scheduler.ranged;
 
 import com.yg.horus.crawl.ContentsPageWrappingRule;
 import com.yg.horus.data.*;

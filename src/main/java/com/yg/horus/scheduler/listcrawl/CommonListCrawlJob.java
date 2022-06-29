@@ -5,7 +5,7 @@ import com.yg.horus.data.CrawlRepository;
 import com.yg.horus.data.CrawlStatus;
 import com.yg.horus.data.CrawlUnit;
 import com.yg.horus.data.TopSeeds;
-import com.yg.horus.scheduler.*;
+import com.yg.horus.scheduler.ranged.*;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
