@@ -4,17 +4,17 @@ import com.yg.horus.crawl.ContentsPageCrawler;
 import com.yg.horus.crawl.ContentsPageWrappingRule;
 import com.yg.horus.crawl.CrawlDataUnit;
 import com.yg.horus.crawl.ListPageCrawler;
+import com.yg.horus.data.CrawlRepository;
 import com.yg.horus.doc.ContentPageDoc;
 import com.yg.horus.dto.ContentCrawlOption;
 import com.yg.horus.dto.ListCrawl;
-import com.yg.horus.dto.ListCrawlOptionReq;
+import com.yg.horus.dto.ListCrawlOption;
 import com.yg.horus.dto.ListCrawlRes;
+import com.yg.horus.scheduler.realtime.CrawlListJob;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,20 +22,46 @@ import java.util.stream.Collectors;
 @Slf4j
 public class CrawlCtr {
     private final ListPageCrawler listPageCrawler ;
+    private final CrawlRepository crawlRepository ;
 
     @Autowired
-    public CrawlCtr(ListPageCrawler _listPageCrawler) {
+    public CrawlCtr(ListPageCrawler _listPageCrawler, CrawlRepository _crawlRepository) {
         this.listPageCrawler = _listPageCrawler ;
+        this.crawlRepository = _crawlRepository ;
     }
 
     @RequestMapping("/crawl/page/list")
     public @ResponseBody
-    ListCrawlRes getListCrawl(@RequestBody ListCrawlOptionReq listCrawlOptionReq) {
+    ListCrawlRes getListCrawl(@RequestBody ListCrawlOption listCrawlOptionReq) {
         log.info("Detected API {}", listCrawlOptionReq) ;
 //        httpResponse.addHeader("Access-Control-Allow-Origin", "*");
         List<CrawlDataUnit> matchedLinks = this.listPageCrawler.getMatchedLinks(listCrawlOptionReq.getTargetSeedUrl(),
                 listCrawlOptionReq.getFilterCrawlUrlRxPattern(),
                 listCrawlOptionReq.getFilterDomGroupAttr());
+        List<ListCrawl> crawls = matchedLinks.stream()
+                .map(crawlUnit -> new ListCrawl(crawlUnit.getUrl(), crawlUnit.getAnchorText())).
+                collect(Collectors.toList());
+
+        ListCrawlRes response = ListCrawlRes.builder().lstCrawls(crawls).build() ;
+        if(response.getLstCrawls() != null)
+            log.info("Count of Crawled : {}", response.getLstCrawls().size()) ;
+
+        return response ;
+    }
+
+    @RequestMapping("/crawl/page/list/job")
+    public @ResponseBody
+    ListCrawlRes listCrawlJob(@RequestBody ListCrawlOption listCrawlOptionReq) {
+        log.info("Detected API {}", listCrawlOptionReq) ;
+
+        CrawlListJob job = new CrawlListJob(listCrawlOptionReq, this.crawlRepository);
+        job.start();
+
+//        List<CrawlDataUnit> matchedLinks = this.listPageCrawler.getMatchedLinks(listCrawlOptionReq.getTargetSeedUrl(),
+//                listCrawlOptionReq.getFilterCrawlUrlRxPattern(),
+//                listCrawlOptionReq.getFilterDomGroupAttr());
+
+        List<CrawlDataUnit> matchedLinks = job.getCrawled();
         List<ListCrawl> crawls = matchedLinks.stream()
                 .map(crawlUnit -> new ListCrawl(crawlUnit.getUrl(), crawlUnit.getAnchorText())).
                 collect(Collectors.toList());

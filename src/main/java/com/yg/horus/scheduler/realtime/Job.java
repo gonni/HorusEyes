@@ -1,4 +1,6 @@
 package com.yg.horus.scheduler.realtime;
 
-public interface Job {
+public interface Job<R> {
+    void start() ;
+    R getCrawled() ;
 }
