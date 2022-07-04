@@ -1,6 +1,6 @@
 package com.yg.horus.scheduler;
 
-import com.yg.horus.scheduler.contcrawl.ContentCrawlJob;
+import com.yg.horus.scheduler.ranged.contcrawl.ContentCrawlJob;
 import com.yg.horus.scheduler.ranged.Job;
 import com.yg.horus.scheduler.ranged.JobBuilder;
 import org.junit.Test;

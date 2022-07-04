@@ -2,7 +2,7 @@ package com.yg.horus.scheduler.ranged;
 
 import com.yg.horus.crawl.CrawlDataUnit;
 import com.yg.horus.data.*;
-import com.yg.horus.scheduler.listcrawl.CommonListCrawlJob;
+import com.yg.horus.scheduler.ranged.listcrawl.CommonListCrawlJob;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

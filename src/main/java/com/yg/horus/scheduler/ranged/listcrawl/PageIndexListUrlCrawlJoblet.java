@@ -1,4 +1,4 @@
-package com.yg.horus.scheduler.listcrawl;
+package com.yg.horus.scheduler.ranged.listcrawl;
 
 import com.yg.horus.crawl.CrawlDataUnit;
 import com.yg.horus.crawl.ListPageCrawler;

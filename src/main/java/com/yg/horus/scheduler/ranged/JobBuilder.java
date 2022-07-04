@@ -2,7 +2,7 @@ package com.yg.horus.scheduler.ranged;
 
 import com.yg.horus.crawl.ContentsPageWrappingRule;
 import com.yg.horus.data.*;
-import com.yg.horus.scheduler.contcrawl.ContentCrawlJob;
+import com.yg.horus.scheduler.ranged.contcrawl.ContentCrawlJob;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;

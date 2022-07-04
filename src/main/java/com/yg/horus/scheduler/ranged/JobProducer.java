@@ -4,7 +4,7 @@ import com.yg.horus.data.CrawlRepository;
 import com.yg.horus.data.CrawlStatus;
 import com.yg.horus.data.CrawlUnit;
 import com.yg.horus.data.TopSeeds;
-import com.yg.horus.scheduler.contcrawl.ContentCrawlJob;
+import com.yg.horus.scheduler.ranged.contcrawl.ContentCrawlJob;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
