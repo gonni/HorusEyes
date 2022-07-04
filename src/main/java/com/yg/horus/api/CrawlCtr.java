@@ -10,7 +10,7 @@ import com.yg.horus.dto.ContentCrawlOption;
 import com.yg.horus.dto.ListCrawl;
 import com.yg.horus.dto.ListCrawlOption;
 import com.yg.horus.dto.ListCrawlRes;
-import com.yg.horus.scheduler.realtime.CrawlListJob;
+import com.yg.horus.scheduler.realtime.jobs.CrawlListJob;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

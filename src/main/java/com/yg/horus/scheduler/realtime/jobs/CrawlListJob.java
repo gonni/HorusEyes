@@ -1,4 +1,4 @@
-package com.yg.horus.scheduler.realtime;
+package com.yg.horus.scheduler.realtime.jobs;
 
 import com.yg.horus.crawl.CrawlDataUnit;
 import com.yg.horus.crawl.ListPageCrawler;
@@ -7,6 +7,7 @@ import com.yg.horus.data.CrawlStatus;
 import com.yg.horus.data.CrawlUnit;
 import com.yg.horus.data.TopSeeds;
 import com.yg.horus.dto.ListCrawlOption;
+import com.yg.horus.scheduler.realtime.Job;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
