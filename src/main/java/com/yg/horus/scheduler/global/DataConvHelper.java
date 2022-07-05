@@ -2,6 +2,7 @@ package com.yg.horus.scheduler.global;
 
 import com.yg.horus.crawl.ContentsPageWrappingRule;
 import com.yg.horus.data.*;
+import com.yg.horus.dto.ListCrawlOption;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,12 @@ public class DataConvHelper {
     @Autowired
     public DataConvHelper(WrapperRepository _wrapperRepository) {
         wrapperRepository = _wrapperRepository ;
+    }
+
+    public ListCrawlOption getListPageWrapRule(long seedNo) {
+        //TODO need to implement
+
+        return null ;
     }
 
     public ContentsPageWrappingRule getContentPageWrapRule(long seedNo) {
