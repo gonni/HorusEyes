@@ -10,22 +10,31 @@ import java.util.List;
 
 @Service
 public class DataConvHelper {
-//    @Autowired
-//    private CrawlRepository crawlRepository = null ;
-//    @Autowired
-//    private SeedRepository seedRepository = null ;
-//    @Autowired
+
+    private final SeedRepository seedRepository ;
     private final WrapperRepository wrapperRepository ;
 
     @Autowired
-    public DataConvHelper(WrapperRepository _wrapperRepository) {
-        wrapperRepository = _wrapperRepository ;
+    public DataConvHelper(WrapperRepository _wrapperRepository, SeedRepository _seedRepository) {
+        this.seedRepository = _seedRepository ;
+        this.wrapperRepository = _wrapperRepository ;
     }
 
     public ListCrawlOption getListPageWrapRule(long seedNo) {
-        //TODO need to implement
+        TopSeeds topSeed = this.seedRepository.findBySeedNo(seedNo);
+        ListCrawlOption option = new ListCrawlOption() ;
+        option.setTargetSeedUrl(topSeed.getUrlPattern());
 
-        return null ;
+        List<WrapperRule> wRules = this.wrapperRepository.findBySeedNo(seedNo);
+        wRules.forEach(rule -> {
+            if(rule.getWrapType().equals(WrapType.LIST_URL_TOP_AREA_FILTER)) {
+                option.setFilterDomGroupAttr(rule.getWrapVal());
+            } else if(rule.getWrapType().equals(WrapType.LIST_URL_PATTERN_FILTER)) {
+                option.setFilterCrawlUrlRxPattern(rule.getWrapVal());
+            }
+        });
+
+        return option ;
     }
 
     public ContentsPageWrappingRule getContentPageWrapRule(long seedNo) {

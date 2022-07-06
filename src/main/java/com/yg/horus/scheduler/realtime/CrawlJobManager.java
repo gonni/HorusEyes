@@ -37,25 +37,22 @@ public class CrawlJobManager {
         this.dataConvHelper = _dataConvHelper;
 
         this.listCrawlProcessor = new JobProcessor(2);
+        this.listCrawlProcessor.startWorkers();
         this.contCrawlProcessor = new JobProcessor(3);
+        this.contCrawlProcessor.startWorkers();
     }
 
-    public void runListJob(long seedNo, long delay) {
+    public void runListCrawlJob(long seedNo) {
         // crawl same seed page by period
         Optional<CrawlUnit> crawlUnit = this.crawlRepository.findById(seedNo);
         crawlUnit.map(a -> {
-            List<WrapperRule> wrapperRules = a.getTopSeeds().getWrapperRules();
-//            wrapperRules.get
-
-            ListCrawlOption option = new ListCrawlOption();
-
-
+            ListCrawlOption option = this.dataConvHelper.getListPageWrapRule(seedNo);
             this.listCrawlProcessor.startJob(new CrawlListJob(option, this.crawlRepository));
             return 1;
         });
     }
 
-    public void runContentJob(long seedNo, long delay) {
+    public void runContentCrawlJob(long seedNo, long delay) {
         // crawl stored seeds page list by short period compared to list
         List<CrawlUnit> targetCrawlConts = this.crawlRepository.findByStatusAndTopSeedsSeedNoOrderByCrawlNoDesc(
                 CrawlStatus.PEND, seedNo, Pageable.unpaged());

@@ -10,6 +10,7 @@ import com.yg.horus.dto.ContentCrawlOption;
 import com.yg.horus.dto.ListCrawl;
 import com.yg.horus.dto.ListCrawlOption;
 import com.yg.horus.dto.ListCrawlRes;
+import com.yg.horus.scheduler.global.DataConvHelper;
 import com.yg.horus.scheduler.realtime.jobs.CrawlListJob;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,11 +24,27 @@ import java.util.stream.Collectors;
 public class CrawlCtr {
     private final ListPageCrawler listPageCrawler ;
     private final CrawlRepository crawlRepository ;
+    private final DataConvHelper dataConvHelper ;
 
     @Autowired
-    public CrawlCtr(ListPageCrawler _listPageCrawler, CrawlRepository _crawlRepository) {
+    public CrawlCtr(ListPageCrawler _listPageCrawler,
+                    CrawlRepository _crawlRepository,
+                    DataConvHelper _dataConvHelper) {
         this.listPageCrawler = _listPageCrawler ;
         this.crawlRepository = _crawlRepository ;
+        this.dataConvHelper = _dataConvHelper ;
+    }
+
+    @RequestMapping("/crawl/conf/wrap/list")
+    public @ResponseBody
+    ListCrawlOption getListCrawlWrapper(@RequestParam long seedNo) {
+        return this.dataConvHelper.getListPageWrapRule(seedNo);
+    }
+
+    @RequestMapping("/crawl/conf/wrap/content")
+    public @ResponseBody
+    ContentsPageWrappingRule getContnentWrapper(@RequestParam long seedNo) {
+        return this.dataConvHelper.getContentPageWrapRule(seedNo);
     }
 
     @RequestMapping("/crawl/page/list")
