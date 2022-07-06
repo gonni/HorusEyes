@@ -25,4 +25,10 @@ public class RtCrawlCtr {
         return "SUC";
     }
 
+    @RequestMapping("/crawl/unit/Content")
+    public @ResponseBody String unitCrawlContent(@RequestParam long seedNo) {
+        log.info("Start crawl seedNo:{}", seedNo);
+        this.crawlJobManager.runContentCrawlJob(seedNo, 1000L);
+        return "SUC";
+    }
 }
