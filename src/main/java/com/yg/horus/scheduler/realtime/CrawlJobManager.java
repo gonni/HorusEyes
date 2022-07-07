@@ -10,6 +10,7 @@ import com.yg.horus.scheduler.realtime.jobs.CrawlContentJob;
 import com.yg.horus.scheduler.realtime.jobs.CrawlListJob;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -47,15 +48,16 @@ public class CrawlJobManager {
         Optional<CrawlUnit> crawlUnit = this.crawlRepository.findById(seedNo);
         crawlUnit.map(a -> {
             ListCrawlOption option = this.dataConvHelper.getListPageWrapRule(seedNo);
-            this.listCrawlProcessor.startJob(new CrawlListJob(option, this.crawlRepository));
+            this.listCrawlProcessor.startJob(new CrawlListJob(seedNo, option, this.crawlRepository));
             return 1;
         });
     }
 
-    public void runContentCrawlJob(long seedNo, long delay) {
+    public void runContentCrawlJob(long seedNo, int limit, long delay) {
         // crawl stored seeds page list by short period compared to list
         List<CrawlUnit> targetCrawlConts = this.crawlRepository.findByStatusAndTopSeedsSeedNoOrderByCrawlNoDesc(
-                CrawlStatus.PEND, seedNo, Pageable.unpaged());
+//                CrawlStatus.PEND, seedNo, Pageable.unpaged());
+                CrawlStatus.IURL, seedNo, PageRequest.of(0, limit));
         log.info("Count of scheduled content crawls: {}", targetCrawlConts.size());
 
         ContentsPageWrappingRule contentPageWrapRule = this.dataConvHelper.getContentPageWrapRule(seedNo);

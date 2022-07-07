@@ -18,6 +18,7 @@ public class ContentsPageCrawler extends CrawlBase {
 
     //TODO need to consider ...
     public ContentPageDoc getContentPageDoc(String url, ContentsPageWrappingRule contentsPageWrappingRule) {
+        log.info("Wrapper Rule : {}", contentsPageWrappingRule);
         ContentPageDoc contentPageDoc = new ContentPageDoc() ;
         Document pageDoc = null ;
 

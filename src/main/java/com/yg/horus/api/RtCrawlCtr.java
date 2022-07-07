@@ -28,7 +28,7 @@ public class RtCrawlCtr {
     @RequestMapping("/crawl/unit/Content")
     public @ResponseBody String unitCrawlContent(@RequestParam long seedNo) {
         log.info("Start crawl seedNo:{}", seedNo);
-        this.crawlJobManager.runContentCrawlJob(seedNo, 1000L);
+        this.crawlJobManager.runContentCrawlJob(seedNo, 10, 1000L);
         return "SUC";
     }
 }

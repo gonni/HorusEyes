@@ -18,9 +18,12 @@ public class CrawlListJob implements Job<List<CrawlDataUnit>> {
     private List<CrawlDataUnit> result = null ;
     private CrawlRepository crawlRepository = null;
 
-    public CrawlListJob(ListCrawlOption _listCrawlOption, CrawlRepository _crawlRepository) {
+    private long seedNo = -1L;
+
+    public CrawlListJob(long seedNo, ListCrawlOption _listCrawlOption, CrawlRepository _crawlRepository) {
         this.listCrawlOption = _listCrawlOption ;
         this.crawlRepository = _crawlRepository ;
+        this.seedNo = seedNo ;
     }
 
     @Override
@@ -39,6 +42,7 @@ public class CrawlListJob implements Job<List<CrawlDataUnit>> {
                 CrawlUnit crawlUnit = this.crawlRepository.findOneByUrl(link.getUrl());
 
                 if(crawlUnit == null) {
+                    log.info("Crawled Unit New : {}", link);
                     crawlUnit = CrawlUnit.builder()
                             .url(link.getUrl())
                             .anchorText(link.getAnchorText())
@@ -52,7 +56,7 @@ public class CrawlListJob implements Job<List<CrawlDataUnit>> {
                     }
                     // cnt++
                 } else {
-                    log.info("Dupplicated : {}", link);
+                    log.info("Crawled Unit Duplicated : {}", link);
 
                     if(link.getAnchorType().equals(CrawlDataUnit.AnchorType.IMG)) {
                         crawlUnit.setAnchorImg(link.getAnchorText());
@@ -60,8 +64,9 @@ public class CrawlListJob implements Job<List<CrawlDataUnit>> {
                         crawlUnit.setAnchorText(link.getAnchorText());
                     }
                 }
+
                 TopSeeds topSeeds = new TopSeeds();
-                topSeeds.setSeedNo(-1L);
+                topSeeds.setSeedNo(this.seedNo);
                 crawlUnit.setTopSeeds(topSeeds);
 
                 this.crawlRepository.save(crawlUnit);

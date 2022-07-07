@@ -71,7 +71,7 @@ public class CrawlCtr {
     ListCrawlRes listCrawlJob(@RequestBody ListCrawlOption listCrawlOptionReq) {
         log.info("Detected API {}", listCrawlOptionReq) ;
 
-        CrawlListJob job = new CrawlListJob(listCrawlOptionReq, this.crawlRepository);
+        CrawlListJob job = new CrawlListJob(-1, listCrawlOptionReq, this.crawlRepository);
         job.start();
 
 //        List<CrawlDataUnit> matchedLinks = this.listPageCrawler.getMatchedLinks(listCrawlOptionReq.getTargetSeedUrl(),
