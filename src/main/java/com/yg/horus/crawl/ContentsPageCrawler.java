@@ -27,6 +27,7 @@ public class ContentsPageCrawler extends CrawlBase {
         } catch (IOException e) {
             e.printStackTrace();
             contentPageDoc.setStatus(ContentPageDoc.PageDocStatus.FAIL);
+            return contentPageDoc ;
         }
 
         contentPageDoc.setTitle(pageDoc.title());

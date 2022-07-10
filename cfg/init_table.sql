@@ -93,3 +93,23 @@ insert into WRAPPER_RULE(SEED_NO, WRAP_TYPE, WRAP_VAL, WRAP_NAME, REG_DT)
 values(19, "CONT_DATE_ON_PAGE", "span.article_date", "페이지내 날짜추출", SYSDATE()) ;
 
 alter table crawl_unit1  add index idx_pagedate(PAGE_DATE);
+
+--
+insert into CRAWL_SEEDS(URL_PATTERN, TITLE, STATUS)
+values ('https://news.naver.com/main/list.naver?mode=LSD&mid=sec&sid1=001&listType=title', '네이버뉴>속보>전체', 'AVTV');
+
+insert into WRAPPER_RULE(SEED_NO, WRAP_TYPE, WRAP_VAL, WRAP_NAME)
+values(3, 'LIST_URL_PATTERN_FILTER', '^(https://n.news.naver.com/mnews/).*$', '뉴스 리스트 추출');
+
+insert into WRAPPER_RULE(SEED_NO, WRAP_TYPE, WRAP_VAL, WRAP_NAME)
+values(3, 'LIST_URL_TOP_AREA_FILTER', 'ul.type02', '뉴스 리스트 영역');
+--
+insert into WRAPPER_RULE(SEED_NO, WRAP_TYPE, WRAP_VAL, WRAP_NAME)
+values(3, 'CONT_TITLE_ON_PAGE', 'div.media_end_head_title > h2', '뉴스내용 제목');
+
+insert into WRAPPER_RULE(SEED_NO, WRAP_TYPE, WRAP_VAL, WRAP_NAME)
+values(3, 'CONT_MAIN_CONT', 'div.newsct_article', '뉴스내용 본문');
+
+insert into WRAPPER_RULE(SEED_NO, WRAP_TYPE, WRAP_VAL, WRAP_NAME)
+select * from WRAPPER_RULE wr  ;
+values(3, 'CONT_DATE_ON_PAGE', 'span._ARTICLE_DATE_TIME', '뉴스내용 날짜');

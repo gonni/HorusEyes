@@ -28,10 +28,10 @@ public class CrawlContentJob implements Job<CrawlUnit> {
         if(this.crawlUnit == null) {
             log.info("Invalid Unit to crawl contents ..");
         }
-
+        log.info("Start Content-crawl job : {} -> {}", this.crawlUnit.getCrawlNo(), this.crawlUnit.getUrl());
         ContentsPageCrawler contentsPageCrawler = new ContentsPageCrawler();
         ContentPageDoc contentPageDoc = contentsPageCrawler.getContentPageDoc(this.crawlUnit.getUrl(), wrapRule);
-        if(contentPageDoc != null) {
+        if(contentPageDoc != null && !contentPageDoc.getStatus().equals(ContentPageDoc.PageDocStatus.FAIL)) {
             this.crawlUnit.setPageTitle(contentPageDoc.getTitleOnContent());
             this.crawlUnit.setPageText(contentPageDoc.getContent());
             this.crawlUnit.setPageDate(contentPageDoc.getDateOnContent());

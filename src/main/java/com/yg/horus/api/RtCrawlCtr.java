@@ -18,6 +18,13 @@ public class RtCrawlCtr {
         this.crawlJobManager = _crawlJobManager ;
     }
 
+    @RequestMapping("/crawl/rt/schedule")
+    public @ResponseBody String rtBatchCrawl(@RequestParam long seedNo) {
+        log.info("Start crawl seedNo:{}", seedNo);
+        this.crawlJobManager.startJobProcessor(seedNo);
+        return "MANAGED";
+    }
+
     @RequestMapping("/crawl/unit/list")
     public @ResponseBody String unitCrawlList(@RequestParam long seedNo) {
         log.info("Start crawl seedNo:{}", seedNo);
@@ -25,8 +32,22 @@ public class RtCrawlCtr {
         return "SUC";
     }
 
-    @RequestMapping("/crawl/unit/Content")
+    @RequestMapping("/crawl/rt/list")
+    public @ResponseBody String rtCrawlList(@RequestParam long seedNo) {
+        log.info("Start crawl seedNo:{}", seedNo);
+        this.crawlJobManager.runListCrawlJob(seedNo);
+        return "SUC";
+    }
+
+    @RequestMapping("/crawl/unit/content")
     public @ResponseBody String unitCrawlContent(@RequestParam long seedNo) {
+        log.info("Start crawl seedNo:{}", seedNo);
+        this.crawlJobManager.runContentCrawlJob(seedNo, 10, 1000L);
+        return "SUC";
+    }
+
+    @RequestMapping("/crawl/rt/content")
+    public @ResponseBody String rtCrawlContent(@RequestParam long seedNo) {
         log.info("Start crawl seedNo:{}", seedNo);
         this.crawlJobManager.runContentCrawlJob(seedNo, 10, 1000L);
         return "SUC";

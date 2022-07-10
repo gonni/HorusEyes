@@ -56,7 +56,7 @@ public class CrawlListJob implements Job<List<CrawlDataUnit>> {
                     }
                     // cnt++
                 } else {
-                    log.info("Crawled Unit Duplicated : {}", link);
+//                    log.info("Crawled Unit Duplicated : {}", link);
 
                     if(link.getAnchorType().equals(CrawlDataUnit.AnchorType.IMG)) {
                         crawlUnit.setAnchorImg(link.getAnchorText());

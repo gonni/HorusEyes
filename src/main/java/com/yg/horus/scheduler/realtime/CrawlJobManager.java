@@ -14,20 +14,29 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
 @Slf4j
 public class CrawlJobManager {
     private static final long DEFAULT_CNT_CONTENT_CARWL = 100L;
+    public enum CRAWL_DOC_TYPE {
+        LIST,
+        CONT,
+        HYBR
+    }
 
     private final CrawlRepository crawlRepository ;
     private final WrapperRepository wrapperRepository ;
     private final DataConvHelper dataConvHelper ;
 
-    private JobProcessor listCrawlProcessor = null ;
-    private JobProcessor contCrawlProcessor = null ;
+//    private JobProcessor listCrawlProcessor = null ;
+//    private JobProcessor contCrawlProcessor = null ;
+
+    private Map<String, SelfJobProcessor> mapJobProcessors ;
 
     @Autowired
     public CrawlJobManager(CrawlRepository _crawlRepository,
@@ -37,18 +46,79 @@ public class CrawlJobManager {
         this.wrapperRepository = _wrapperRepository;
         this.dataConvHelper = _dataConvHelper;
 
-        this.listCrawlProcessor = new JobProcessor(2);
-        this.listCrawlProcessor.startWorkers();
-        this.contCrawlProcessor = new JobProcessor(3);
-        this.contCrawlProcessor.startWorkers();
+//        this.listCrawlProcessor = new JobProcessor(2);
+//        this.listCrawlProcessor.startWorkers();
+//        this.contCrawlProcessor = new JobProcessor(3);
+//        this.contCrawlProcessor.startWorkers();
     }
+
+    public void addJopProcessor(CRAWL_DOC_TYPE docType, long jobId, SelfJobProcessor jobProcessor) {
+        if(this.mapJobProcessors == null)
+            this.mapJobProcessors = new HashMap<>();
+        this.mapJobProcessors.put(docType + "_" + jobId, jobProcessor) ;
+    }
+
+    public void startJobProcessor(long seedNo) {
+        log.info("Start Job Scheduler #{}", seedNo);
+        this.initNewListJob(seedNo, 2, 20000L);
+        this.initNewContJob(seedNo, 3, 10000L);
+    }
+
+    public void stopJobProcessor() {
+        ;
+    }
+
+    public Map<String, SelfJobProcessor> getJobs() {
+        return this.mapJobProcessors ;
+    }
+
+    private void initNewListJob(long seedNo, int cntWorkers, long delay) {
+        SelfJobProcessor jobProcessor = new SelfJobProcessor(cntWorkers, delay) {
+            @Override
+            void createJob() {  // This method is called periodically
+                // crawl same seed page by period
+//                Optional<CrawlUnit> crawlUnit = crawlRepository.findById(seedNo);
+//                crawlUnit.map(a -> {
+//                    ListCrawlOption option = dataConvHelper.getListPageWrapRule(seedNo);
+//                    listCrawlProcessor.startJob(new CrawlListJob(seedNo, option, crawlRepository));
+//                    return 1;
+//                });
+                runListCrawlJob(seedNo);
+            }
+        } ;
+
+        jobProcessor.startWorkers();
+        jobProcessor.startProducer();
+
+        this.addJopProcessor(CRAWL_DOC_TYPE.LIST, seedNo, jobProcessor);
+    }
+
+    private void initNewContJob(long seedNo, int cntWorkers, long delay) {
+        SelfJobProcessor jobProcessor = new SelfJobProcessor(cntWorkers, delay) {
+            @Override
+            void createJob() {  // This method is called periodically
+                if(super.queue.size() < 10) {
+                    log.info("ContentCrawl worker queue size : {}", super.queue.size());
+                    runContentCrawlJob(seedNo, 20, 1000);
+                } else
+                    log.info("JobQueue is full ..");
+            }
+        } ;
+
+        jobProcessor.startWorkers();
+        jobProcessor.startProducer();
+
+        this.addJopProcessor(CRAWL_DOC_TYPE.CONT, seedNo, jobProcessor);
+    }
+
 
     public void runListCrawlJob(long seedNo) {
         // crawl same seed page by period
         Optional<CrawlUnit> crawlUnit = this.crawlRepository.findById(seedNo);
+        JobProcessor listCrawlProcessor = this.mapJobProcessors.get(CRAWL_DOC_TYPE.LIST + "_" + seedNo) ;
         crawlUnit.map(a -> {
             ListCrawlOption option = this.dataConvHelper.getListPageWrapRule(seedNo);
-            this.listCrawlProcessor.startJob(new CrawlListJob(seedNo, option, this.crawlRepository));
+            listCrawlProcessor.startJob(new CrawlListJob(seedNo, option, this.crawlRepository));
             return 1;
         });
     }
@@ -61,11 +131,10 @@ public class CrawlJobManager {
         log.info("Count of scheduled content crawls: {}", targetCrawlConts.size());
 
         ContentsPageWrappingRule contentPageWrapRule = this.dataConvHelper.getContentPageWrapRule(seedNo);
-
+        JobProcessor contCrawlProcessor = this.mapJobProcessors.get(CRAWL_DOC_TYPE.CONT + "_" + seedNo) ;
         targetCrawlConts.forEach(crawlUnit -> {
             CrawlContentJob contJob = new CrawlContentJob(crawlUnit, contentPageWrapRule, this.crawlRepository);
-            this.contCrawlProcessor.startJob(contJob);
-
+            contCrawlProcessor.startJob(contJob);
             try {
                 Thread.sleep(delay);
             } catch (InterruptedException e) {
