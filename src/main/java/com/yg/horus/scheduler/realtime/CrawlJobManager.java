@@ -33,9 +33,6 @@ public class CrawlJobManager {
     private final WrapperRepository wrapperRepository ;
     private final DataConvHelper dataConvHelper ;
 
-//    private JobProcessor listCrawlProcessor = null ;
-//    private JobProcessor contCrawlProcessor = null ;
-
     private Map<String, SelfJobProcessor> mapJobProcessors ;
 
     @Autowired
@@ -45,11 +42,6 @@ public class CrawlJobManager {
         this.crawlRepository = _crawlRepository ;
         this.wrapperRepository = _wrapperRepository;
         this.dataConvHelper = _dataConvHelper;
-
-//        this.listCrawlProcessor = new JobProcessor(2);
-//        this.listCrawlProcessor.startWorkers();
-//        this.contCrawlProcessor = new JobProcessor(3);
-//        this.contCrawlProcessor.startWorkers();
     }
 
     public void addJopProcessor(CRAWL_DOC_TYPE docType, long jobId, SelfJobProcessor jobProcessor) {
@@ -68,22 +60,17 @@ public class CrawlJobManager {
         ;
     }
 
-    public Map<String, SelfJobProcessor> getJobs() {
+    public Map<String, SelfJobProcessor> getMapJobProcessors() {
         return this.mapJobProcessors ;
     }
 
     private void initNewListJob(long seedNo, int cntWorkers, long delay) {
         SelfJobProcessor jobProcessor = new SelfJobProcessor(cntWorkers, delay) {
             @Override
-            void createJob() {  // This method is called periodically
+            int createJob() {  // This method is called periodically
                 // crawl same seed page by period
-//                Optional<CrawlUnit> crawlUnit = crawlRepository.findById(seedNo);
-//                crawlUnit.map(a -> {
-//                    ListCrawlOption option = dataConvHelper.getListPageWrapRule(seedNo);
-//                    listCrawlProcessor.startJob(new CrawlListJob(seedNo, option, crawlRepository));
-//                    return 1;
-//                });
                 runListCrawlJob(seedNo);
+                return 1;
             }
         } ;
 
@@ -96,12 +83,13 @@ public class CrawlJobManager {
     private void initNewContJob(long seedNo, int cntWorkers, long delay) {
         SelfJobProcessor jobProcessor = new SelfJobProcessor(cntWorkers, delay) {
             @Override
-            void createJob() {  // This method is called periodically
+            int createJob() {  // This method is called periodically
                 if(super.queue.size() < 10) {
                     log.info("ContentCrawl worker queue size : {}", super.queue.size());
-                    runContentCrawlJob(seedNo, 20, 1000);
+                    return runContentCrawlJob(seedNo, 20, 1000);
                 } else
                     log.info("JobQueue is full ..");
+                return 0;
             }
         } ;
 
@@ -123,7 +111,7 @@ public class CrawlJobManager {
         });
     }
 
-    public void runContentCrawlJob(long seedNo, int limit, long delay) {
+    public int runContentCrawlJob(long seedNo, int limit, long delay) {
         // crawl stored seeds page list by short period compared to list
         List<CrawlUnit> targetCrawlConts = this.crawlRepository.findByStatusAndTopSeedsSeedNoOrderByCrawlNoDesc(
 //                CrawlStatus.PEND, seedNo, Pageable.unpaged());
@@ -143,6 +131,7 @@ public class CrawlJobManager {
             }
         });
 
+        return (targetCrawlConts != null)? targetCrawlConts.size() : 0;
     }
 
 }

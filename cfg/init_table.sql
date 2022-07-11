@@ -68,30 +68,6 @@ create table CRAWL_KOSPI(
 	PENSION_FUND INT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
-insert into CRAWL_SEEDS(URL_PATTERN, TITLE)
-values('https://finance.naver.com/news/news_list.nhn?mode=LSS3D&section_id=101&section_id2=258&section_id3=402',
-'네이버>뉴스포커스>기업종목분석');
-
-insert into CRAWL_SEEDS(URL_PATTERN, TITLE)
-values('https://finance.naver.com/news/news_list.nhn?mode=LSS3D&section_id=101&section_id2=258&section_id3=401',
-'네이버>뉴스포커스>시황전망');
-
-insert into WRAPPER_RULE(SEED_NO, WRAP_TYPE, WRAP_VAL, WRAP_NAME, REG_DT)
-values(2, "LIST_URL_PATTERN_FILTER", "^(https:\\/\\/finance.naver.com\\/news\\/news_read.nhn\\?article_id=).*$",
-"ListFiltering", SYSDATE()) ;
-
-insert into WRAPPER_RULE(SEED_NO, WRAP_TYPE, WRAP_VAL, WRAP_NAME, REG_DT)
-values(19, "LIST_URL_TOP_AREA_FILTER", "ul.realtimeNewsList", "페이지내 내용추출", SYSDATE()) ;
-
-insert into WRAPPER_RULE(SEED_NO, WRAP_TYPE, WRAP_VAL, WRAP_NAME, REG_DT)
-values(19, "CONT_TITLE_ON_PAGE", "div.article_info > h3", "ListFiltering", SYSDATE()) ;
-
-insert into WRAPPER_RULE(SEED_NO, WRAP_TYPE, WRAP_VAL, WRAP_NAME, REG_DT)
-values(19, "CONT_MAIN_CONT", "div#content", "페이지내 내용추출", SYSDATE()) ;
-
-insert into WRAPPER_RULE(SEED_NO, WRAP_TYPE, WRAP_VAL, WRAP_NAME, REG_DT)
-values(19, "CONT_DATE_ON_PAGE", "span.article_date", "페이지내 날짜추출", SYSDATE()) ;
-
 alter table crawl_unit1  add index idx_pagedate(PAGE_DATE);
 
 --
@@ -111,5 +87,6 @@ insert into WRAPPER_RULE(SEED_NO, WRAP_TYPE, WRAP_VAL, WRAP_NAME)
 values(3, 'CONT_MAIN_CONT', 'div.newsct_article', '뉴스내용 본문');
 
 insert into WRAPPER_RULE(SEED_NO, WRAP_TYPE, WRAP_VAL, WRAP_NAME)
-select * from WRAPPER_RULE wr  ;
 values(3, 'CONT_DATE_ON_PAGE', 'span._ARTICLE_DATE_TIME', '뉴스내용 날짜');
+
+select * from WRAPPER_RULE wr  ;

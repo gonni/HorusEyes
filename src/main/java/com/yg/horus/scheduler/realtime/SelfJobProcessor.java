@@ -1,9 +1,15 @@
 package com.yg.horus.scheduler.realtime;
 
+import lombok.Getter;
+
 abstract public class SelfJobProcessor extends JobProcessor implements Runnable {
     private volatile boolean running = false ;
     private Thread jobProducerWorker = null ;
     private long delay = 1000L ;
+    @Getter
+    private long cntJobProcTurns = 0L;
+    @Getter
+    private long cntProcessedUnit = 0L;
 
     SelfJobProcessor(int cntWorkers, long delay) {
         super(cntWorkers);
@@ -33,7 +39,11 @@ abstract public class SelfJobProcessor extends JobProcessor implements Runnable 
     @Override
     public void run() {
         while(this.running) {
-            this.createJob();
+            int cntUnitJobs = this.createJob() ;
+
+            this.cntJobProcTurns ++ ;
+            this.cntProcessedUnit += cntUnitJobs ;
+
             try {
                 Thread.sleep(this.delay);
             } catch (InterruptedException e) {
@@ -42,5 +52,5 @@ abstract public class SelfJobProcessor extends JobProcessor implements Runnable 
         }
     }
 
-    abstract void createJob() ;
+    abstract int createJob() ;
 }

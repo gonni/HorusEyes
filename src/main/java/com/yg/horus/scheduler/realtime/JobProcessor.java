@@ -86,6 +86,26 @@ public class JobProcessor {
         log.info("All workers are just terminated ..");
     }
 
+    // ---
+    public int getCntWorkers() {
+        if(workers != null)
+            return workers.size();
+        return 0;
+    }
+
+    public int getCntActiveWorkers() {
+        int cnt = 0;
+        cnt = workers.stream().map(worker -> {
+            return worker.isAlive() ? 1 : 0;
+        }).reduce(0, Integer::sum);
+
+        return cnt ;
+    }
+
+    public int getCntPendingJobs() {
+        return this.queue.size();
+    }
+
     public static void main(String ... v) throws Exception {
         System.out.println("Active System .. ");
 
