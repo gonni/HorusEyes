@@ -24,6 +24,40 @@
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
+
+        <repository>
+            <id>sonatype-nexus-snapshots</id>
+            <name>Sonatype Nexus Snapshots</name>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>daily</updatePolicy>  <!-- Optional, update daily -->
+            </snapshots>
+        </repository>
+        <repository>
+            <id>M2</id>
+            <url>https://s01.oss.sonatype.org/content/repositories/orgdeeplearning4j-1019</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </repository>
+        <repository>
+            <id>M2-1</id>
+            <url>https://s01.oss.sonatype.org/content/repositories/orgdeeplearning4j-1032</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </repository>
+        <repository>
+            <id>M2-2</id>
+            <url>https://s01.oss.sonatype.org/content/repositories/orgdeeplearning4j-1034</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -98,13 +132,13 @@
         <dependency>
             <groupId>org.deeplearning4j</groupId>
             <artifactId>deeplearning4j-core</artifactId>
-            <version>1.0.0-beta4</version>
+            <version>1.0.0-M2</version>
         </dependency>
 
         <dependency>
             <groupId>org.nd4j</groupId>
             <artifactId>nd4j-native-platform</artifactId>
-            <version>1.0.0-beta4</version>
+            <version>1.0.0-M2</version>
         </dependency>
 
         <dependency>
@@ -112,20 +146,19 @@
             <artifactId>deeplearning4j-nlp-korean_2.11</artifactId>
             <version>1.0.0-beta4</version>
         </dependency>
-
+        <!--
         <dependency>
             <groupId>org.deeplearning4j</groupId>
             <artifactId>deeplearning4j-ui_2.11</artifactId>
-            <version>1.0.0-beta4</version>
+            <version>1.0.0-M1</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.deeplearning4j/deeplearning4j-util -->
         <dependency>
             <groupId>org.deeplearning4j</groupId>
             <artifactId>deeplearning4j-util</artifactId>
-            <version>1.0.0-beta4</version>
+            <version>1.0.0-M1</version>
         </dependency>
-        <!--
+
         <dependency>
             <groupId>org.deeplearning4j</groupId>
             <artifactId>dl4j-examples</artifactId>
