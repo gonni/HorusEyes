@@ -90,3 +90,11 @@ insert into WRAPPER_RULE(SEED_NO, WRAP_TYPE, WRAP_VAL, WRAP_NAME)
 values(3, 'CONT_DATE_ON_PAGE', 'span._ARTICLE_DATE_TIME', '뉴스내용 날짜');
 
 select * from WRAPPER_RULE wr  ;
+
+create table TERM_DIST (
+                           TERM_NO INT not null AUTO_INCREMENT PRIMARY KEY,
+                           BASE_TERM varchar(64),
+                           COMP_TERM varchar(64),
+                           DIST_VAL double,
+                           GRP_TS long
+);

@@ -16,13 +16,34 @@ public class HellThompson {
     public static void main(String ... v) {
         System.out.println("Active Thompson !!");
 
-        BanditPerformance banditPerformance = new BanditPerformance(ImmutableList.of(
-                new ObservedArmPerformance("a", 100, 90),
-                new ObservedArmPerformance("b", 80, 80),
-                new ObservedArmPerformance("c", 70, 100)
-        ));
-        double cumulativeRegret = banditPerformance.getCumulativeRegret();
-        System.out.println("Cum -> " + cumulativeRegret);
+        List<ObservedArmPerformance> armPerformances = ImmutableList.of(
+                new ObservedArmPerformance("a", 120, 100),
+                new ObservedArmPerformance("b", 90, 101),
+                new ObservedArmPerformance("c", 150, 120)
+        );
+
+        BanditPerformance banditPerformance = new BanditPerformance(armPerformances);
+        BanditStatistics banditStatistics =
+                getBandit(
+                        new MersenneTwister(1),
+                        100,
+                        0.90,
+                        0.01)
+                .getBanditStatistics(banditPerformance);
+        System.out.println("Result -> " + banditStatistics.getWeightsByVariant());
+
+
+
+//        BanditPerformance banditPerformance = new BanditPerformance(ImmutableList.of(
+//                new ObservedArmPerformance("a", 100, 100),
+//                new ObservedArmPerformance("b", 99, 101)
+//        ));
+//        BanditStatistics banditStatistics = getBandit(new MersenneTwister(1), 10, 0.90, 0.01)
+//                .getBanditStatistics(banditPerformance);
+//        System.out.println("result ->" + banditStatistics.getVictoriousVariant());
+
+//        double cumulativeRegret = banditPerformance.getCumulativeRegret();
+//        System.out.println("Cum -> " + cumulativeRegret);
 
 //        List<ObservedArmPerformance> armPerformances = ImmutableList.of(
 //                new ObservedArmPerformance("a", 20, 1),

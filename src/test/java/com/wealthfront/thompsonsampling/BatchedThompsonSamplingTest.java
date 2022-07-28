@@ -24,6 +24,7 @@ public class BatchedThompsonSamplingTest {
     BanditPerformance banditPerformance = new BanditPerformance(armPerformances);
     BanditStatistics banditStatistics = getBandit(new MersenneTwister(1), 10, 0.90, 0.01)
         .getBanditStatistics(banditPerformance);
+    System.out.println("Result -> " + banditStatistics.getWeightsByVariant());
     assertEquals(ImmutableMap.of("a", 0.6, "b", 0.4), banditStatistics.getWeightsByVariant());
     assertFalse(banditStatistics.getVictoriousVariant().isPresent());
   }
