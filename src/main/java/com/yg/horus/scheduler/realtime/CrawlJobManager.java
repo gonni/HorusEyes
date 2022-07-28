@@ -65,6 +65,11 @@ public class CrawlJobManager {
     }
 
     private void initNewListJob(long seedNo, int cntWorkers, long delay) {
+        if(mapJobProcessors.get(CRAWL_DOC_TYPE.LIST + "_" + seedNo) != null) {
+            log.info("The requested job already exists : {}", seedNo);
+            return ;
+        }
+
         SelfJobProcessor jobProcessor = new SelfJobProcessor(cntWorkers, delay) {
             @Override
             int createJob() {  // This method is called periodically
@@ -81,6 +86,11 @@ public class CrawlJobManager {
     }
 
     private void initNewContJob(long seedNo, int cntWorkers, long delay) {
+        if(mapJobProcessors.get(CRAWL_DOC_TYPE.CONT + "_" + seedNo) != null) {
+            log.info("The requested job already exists : {}", seedNo);
+            return ;
+        }
+
         SelfJobProcessor jobProcessor = new SelfJobProcessor(cntWorkers, delay) {
             @Override
             int createJob() {  // This method is called periodically
