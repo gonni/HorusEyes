@@ -9,6 +9,6 @@ import java.util.List;
 
 @Repository
 public interface TermDistRepository extends JpaRepository<TermDist, Long> {
-    @Query("SELECT t FROM TermDist t WHERE t.baseTerm = :baseTerm AND t.grpTs = MAX(t.grpTs)")
+    @Query("SELECT t FROM TermDist t WHERE t.baseTerm = :baseTerm")
     List<TermDist> findLatestTerm(@Param("baseTerm") String baseTerm);
 }

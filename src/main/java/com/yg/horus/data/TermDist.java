@@ -25,4 +25,6 @@ public class TermDist {
     private double distVal ;
     @Column(name = "GRP_TS")
     private long grpTs ;
+
+
 }
