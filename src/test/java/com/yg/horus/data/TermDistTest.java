@@ -29,8 +29,23 @@ public class TermDistTest {
 
     @Test
     public void testGetTermDists() {
-        List<TermDist> lstTerm = this.termDistRepository.findLatestTerm("경제");
+        long latestTs = this.termDistRepository.getLatestGrpId();
+        System.out.println("Latest Distance : " + latestTs) ;
+        assertTrue(latestTs > 0);
+        // ----
+        List<TermDist> lstTerm = this.termDistRepository.findGrpTsTermVectors("경제", latestTs);
         lstTerm.forEach(System.out::println);
         assertTrue(lstTerm.size() == 200);
+        // ----
+        List<TermDist> president = this.termDistRepository.findLatestTermVectors("대통령");
+        president.forEach(System.out::println);
+        assertTrue(president.size() == 200);
+        // ----
+
+        List<String> latestValidTopics = this.termDistRepository.getLatestValidTopics();
+        System.out.println("------------------------");
+        latestValidTopics.forEach(System.out::println);
+        assertTrue(latestValidTopics.size() > 15);
+
     }
 }

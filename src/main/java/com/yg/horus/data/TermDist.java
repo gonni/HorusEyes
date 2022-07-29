@@ -1,12 +1,9 @@
 package com.yg.horus.data;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
+import lombok.*;
 import javax.persistence.*;
 
+@Data
 @Entity
 @Getter
 @Setter
@@ -25,6 +22,5 @@ public class TermDist {
     private double distVal ;
     @Column(name = "GRP_TS")
     private long grpTs ;
-
 
 }
