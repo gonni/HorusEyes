@@ -47,5 +47,7 @@ public class TermDistTest {
         latestValidTopics.forEach(System.out::println);
         assertTrue(latestValidTopics.size() > 15);
 
+        System.out.println("------------------------");
+
     }
 }

@@ -62,9 +62,17 @@ public class RtCrawlCtr {
     public @ResponseBody String rtBatchCrawl(@RequestParam long seedNo) {
         log.info("Start crawl seedNo:{}", seedNo);
         this.crawlJobManager.startJobProcessor(seedNo);
-        return "MANAGED";
+        return "STARTED";
     }
 
+    @RequestMapping("/crawl/rt/schedule/stop")
+    public @ResponseBody String stopBatchCrawl(@RequestParam long seedNo) {
+        log.info("Stop crawl seedNo:{}", seedNo);
+        this.crawlJobManager.stopAllJob(seedNo);
+        return "STOPPED";
+    }
+
+    // dev units belows
     @RequestMapping("/crawl/unit/list")
     public @ResponseBody String unitCrawlList(@RequestParam long seedNo) {
         log.info("Start crawl seedNo:{}", seedNo);

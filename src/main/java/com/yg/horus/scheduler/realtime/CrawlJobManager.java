@@ -56,8 +56,25 @@ public class CrawlJobManager {
         this.initNewContJob(seedNo, 3, 10000L);
     }
 
-    public void stopJobProcessor() {
-        ;
+    private String getJobTypeCode(CRAWL_DOC_TYPE docType, long jobId) {
+        return docType + "_" + jobId ;
+    }
+
+    public void stopAllJob(long seedNo) {
+        this.stopJobProcessor(CRAWL_DOC_TYPE.LIST, seedNo);
+        this.stopJobProcessor(CRAWL_DOC_TYPE.CONT, seedNo);
+
+    }
+
+    private void stopJobProcessor(CRAWL_DOC_TYPE type, long seedNo) {
+        SelfJobProcessor lstProc =
+                this.mapJobProcessors.get(this.getJobTypeCode(type, seedNo));
+        if(lstProc != null) {
+            lstProc.stopProducer();
+            lstProc.terminateWorkers();
+            log.info("JobProcessor successfully stopped ..");
+            this.mapJobProcessors.remove(this.getJobTypeCode(type, seedNo)) ;
+        }
     }
 
     public Map<String, SelfJobProcessor> getMapJobProcessors() {
@@ -65,7 +82,8 @@ public class CrawlJobManager {
     }
 
     private void initNewListJob(long seedNo, int cntWorkers, long delay) {
-        if(mapJobProcessors.get(CRAWL_DOC_TYPE.LIST + "_" + seedNo) != null) {
+        if(this.mapJobProcessors != null &&
+                mapJobProcessors.get(CRAWL_DOC_TYPE.LIST + "_" + seedNo) != null) {
             log.info("The requested job already exists : {}", seedNo);
             return ;
         }
@@ -96,7 +114,7 @@ public class CrawlJobManager {
             int createJob() {  // This method is called periodically
                 if(super.queue.size() < 10) {
                     log.info("ContentCrawl worker queue size : {}", super.queue.size());
-                    return runContentCrawlJob(seedNo, 20, 1000);
+                    return runContentCrawlJob(seedNo, 20, 2000);
                 } else
                     log.info("JobQueue is full ..");
                 return 0;
