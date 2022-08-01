@@ -8,7 +8,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 @Slf4j
 public class JobProcessor {
-    protected LinkedBlockingQueue<Job> queue = null ;
+    protected LinkedBlockingQueue<Job> queue = null ;   // pending jobs
     private List<Worker> workers = null ;
     private int cntWorkers = 2;
     private static int jobIdCnt = 0;
@@ -47,7 +47,7 @@ public class JobProcessor {
                         iJob.start();
                     }
                 } catch (Exception e) {
-                    log.info("Exception occurred ..", workerId);
+                    log.info("Exception occurred .. #{}", workerId);
                 }
             }
 

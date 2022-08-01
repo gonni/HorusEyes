@@ -8,5 +8,6 @@ public enum CrawlStatus {
     PEND,
     IURL,
     SUCC,
-    FAIL
+    FAIL,
+    FASV
 }

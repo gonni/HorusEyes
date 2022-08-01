@@ -40,8 +40,16 @@ public class CrawlContentJob implements Job<CrawlUnit> {
             this.crawlUnit.setStatus(CrawlStatus.FAIL);
         }
         this.crawlUnit.setUpdDate(LocalDateTime.now());
+        try {
+            this.crawlRepository.save(this.crawlUnit);
+        } catch(Exception e) {
+            log.info("detected invalid text : {}", e.getMessage());
+            this.crawlUnit.setPageTitle("");
+            this.crawlUnit.setPageText("");
+            this.crawlUnit.setStatus(CrawlStatus.FASV);
 
-        this.crawlRepository.save(this.crawlUnit);
+            this.crawlRepository.save(this.crawlUnit);
+        }
     }
 
     @Override
