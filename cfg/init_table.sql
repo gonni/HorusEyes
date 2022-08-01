@@ -98,3 +98,10 @@ create table TERM_DIST (
                            DIST_VAL double,
                            GRP_TS long
 );
+
+create table NEWS_CLICK (
+                            CLICK_ID INT not null AUTO_INCREMENT PRIMARY KEY,
+                            USER_ID varchar(64),
+                            NEWS_ID INT,
+                            CLICK_DT DATETIME DEFAULT CURRENT_TIMESTAMP
+);
