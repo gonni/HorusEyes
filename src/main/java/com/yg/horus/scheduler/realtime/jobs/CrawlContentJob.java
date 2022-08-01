@@ -29,18 +29,19 @@ public class CrawlContentJob implements Job<CrawlUnit> {
             log.info("Invalid Unit to crawl contents ..");
         }
         log.info("Start Content-crawl job : {} -> {}", this.crawlUnit.getCrawlNo(), this.crawlUnit.getUrl());
-        ContentsPageCrawler contentsPageCrawler = new ContentsPageCrawler();
-        ContentPageDoc contentPageDoc = contentsPageCrawler.getContentPageDoc(this.crawlUnit.getUrl(), wrapRule);
-        if(contentPageDoc != null && !contentPageDoc.getStatus().equals(ContentPageDoc.PageDocStatus.FAIL)) {
-            this.crawlUnit.setPageTitle(contentPageDoc.getTitleOnContent());
-            this.crawlUnit.setPageText(contentPageDoc.getContent());
-            this.crawlUnit.setPageDate(contentPageDoc.getDateOnContent());
-            this.crawlUnit.setStatus(CrawlStatus.SUCC);
-        } else {
-            this.crawlUnit.setStatus(CrawlStatus.FAIL);
-        }
-        this.crawlUnit.setUpdDate(LocalDateTime.now());
         try {
+            ContentsPageCrawler contentsPageCrawler = new ContentsPageCrawler();
+            ContentPageDoc contentPageDoc = contentsPageCrawler.getContentPageDoc(this.crawlUnit.getUrl(), wrapRule);
+            if(contentPageDoc != null && !contentPageDoc.getStatus().equals(ContentPageDoc.PageDocStatus.FAIL)) {
+                this.crawlUnit.setPageTitle(contentPageDoc.getTitleOnContent());
+                this.crawlUnit.setPageText(contentPageDoc.getContent());
+                this.crawlUnit.setPageDate(contentPageDoc.getDateOnContent());
+                this.crawlUnit.setStatus(CrawlStatus.SUCC);
+            } else {
+                this.crawlUnit.setStatus(CrawlStatus.FAIL);
+            }
+            this.crawlUnit.setUpdDate(LocalDateTime.now());
+
             this.crawlRepository.save(this.crawlUnit);
         } catch(Exception e) {
             log.info("detected invalid text : {}", e.getMessage());
