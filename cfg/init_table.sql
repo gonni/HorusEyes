@@ -103,5 +103,6 @@ create table NEWS_CLICK (
                             CLICK_ID INT not null AUTO_INCREMENT PRIMARY KEY,
                             USER_ID varchar(64),
                             NEWS_ID INT,
+                            PAGE_CD varchar(16),
                             CLICK_DT DATETIME DEFAULT CURRENT_TIMESTAMP
 );
