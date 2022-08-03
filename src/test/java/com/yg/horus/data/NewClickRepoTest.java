@@ -11,6 +11,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import java.util.List;
+
 @SpringBootTest
 @RunWith(SpringRunner.class)
 //@DataJpaTest
@@ -24,12 +26,20 @@ public class NewClickRepoTest {
     private NewsClickRepository newsClickRepository ;
 
     @Test
-    public void testSaveData() {
-        NewsClickRepository.NewsClick testCL = new NewsClickRepository.NewsClick();
-        testCL.setNewsId(1);
-        testCL.setUserId("127.0.0.1");
-        newsClickRepository.save(testCL);
+    public void getNewsClickStatistics() {
+        List<ClickCount> ropn = this.newsClickRepository.getClickCount("ROPN");
+        ropn.forEach(a -> System.out.println(a));
 
-        assert(true);
+        assert(ropn != null && ropn.size() > 0);
     }
+//    @Test
+//    public void testSaveData() {
+//        NewsClickRepository.NewsClick testCL = new NewsClickRepository.NewsClick();
+//        testCL.setNewsId(1);
+//        testCL.setUserId("127.0.0.1");
+//        testCL.setPageCd("TEST");
+//        newsClickRepository.save(testCL);
+//
+//        assert(true);
+//    }
 }
