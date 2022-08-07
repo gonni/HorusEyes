@@ -141,7 +141,7 @@ public class CrawlJobManager {
 
     public int runContentCrawlJob(long seedNo, int limit, long delay) {
         // crawl stored seeds page list by short period compared to list
-        List<CrawlUnit> targetCrawlConts = this.crawlRepository.findByStatusAndTopSeedsSeedNoOrderByCrawlNoDesc(
+        List<CrawlUnit> targetCrawlConts = this.crawlRepository.findByStatusAndTopSeedsSeedNoOrderByCrawlNoAsc(
 //                CrawlStatus.PEND, seedNo, Pageable.unpaged());
                 CrawlStatus.IURL, seedNo, PageRequest.of(0, limit));
         log.info("Count of scheduled content crawls: {}", targetCrawlConts.size());
