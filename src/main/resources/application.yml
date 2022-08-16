@@ -21,6 +21,28 @@ logging:
   config: classpath:logback-spring.xml
 ---
 spring:
+  profiles: offLocal
+  datasource:
+    username: root
+    password: 18651865
+    jdbcUrl: jdbc:mysql://10.202.66.123:3306/horus?useUnicode=true&characterEncoding=utf8
+    url: jdbc:mysql://10.202.66.123:3306/horus?useUnicode=true&characterEncoding=utf8
+    driver-class-name: com.mysql.jdbc.Driver
+    hikari:
+      maximum-pool-size: 10
+horus:
+  nlp:
+    pv:
+      train:
+        root: /Users/a1000074/dev/temp-dl/train/
+        up-dir: /Users/a1000074/dev/temp-dl/train/up/
+        down-dir: /Users/a1000074/dev/temp-dl/train/down/
+      test:
+        root: /Users/a1000074/dev/temp-dl/test/
+logging:
+  config: classpath:logback-spring.xml
+---
+spring:
   profiles: localhomeMac
   datasource:
     username: root

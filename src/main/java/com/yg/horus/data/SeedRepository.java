@@ -10,7 +10,7 @@ import java.util.List;
  * Created by a1000074 on 12/04/2021.
  */
 @Repository
-public interface SeedRepository extends JpaRepository<TopSeeds, Iterator> {
+public interface SeedRepository extends JpaRepository<TopSeeds, Long> {
     TopSeeds findBySeedNo(long seedNo);
     List<TopSeeds> findByStatus(SeedStatus status);
 }

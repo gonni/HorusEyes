@@ -29,6 +29,7 @@ public class CrawlJobManager {
         HYBR
     }
 
+    private final SeedRepository seedRepository ;
     private final CrawlRepository crawlRepository ;
     private final WrapperRepository wrapperRepository ;
     private final DataConvHelper dataConvHelper ;
@@ -36,9 +37,12 @@ public class CrawlJobManager {
     private Map<String, SelfJobProcessor> mapJobProcessors ;
 
     @Autowired
-    public CrawlJobManager(CrawlRepository _crawlRepository,
-                           WrapperRepository _wrapperRepository,
-                           DataConvHelper _dataConvHelper) {
+    public CrawlJobManager(
+            SeedRepository _seedRepository,
+            CrawlRepository _crawlRepository,
+            WrapperRepository _wrapperRepository,
+            DataConvHelper _dataConvHelper) {
+        this.seedRepository = _seedRepository ;
         this.crawlRepository = _crawlRepository ;
         this.wrapperRepository = _wrapperRepository;
         this.dataConvHelper = _dataConvHelper;
@@ -130,13 +134,29 @@ public class CrawlJobManager {
 
     public void runListCrawlJob(long seedNo) {
         // crawl same seed page by period
-        Optional<CrawlUnit> crawlUnit = this.crawlRepository.findById(seedNo);
+//        Optional<CrawlUnit> crawlUnit = this.crawlRepository.findById(seedNo);
+//        log.info("CrawlUnit =>" + crawlUnit.toString());
+//        JobProcessor listCrawlProcessor = this.mapJobProcessors.get(CRAWL_DOC_TYPE.LIST + "_" + seedNo) ;
+//        crawlUnit.map(a -> {
+//            ListCrawlOption option = this.dataConvHelper.getListPageWrapRule(seedNo);
+//            listCrawlProcessor.startJob(new CrawlListJob(seedNo, option, this.crawlRepository));
+//            return 1;
+//        });
+        Optional<TopSeeds> seedInfo = this.seedRepository.findById(seedNo);
+        if(!seedInfo.isPresent()) {
+            log.info("SeedInfo in HorusDB doesn't exist for #{}", seedNo);
+            return ;
+        }
+        //TopSeeds seedInfo = this.seedRepository.findBySeedNo(seedNo);
+        log.info("CrawlUnit =>" + seedInfo);
         JobProcessor listCrawlProcessor = this.mapJobProcessors.get(CRAWL_DOC_TYPE.LIST + "_" + seedNo) ;
-        crawlUnit.map(a -> {
+        seedInfo.map(a -> {
             ListCrawlOption option = this.dataConvHelper.getListPageWrapRule(seedNo);
             listCrawlProcessor.startJob(new CrawlListJob(seedNo, option, this.crawlRepository));
             return 1;
         });
+
+
     }
 
     public int runContentCrawlJob(long seedNo, int limit, long delay) {
