@@ -21,6 +21,15 @@ public interface NewsClickRepository extends JpaRepository<NewsClickRepository.N
             , nativeQuery = true)
     List<ClickCount> getClickCount(@Param("pageCd") String pageCd);
 
+    @Query(value = "SELECT n.NEWS_ID as newsId, COUNT(n.NEWS_ID) as cntClick " +
+            "FROM NEWS_CLICK n WHERE n.PAGE_CD = :pageCd AND n.NEWS_ID IN (:targetItems)" +
+            "GROUP BY n.NEWS_ID"
+            , nativeQuery = true)
+    List<ClickCount> getClickCount(
+            @Param("pageCd") String pageCd,
+            @Param("targetItems") List<Long> targets);
+
+
     @Data
     @Entity
     @Getter

@@ -16,7 +16,9 @@ public interface CrawlRepository  extends JpaRepository<CrawlUnit, Long> {
     List<CrawlUnit> findByStatus(String status) ;
     List<CrawlUnit> findByAnchorText(String anchorText) ;
     CrawlUnit findOneByUrl(String url) ;
+
     List<CrawlUnit> findByStatusOrderByCrawlNoDesc(CrawlStatus crawlStatus, Pageable pageable) ;
+    List<CrawlUnit> findByTopSeedsSeedNoOrderByCrawlNoDesc(long seedNo, Pageable pageable) ;
     List<CrawlUnit> findByStatusAndTopSeedsSeedNoOrderByCrawlNoDesc(CrawlStatus crawlStatus, long seedNo, Pageable pageable) ;
     List<CrawlUnit> findByStatusAndTopSeedsSeedNoOrderByCrawlNoAsc(CrawlStatus crawlStatus, long seedNo, Pageable pageable) ;
 
