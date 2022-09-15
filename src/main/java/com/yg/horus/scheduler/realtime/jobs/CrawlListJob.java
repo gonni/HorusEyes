@@ -39,6 +39,7 @@ public class CrawlListJob implements Job<List<CrawlDataUnit>> {
     private boolean storeCrawlData(List<CrawlDataUnit> result) {
         if(this.crawlRepository != null ) {
             result.forEach(link -> {
+                //TODO changed query to reduce cup load
                 CrawlUnit crawlUnit = this.crawlRepository.findOneByUrl(link.getUrl());
 
                 if(crawlUnit == null) {
