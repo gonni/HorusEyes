@@ -96,7 +96,7 @@ create table TERM_DIST (
                            BASE_TERM varchar(64),
                            COMP_TERM varchar(64),
                            DIST_VAL double,
-                           GRP_TS long
+                           GRP_TS BIGINT
 );
 
 create table NEWS_CLICK (
