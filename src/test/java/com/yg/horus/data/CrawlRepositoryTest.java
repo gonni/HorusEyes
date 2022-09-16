@@ -48,63 +48,70 @@ public class CrawlRepositoryTest {
 //    }
 
     @Test
-    public void testInOutCrawl() {
-        String anchorText = "Test Title Anchor at " + System.currentTimeMillis() ;
-
-//        TopSeeds topSeeds = TopSeeds.builder()
-//                .urlPattern("http://navertest.com/news/today/" + System.currentTimeMillis())
-//                .title("TEST_SITE").build();
-//
-//        this.seedRepository.save(topSeeds) ;
-        TopSeeds topSeeds = TopSeeds.builder().build();
-        topSeeds.setSeedNo(27);
-
-
-        CrawlUnit crawlUnit = CrawlUnit.builder()
-                .url("https://www.naver.com/news/"+System.currentTimeMillis()+"test3.hml")
-                .anchorText(anchorText)
-                .status(CrawlStatus.INIT)
-                .build();
-        crawlUnit.setPageDate("2021-01-24 15:12");
-        crawlUnit.setPageText("TEST at ");
-        crawlUnit.setTopSeeds(topSeeds);
-
-
-        CrawlUnit save = this.crawlRepository.save(crawlUnit);
-
-
-        System.out.println("Inserted Crawl No -> " + save.getCrawlNo() + " --> " + topSeeds.toString());
-
-        List<CrawlUnit> icu = this.crawlRepository.findByStatusAndTopSeedsSeedNoOrderByCrawlNoDesc(CrawlStatus.INIT,
-                save.getTopSeeds().getSeedNo(), PageRequest.of(0, 2));
-        icu.forEach(System.out::println);
-
-
-//        save.setPageText("This is Text message for test created at " + System.currentTimeMillis() + " #id:"
-//                + save.getCrawlNo()) ;
-//        save.setStatus(CrawlStatus.SUCC);
-//
-//        this.crawlRepository.save(save);
-//List<CrawlUnit> findByStatusOrderByCrawlNoDesc(CrawlStatus crawlStatus, Pageable pageable) ;
-//        System.out.println("CrawlNo ->" + save.getCrawlNo());
-//
-//        this.crawlRepository.findAll().forEach(c -> {
-//            try {
-//                System.out.println("CrawlNo :" + c.getCrawlNo() + ", SeedClass :" + c.getTopSeeds());
-//            } catch(Exception e) {
-//                System.out.println("ERR :" + e.getMessage());
-//                e.printStackTrace();
-//            }
-//        });
-//
-//        List<CrawlUnit> byUrl = this.crawlRepository.findByUrl("https://www.naver.com/news/test1.hml");
-//        if(byUrl != null && byUrl.size() > 0)
-//            System.out.println("Find -> " + byUrl.get(0).getUrl());
-//        else
-//            System.out.println("Failed ..");
-
-        assertTrue(true) ;
+    public void testCntIUrl() {
+        long cnt = this.crawlRepository.getCountOfInitUnits(9L);
+        System.out.println("CNT :" + cnt);
+        assertTrue(cnt > 0);
     }
+
+//    @Test
+//    public void testInOutCrawl() {
+//        String anchorText = "Test Title Anchor at " + System.currentTimeMillis() ;
+//
+////        TopSeeds topSeeds = TopSeeds.builder()
+////                .urlPattern("http://navertest.com/news/today/" + System.currentTimeMillis())
+////                .title("TEST_SITE").build();
+////
+////        this.seedRepository.save(topSeeds) ;
+//        TopSeeds topSeeds = TopSeeds.builder().build();
+//        topSeeds.setSeedNo(27);
+//
+//
+//        CrawlUnit crawlUnit = CrawlUnit.builder()
+//                .url("https://www.naver.com/news/"+System.currentTimeMillis()+"test3.hml")
+//                .anchorText(anchorText)
+//                .status(CrawlStatus.INIT)
+//                .build();
+//        crawlUnit.setPageDate("2021-01-24 15:12");
+//        crawlUnit.setPageText("TEST at ");
+//        crawlUnit.setTopSeeds(topSeeds);
+//
+//
+//        CrawlUnit save = this.crawlRepository.save(crawlUnit);
+//
+//
+//        System.out.println("Inserted Crawl No -> " + save.getCrawlNo() + " --> " + topSeeds.toString());
+//
+//        List<CrawlUnit> icu = this.crawlRepository.findByStatusAndTopSeedsSeedNoOrderByCrawlNoDesc(CrawlStatus.INIT,
+//                save.getTopSeeds().getSeedNo(), PageRequest.of(0, 2));
+//        icu.forEach(System.out::println);
+//
+//
+////        save.setPageText("This is Text message for test created at " + System.currentTimeMillis() + " #id:"
+////                + save.getCrawlNo()) ;
+////        save.setStatus(CrawlStatus.SUCC);
+////
+////        this.crawlRepository.save(save);
+////List<CrawlUnit> findByStatusOrderByCrawlNoDesc(CrawlStatus crawlStatus, Pageable pageable) ;
+////        System.out.println("CrawlNo ->" + save.getCrawlNo());
+////
+////        this.crawlRepository.findAll().forEach(c -> {
+////            try {
+////                System.out.println("CrawlNo :" + c.getCrawlNo() + ", SeedClass :" + c.getTopSeeds());
+////            } catch(Exception e) {
+////                System.out.println("ERR :" + e.getMessage());
+////                e.printStackTrace();
+////            }
+////        });
+////
+////        List<CrawlUnit> byUrl = this.crawlRepository.findByUrl("https://www.naver.com/news/test1.hml");
+////        if(byUrl != null && byUrl.size() > 0)
+////            System.out.println("Find -> " + byUrl.get(0).getUrl());
+////        else
+////            System.out.println("Failed ..");
+//
+//        assertTrue(true) ;
+//    }
 
 //    @Test
 //    public void testCrawlSeed() {

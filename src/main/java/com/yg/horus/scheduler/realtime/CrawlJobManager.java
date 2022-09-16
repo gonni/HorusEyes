@@ -48,6 +48,10 @@ public class CrawlJobManager {
         this.dataConvHelper = _dataConvHelper;
     }
 
+    public long getCntInitUnit(long seedNo) {
+        return this.crawlRepository.getCountOfInitUnits(seedNo);
+    }
+
     public void addJopProcessor(CRAWL_DOC_TYPE docType, long jobId, SelfJobProcessor jobProcessor) {
         if(this.mapJobProcessors == null)
             this.mapJobProcessors = new HashMap<>();
@@ -56,7 +60,7 @@ public class CrawlJobManager {
 
     public void startJobProcessor(long seedNo) {
         log.info("Start Job Scheduler #{}", seedNo);
-        this.initNewListJob(seedNo, 2, 20000L);
+        this.initNewListJob(seedNo, 2, 15000L);
         this.initNewContJob(seedNo, 3, 10000L);
     }
 
@@ -106,7 +110,7 @@ public class CrawlJobManager {
 
         this.addJopProcessor(CRAWL_DOC_TYPE.LIST, seedNo, jobProcessor);
     }
-
+    // delay - 10sec
     private void initNewContJob(long seedNo, int cntWorkers, long delay) {
         if(mapJobProcessors.get(CRAWL_DOC_TYPE.CONT + "_" + seedNo) != null) {
             log.info("The requested job already exists : {}", seedNo);
@@ -118,7 +122,7 @@ public class CrawlJobManager {
             int createJob() {  // This method is called periodically
                 if(super.queue.size() < 10) {
                     log.info("ContentCrawl worker queue size : {}", super.queue.size());
-                    return runContentCrawlJob(seedNo, 20, 2000);
+                    return runContentCrawlJob(seedNo, 20, 1002L);
                 } else
                     log.info("JobQueue is full ..");
                 return 0;
@@ -133,15 +137,6 @@ public class CrawlJobManager {
 
 
     public void runListCrawlJob(long seedNo) {
-        // crawl same seed page by period
-//        Optional<CrawlUnit> crawlUnit = this.crawlRepository.findById(seedNo);
-//        log.info("CrawlUnit =>" + crawlUnit.toString());
-//        JobProcessor listCrawlProcessor = this.mapJobProcessors.get(CRAWL_DOC_TYPE.LIST + "_" + seedNo) ;
-//        crawlUnit.map(a -> {
-//            ListCrawlOption option = this.dataConvHelper.getListPageWrapRule(seedNo);
-//            listCrawlProcessor.startJob(new CrawlListJob(seedNo, option, this.crawlRepository));
-//            return 1;
-//        });
         Optional<TopSeeds> seedInfo = this.seedRepository.findById(seedNo);
         if(!seedInfo.isPresent()) {
             log.info("SeedInfo in HorusDB doesn't exist for #{}", seedNo);
@@ -166,6 +161,15 @@ public class CrawlJobManager {
                 CrawlStatus.IURL, seedNo, PageRequest.of(0, limit));
         log.info("Count of scheduled content crawls: {}", targetCrawlConts.size());
 
+        //
+        targetCrawlConts.forEach(crawlUnit -> {
+            log.info("Change CrawlUnit#{} Status to Fetched", crawlUnit.getCrawlNo());
+            crawlUnit.setStatus(CrawlStatus.FETC);
+            crawlRepository.save(crawlUnit);
+        }
+        );
+
+        // Start Job Processing
         ContentsPageWrappingRule contentPageWrapRule = this.dataConvHelper.getContentPageWrapRule(seedNo);
         JobProcessor contCrawlProcessor = this.mapJobProcessors.get(CRAWL_DOC_TYPE.CONT + "_" + seedNo) ;
         targetCrawlConts.forEach(crawlUnit -> {

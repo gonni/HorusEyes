@@ -21,5 +21,6 @@ public class CrawlStatus {
 
     private long cntJobProcessed ;
     private long cntJobFetched ;
+    private long cntPendingJobs ;
 
 }

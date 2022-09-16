@@ -39,9 +39,11 @@ public class RtCrawlCtr {
 
                 String[] tokens = key.split("_");
                 cs.setDocType(CrawlJobManager.CRAWL_DOC_TYPE.valueOf(tokens[0]));
-                cs.setSeedNo(Long.valueOf(tokens[1]));
+                long targetSeedNo = Long.valueOf(tokens[1]);
+                cs.setSeedNo(targetSeedNo);
                 cs.setCntJobProcessed(jp.getCntJobProcTurns());
                 cs.setCntJobFetched(jp.getCntProcessedUnit());
+                cs.setCntPendingJobs(this.crawlJobManager.getCntInitUnit(targetSeedNo));
                 // consume workers
                 Consumer consumer = new Consumer(
                         jp.getCntWorkers(),

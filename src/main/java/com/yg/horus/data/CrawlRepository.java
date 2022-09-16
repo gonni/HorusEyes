@@ -25,4 +25,7 @@ public interface CrawlRepository  extends JpaRepository<CrawlUnit, Long> {
     @Query("SELECT u FROM CrawlUnit u WHERE u.pageDate >= :startDate AND u.pageDate < :endDate")
     List<CrawlUnit> getDateRangedUnits(@Param("startDate") String startDate, @Param("endDate") String endDate) ;
     List<CrawlUnit> findByPageDateStartsWith(String targetDt);
+
+    @Query("SELECT COUNT(u) FROM CrawlUnit u WHERE u.topSeeds.seedNo =:seedNo AND u.status = 'IURL'")
+    long getCountOfInitUnits(@Param("seedNo") long seedNo) ;
 }
