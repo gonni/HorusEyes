@@ -21,6 +21,19 @@ logging:
   config: classpath:logback-spring.xml
 ---
 spring:
+  profiles: docker
+  datasource:
+    username: root
+    password: 18651865
+    jdbcUrl: jdbc:mysql://mysql5730r:3306/horus?useUnicode=true&characterEncoding=utf8
+    url: jdbc:mysql://mysql5730r:3306/horus?useUnicode=true&characterEncoding=utf8
+    driver-class-name: com.mysql.jdbc.Driver
+    hikari:
+      maximum-pool-size: 10
+logging:
+  config: classpath:logback-spring.xml
+---
+spring:
   profiles: offLocal
   datasource:
     username: root
