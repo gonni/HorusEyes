@@ -30,6 +30,15 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
     hikari:
       maximum-pool-size: 10
+horus:
+  nlp:
+    pv:
+      train:
+        root: /Users/a1000074/dev/temp-dl/train/
+        up-dir: /Users/a1000074/dev/temp-dl/train/up/
+        down-dir: /Users/a1000074/dev/temp-dl/train/down/
+      test:
+        root: /Users/a1000074/dev/temp-dl/test/
 logging:
   config: classpath:logback-spring.xml
 ---
