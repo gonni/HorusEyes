@@ -17,7 +17,7 @@ import java.security.cert.X509Certificate;
  * Created by jeff on 21. 5. 10.
  */
 public class CrawlBase {
-
+    private final static int TIME_OUT = 5000;
     public CrawlBase() {
         this.initSslConnection();
     }
@@ -44,7 +44,7 @@ public class CrawlBase {
     }
 
     public Document getPageDoc(String url) throws IOException {
-        return  Jsoup.connect(url).get();
+        return  Jsoup.connect(url).timeout(TIME_OUT).get();
     }
 
 }

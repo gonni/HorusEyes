@@ -23,7 +23,7 @@ logging:
 spring:
   profiles: docker
   datasource:
-    username: root
+    username: root-
     password: 18651865
     jdbcUrl: jdbc:mysql://mysql5730r:3306/horus?useUnicode=true&characterEncoding=utf8
     url: jdbc:mysql://mysql5730r:3306/horus?useUnicode=true&characterEncoding=utf8
