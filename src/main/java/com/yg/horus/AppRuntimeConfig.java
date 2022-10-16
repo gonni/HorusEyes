@@ -20,7 +20,7 @@ public class AppRuntimeConfig implements CommandLineRunner, ApplicationListener<
 
     @Override
     public void run(String... strings) throws Exception {
-        log.info("Init System ..");
+//        log.info("Init System ..");
 //        this.jobProducer.startWorker();
     }
 

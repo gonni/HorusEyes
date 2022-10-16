@@ -20,6 +20,10 @@ public class TermDist {
     private String compTerm ;
     @Column(name = "DIST_VAL")
     private double distVal ;
+//    @Column(name = "T_RANGE_MIN_AGO")
+//    private double minAgo ;
+//    @Column(name = "SEED_NO")
+//    private double seedNo ;
     @Column(name = "GRP_TS")
     private long grpTs ;
 

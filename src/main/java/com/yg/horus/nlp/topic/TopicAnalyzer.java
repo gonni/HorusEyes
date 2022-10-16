@@ -29,13 +29,16 @@ public class TopicAnalyzer {
     }
 
     private void loadTdm() {
+        long ts = System.currentTimeMillis() ;
         if(tdm == null) tdm = new HashMap<>();
         this.tdm.clear();
 
-        List<String> topics = this.termDistRepository.getLatestValidTopics();
+        long grpId = this.termDistRepository.getLatestGrpId();
+        List<String> topics = this.termDistRepository.getLatestValidTopics(grpId);
 
         topics.forEach(topic -> {
-            List<TermDist> termVectors = termDistRepository.findLatestTermVectors(topic);
+            List<TermDist> termVectors = termDistRepository.findLatestTermVectors(topic, grpId);
+
             Map<String, Double> compTerms = new HashMap<>();
             termVectors.forEach(termDist -> {
                 compTerms.put(termDist.getCompTerm(), termDist.getDistVal());
@@ -45,7 +48,7 @@ public class TopicAnalyzer {
             tdm.put(topic, compTerms);
         });
 
-        log.info("TDM load completed .. {}", tdm.size());
+        log.info("TDM load completed .. {} for {}", tdm.size(), (System.currentTimeMillis() - ts));
     }
 
     public void displayLog() {
