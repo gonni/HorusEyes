@@ -117,8 +117,8 @@ spring:
   datasource:
     username: root
     password: root
-    jdbcUrl: jdbc:mysql://mysql5.7:3306/horus?useUnicode=true&characterEncoding=utf8&useSSL=false
-    url: jdbc:mysql://mysql5.7:3306/horus?useUnicode=true&characterEncoding=utf8&useSSL=false
+    jdbcUrl: jdbc:mysql://mysql57:3306/horus?useUnicode=true&characterEncoding=utf8&useSSL=false
+    url: jdbc:mysql://mysql57:3306/horus?useUnicode=true&characterEncoding=utf8&useSSL=false
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       maximum-pool-size: 10
