@@ -2,8 +2,8 @@ package com.yg.horus.api;
 
 //import com.yg.horus.data.MemberRepository;
 import com.yg.horus.crawl.CrawlDataUnit;
-import com.yg.horus.nlp.paragraphvectors.TopicCluster;
-import com.yg.horus.nlp.word2vec.Word2vecModeler;
+//import com.yg.horus.nlp.paragraphvectors.TopicCluster;
+//import com.yg.horus.nlp.word2vec.Word2vecModeler;
 import com.yg.horus.scheduler.custom.NaverStockJobManager;
 import com.yg.horus.scheduler.ranged.*;
 import lombok.extern.slf4j.Slf4j;
@@ -32,10 +32,10 @@ public class ServiceCtr {
     private ManagedJobScheduler managedJobScheduler = null ;
     @Autowired
     private NaverStockJobManager naverStockJobManager = null ;
-    @Autowired
-    private Word2vecModeler word2vecModeler = null;
-    @Autowired
-    private TopicCluster topicCluster = null ;
+//    @Autowired
+//    private Word2vecModeler word2vecModeler = null;
+//    @Autowired
+//    private TopicCluster topicCluster = null ;
 
     @Value("${horus.engine.version}")
     private String version ;
@@ -121,42 +121,42 @@ public class ServiceCtr {
      * @param endPd PAGE_DATE > '2021-03-01' and PAGE_DATE < '2021-03-03';
      * @return
      */
-    @RequestMapping("/w2v/sim/build")
-    public String simulBuildW2vFile(@RequestParam  String startPd, @RequestParam String endPd) {
-        log.info("Request detected W2V model build : {} / {}", startPd, endPd);
-
-        long ts = System.currentTimeMillis();
-        this.word2vecModeler.simulBuildW2vModel(startPd, endPd);
-
-        return "load completed for " + (System.currentTimeMillis() - ts) ;
-    }
+//    @RequestMapping("/w2v/sim/build")
+//    public String simulBuildW2vFile(@RequestParam  String startPd, @RequestParam String endPd) {
+//        log.info("Request detected W2V model build : {} / {}", startPd, endPd);
+//
+//        long ts = System.currentTimeMillis();
+//        this.word2vecModeler.simulBuildW2vModel(startPd, endPd);
+//
+//        return "load completed for " + (System.currentTimeMillis() - ts) ;
+//    }
 
     /**
      * @param startPd PAGE_DATE > '2021-03-01' and PAGE_DATE < '2021-03-03';
      * @param endPd PAGE_DATE > '2021-03-01' and PAGE_DATE < '2021-03-03';
      * @return
      */
-    @RequestMapping("/w2v/build")
-    public String buildW2vFile(@RequestParam  String startPd,
-                               @RequestParam String endPd,
-                               @RequestParam(required = false) String filePath) {
-        log.info("Request detected W2V model build : {} / {} -> {}", startPd, endPd, filePath);
-
-        long ts = System.currentTimeMillis();
-        this.word2vecModeler.buildW2vFile(startPd, endPd, filePath);
-
-        return "load completed for " + (System.currentTimeMillis() - ts) ;
-    }
-
-    @RequestMapping("/p2v/simulate")
-    public String paraVecSimulate() {
-        try {
-            this.topicCluster.makeParagraphVectors();
-            this.topicCluster.checkUnlabeledData();
-            return "completed ..";
-        } catch (Exception e) {
-            return "failed .." + e.getMessage();
-        }
-    }
+//    @RequestMapping("/w2v/build")
+//    public String buildW2vFile(@RequestParam  String startPd,
+//                               @RequestParam String endPd,
+//                               @RequestParam(required = false) String filePath) {
+//        log.info("Request detected W2V model build : {} / {} -> {}", startPd, endPd, filePath);
+//
+//        long ts = System.currentTimeMillis();
+//        this.word2vecModeler.buildW2vFile(startPd, endPd, filePath);
+//
+//        return "load completed for " + (System.currentTimeMillis() - ts) ;
+//    }
+//
+//    @RequestMapping("/p2v/simulate")
+//    public String paraVecSimulate() {
+//        try {
+//            this.topicCluster.makeParagraphVectors();
+//            this.topicCluster.checkUnlabeledData();
+//            return "completed ..";
+//        } catch (Exception e) {
+//            return "failed .." + e.getMessage();
+//        }
+//    }
 
 }

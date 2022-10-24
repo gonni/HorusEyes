@@ -1,5 +1,6 @@
 package com.yg.horus.api;
 
+/*
 import com.yg.horus.data.NewsClickRepository;
 import com.yg.horus.nlp.topic.TopicAnalyzer;
 import lombok.AllArgsConstructor;
@@ -65,3 +66,4 @@ class NewsUserClickReq {
     private long newsNo ;
     private boolean isRecommended ;
 }
+*/

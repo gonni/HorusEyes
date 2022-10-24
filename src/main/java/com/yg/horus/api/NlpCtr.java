@@ -1,5 +1,6 @@
 package com.yg.horus.api;
 
+/*
 
 import com.yg.horus.nlp.topic.TopicAnalyzer;
 import kr.co.shineware.nlp.komoran.constant.DEFAULT_MODEL;
@@ -68,3 +69,4 @@ public class NlpCtr {
 class TopicScoreRequest {
     private String sentence ;
 }
+*/
