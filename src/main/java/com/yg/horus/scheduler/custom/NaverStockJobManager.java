@@ -45,7 +45,7 @@ public class NaverStockJobManager {
     }
 
     public void execSerialJobsCrawlKospiInvest() {
-        for(int i = 1;i <= 1362; i++) {
+        for(int i = 1;i <= 2; i++) {
             List<DailyInvestDoc> idxValues = this.naverStockIndexCrawler.getIndexValue(i);
             log.info("Crawl KOSPI Values : {}", idxValues.get(0));
 
@@ -58,8 +58,8 @@ public class NaverStockJobManager {
             }
         }
 
-        for(int i=1;i<=405;i++) {
-            List<DailyInvestDoc> investers = this.naverStockIndexCrawler.getInvesters("20210514", i);
+        for(int i=1;i<=2;i++) {
+            List<DailyInvestDoc> investers = this.naverStockIndexCrawler.getInvesters("20230416", i);
             log.info("Crawl KOSPI Invester : {}", investers.get(0));
 
             this.kospiRepository.saveAll(investers);
